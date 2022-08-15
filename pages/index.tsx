@@ -3,6 +3,8 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { AiFillGithub } from 'react-icons/ai'
 
+import Timetable from '../components/Timetable'
+
 const Home: NextPage = () => {
 	return (
 		<div className={styles.container}>
@@ -11,7 +13,9 @@ const Home: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<main className={styles.main}>jou</main>
+			<main className={styles.main}>
+				<Timetable />
+			</main>
 
 			<footer className={styles.footer}>
 				<a
