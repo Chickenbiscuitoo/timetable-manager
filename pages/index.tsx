@@ -2,10 +2,14 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { AiFillGithub } from 'react-icons/ai'
+import useTimetableStore from '../store'
 
 import Timetable from '../components/Timetable'
+import ScrollMenu from '../components/ScrollMenu'
 
 const Home: NextPage = () => {
+	const { teachers, subjects } = useTimetableStore()
+
 	return (
 		<div className={styles.container}>
 			<Head>
@@ -14,6 +18,8 @@ const Home: NextPage = () => {
 			</Head>
 
 			<main className={styles.main}>
+				<ScrollMenu data={teachers} />
+				<ScrollMenu data={subjects} />
 				<Timetable />
 			</main>
 

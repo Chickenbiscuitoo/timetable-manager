@@ -1,0 +1,30 @@
+.scrollmenu {
+	background-color: #333;
+	overflow: auto;
+	white-space: nowrap;
+	min-height: 3.5rem;
+	height: fit-content;
+}
+.scrollmenu a {
+	display: inline-block;
+	color: white;
+	text-align: center;
+	padding: 14px;
+	text-decoration: none;
+}
+.scrollmenu a:hover {
+	background-color: #777;
+}
+
+.searchbar {
+	background-color: #333;
+	overflow: auto;
+	white-space: nowrap;
+	color: white;
+	padding: 0.2rem;
+	padding-left: 0.5rem;
+	width: 6rem;
+	margin-left: 1rem;
+	margin-top: 1rem;
+	border-radius: 10px;
+}

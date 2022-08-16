@@ -1,13 +1,12 @@
 import type { NextComponentType } from 'next'
 import styles from '../styles/Timetable.module.css'
-
 import useTimetableStore from '../store'
 import { useEffect, useState } from 'react'
 
 const Timetable: NextComponentType = () => {
 	const { rawTableData, addLesson } = useTimetableStore()
 
-	// Fuction to make nested array from array of objects
+	// Fuction to make nested array from an array of objects
 	function tableArrayFromList(list: any, rows: number, cols: number) {
 		const arr = new Array(rows + 1)
 			.fill(0)
@@ -30,7 +29,7 @@ const Timetable: NextComponentType = () => {
 
 	return (
 		<>
-			<table>
+			<table className={styles.tg}>
 				<thead>
 					<tr>
 						<th>x</th>
@@ -58,9 +57,6 @@ const Timetable: NextComponentType = () => {
 						))}
 				</tbody>
 			</table>
-			<button onClick={() => addLesson(305, 'PBE', 'CP')}>
-				Add Lesson
-			</button>
 		</>
 	)
 }

@@ -6,7 +6,7 @@
 .tg td {
 	border-color: black;
 	border-style: solid;
-	border-width: 1px;
+	border-width: slim;
 	font-size: 14px;
 	overflow: hidden;
 	padding: 10px 5px;
@@ -16,7 +16,7 @@
 .tg th {
 	border-color: black;
 	border-style: solid;
-	border-width: 1px;
+	border-width: slim;
 	font-size: 14px;
 	font-weight: normal;
 	overflow: hidden;
