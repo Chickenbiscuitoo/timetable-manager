@@ -1,4 +1,6 @@
 import type { NextPage } from 'next'
+import styles from '../styles/Timetable.module.css'
+
 import useTimetableStore from '../store'
 import { useDrop } from 'react-dnd'
 
@@ -12,20 +14,30 @@ const Cell: NextPage<Props> = ({ subject, lesson_id, position }) => {
 	const { addLesson } = useTimetableStore()
 	console.log()
 
-	const [{ isOver, itemProps }, drop]: any = useDrop({
+	const [{ isOver, canDrop, itemProps }, drop]: any = useDrop({
 		accept: 'MenuItem',
+		canDrop: () => !lesson_id,
+		drop: () => addLesson(position, itemProps.name),
 		collect: (monitor) => ({
+			canDrop: !!monitor.canDrop(),
 			isOver: !!monitor.isOver(),
 			itemProps: monitor.getItem(),
 		}),
-		drop: () => {
-			if (!lesson_id) {
-				addLesson(position, itemProps.name)
-			}
-		},
 	})
 
-	return <td ref={drop}>{subject}</td>
+	const getClassName = () => {
+		if (isOver && canDrop) {
+			return styles.hovered_success
+		} else if (isOver && !canDrop) {
+			return styles.hovered_fail
+		}
+	}
+
+	return (
+		<td ref={drop} className={getClassName()}>
+			{subject}
+		</td>
+	)
 }
 
 export default Cell

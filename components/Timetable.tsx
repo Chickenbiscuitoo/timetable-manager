@@ -90,8 +90,4 @@ const Timetable: NextComponentType = () => {
 	)
 }
 
-// (i + 1).toString().length >= 1
-// 	? (ci + 1).toString() + '0' + (i + 1).toString()
-// 	: (ci + 1).toString() + (i + 1).toString()
-
 export default Timetable

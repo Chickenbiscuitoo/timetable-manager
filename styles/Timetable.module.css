@@ -28,3 +28,11 @@
 	vertical-align: top;
 	text-align: center;
 }
+
+.hovered_success {
+	background-color: #dff0d8;
+}
+
+.hovered_fail {
+	background-color: #f2dede;
+}
