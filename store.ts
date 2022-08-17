@@ -14,7 +14,11 @@ interface TimetableState {
 		name: string
 		shortName: string
 	}[]
-	addLesson: (lessonId: number, subject: string, teacher: string) => void
+	addLesson: (
+		lessonId: number,
+		subject: string,
+		teacher?: string | undefined
+	) => void
 }
 
 const useTimetableStore = create<TimetableState>((set) => ({
@@ -213,7 +217,7 @@ const useTimetableStore = create<TimetableState>((set) => ({
 		},
 	],
 
-	addLesson: (lesson_id, subject, teacher) =>
+	addLesson: (lesson_id, subject, teacher = 'undefined') =>
 		set((state) => ({
 			rawTableData: [
 				...state.rawTableData,

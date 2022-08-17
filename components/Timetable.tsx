@@ -3,6 +3,8 @@ import styles from '../styles/Timetable.module.css'
 import useTimetableStore from '../store'
 import { useEffect, useState } from 'react'
 
+import Cell from '../components/Cell'
+
 const Timetable: NextComponentType = () => {
 	const { rawTableData, addLesson } = useTimetableStore()
 
@@ -48,11 +50,38 @@ const Timetable: NextComponentType = () => {
 								<td>{i + 1}</td>
 								{row
 									.filter((_, ci) => ci)
-									.map((cell, ci) => (
-										<td key={i * 100 + ci}>
-											{cell?.subject}
-										</td>
-									))}
+									.map((cell, ci) => {
+										function getKey() {
+											if (
+												(i + 1).toString()
+													.length === 1
+											) {
+												return parseInt(
+													`${(
+														ci + 1
+													).toString()}0${(
+														i + 1
+													).toString()}`
+												)
+											} else {
+												return parseInt(
+													`${(
+														ci + 1
+													).toString()}${(
+														i + 1
+													).toString()}`
+												)
+											}
+										}
+										return (
+											<Cell
+												key={getKey()}
+												subject={cell?.subject}
+												lesson_id={cell?.lesson_id}
+												position={getKey()}
+											/>
+										)
+									})}
 							</tr>
 						))}
 				</tbody>
@@ -60,5 +89,9 @@ const Timetable: NextComponentType = () => {
 		</>
 	)
 }
+
+// (i + 1).toString().length >= 1
+// 	? (ci + 1).toString() + '0' + (i + 1).toString()
+// 	: (ci + 1).toString() + (i + 1).toString()
 
 export default Timetable

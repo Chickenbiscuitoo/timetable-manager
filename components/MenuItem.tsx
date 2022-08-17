@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import styles from '../styles/ScrollMenu.module.css'
 
 import { useDrag } from 'react-dnd'
 
@@ -11,7 +10,7 @@ interface Props {
 const MenuItem: NextPage<Props> = ({ name, id }) => {
 	const [collected, drag] = useDrag(() => ({
 		type: 'MenuItem',
-		item: { id },
+		item: { id, name },
 		collect: (monitor) => ({
 			isDragging: monitor.isDragging(),
 			name: name,
