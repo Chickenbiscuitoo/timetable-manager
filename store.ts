@@ -3,8 +3,8 @@ import create from 'zustand'
 interface TimetableState {
 	rawTableData: {
 		lesson_id: number
-		subject: string
-		teacher: string
+		subject: string | string[]
+		teacher: string | string[]
 	}[]
 	teachers: {
 		name: string
@@ -16,8 +16,13 @@ interface TimetableState {
 	}[]
 	addLesson: (
 		lessonId: number,
-		subject: string,
-		teacher?: string | undefined
+		subject: string | string[],
+		teacher?: string | string[] | undefined
+	) => void
+	updateLesson: (
+		lessonId: number,
+		subject: string | string[],
+		teacher: string | string[]
 	) => void
 }
 
@@ -84,7 +89,7 @@ const useTimetableStore = create<TimetableState>((set) => ({
 		{
 			lesson_id: 308,
 			subject: 'FYZ',
-			teacher: 'PL',
+			teacher: ['RP', 'JK'],
 		},
 	],
 	teachers: [
@@ -217,10 +222,23 @@ const useTimetableStore = create<TimetableState>((set) => ({
 		},
 	],
 
-	addLesson: (lesson_id, subject, teacher = 'undefined') =>
+	addLesson: (lesson_id, subject, teacher) =>
 		set((state) => ({
 			rawTableData: [
 				...state.rawTableData,
+				{
+					lesson_id,
+					subject,
+					teacher: teacher ? teacher : '',
+				},
+			],
+		})),
+	updateLesson: (lesson_id, subject, teacher) =>
+		set((state) => ({
+			rawTableData: [
+				...state.rawTableData.filter(
+					(el) => el.lesson_id !== lesson_id
+				),
 				{
 					lesson_id,
 					subject,

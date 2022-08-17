@@ -79,6 +79,7 @@ const Timetable: NextComponentType = () => {
 												subject={cell?.subject}
 												lesson_id={cell?.lesson_id}
 												position={getKey()}
+												teacher={cell?.teacher}
 											/>
 										)
 									})}
