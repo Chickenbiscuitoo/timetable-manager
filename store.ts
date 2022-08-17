@@ -139,62 +139,77 @@ const useTimetableStore = create<TimetableState>((set) => ({
 		{
 			name: 'Siete',
 			shortName: 'PCI',
+			id: 1,
 		},
 		{
 			name: 'Fyzika',
 			shortName: 'FYZ',
+			id: 2,
 		},
 		{
 			name: 'Matematika',
 			shortName: 'MAT',
+			id: 3,
 		},
 		{
 			name: 'Chemia',
 			shortName: 'CHE',
+			id: 4,
 		},
 		{
 			name: 'Biologia',
 			shortName: 'BIO',
+			id: 5,
 		},
 		{
 			name: 'Siete',
 			shortName: 'PCI',
+			id: 6,
 		},
 		{
 			name: 'Fyzika',
 			shortName: 'FYZ',
+			id: 7,
 		},
 		{
 			name: 'Matematika',
 			shortName: 'MAT',
+			id: 8,
 		},
 		{
 			name: 'Chemia',
 			shortName: 'CHE',
+			id: 9,
 		},
 		{
 			name: 'Biologia',
 			shortName: 'BIO',
+			id: 10,
 		},
 		{
 			name: 'Siete',
 			shortName: 'PCI',
+			id: 11,
 		},
 		{
 			name: 'Fyzika',
 			shortName: 'FYZ',
+			id: 12,
 		},
 		{
 			name: 'Matematika',
 			shortName: 'MAT',
+			id: 13,
 		},
 		{
 			name: 'Chemia',
 			shortName: 'CHE',
+			id: 14,
 		},
 		{
 			name: 'Biologia',
 			shortName: 'BIO',
+			id: 15,
 		},
 	],
 

@@ -1,6 +1,9 @@
 import type { NextPage } from 'next'
 import styles from '../styles/ScrollMenu.module.css'
 import { useState } from 'react'
+
+import MenuItem from '../components/MenuItem'
+
 interface Props {
 	data: any
 }
@@ -10,7 +13,6 @@ const ScrollMenu: NextPage<Props> = ({ data }) => {
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
 		setFilter(e.target.value)
-	console.log(filter)
 
 	return (
 		<div className={styles.scrollmenu}>
@@ -27,7 +29,7 @@ const ScrollMenu: NextPage<Props> = ({ data }) => {
 					item.name.toLowerCase().includes(filter.toLowerCase())
 				)
 				.map((i: any) => (
-					<a>{i.name}</a>
+					<MenuItem key={i.id} id={i.id} name={i.name} />
 				))}
 		</div>
 	)
