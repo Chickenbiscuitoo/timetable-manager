@@ -34,7 +34,7 @@ const Timetable: NextComponentType = () => {
 			<table className={styles.tg}>
 				<thead>
 					<tr>
-						<th>x</th>
+						<th className={styles.num_cell}>x</th>
 						<th>Monday</th>
 						<th>Tuesday</th>
 						<th>Wednesday</th>
@@ -47,7 +47,9 @@ const Timetable: NextComponentType = () => {
 						.filter((_, i) => i)
 						.map((row, i) => (
 							<tr key={i}>
-								<td>{i + 1}</td>
+								<td className={styles.num_cell}>
+									{i + 1}
+								</td>
 								{row
 									.filter((_, ci) => ci)
 									.map((cell, ci) => {

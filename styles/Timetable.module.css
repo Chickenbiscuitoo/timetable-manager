@@ -77,3 +77,8 @@
 	background-size: cover;
 	clip-path: polygon(100% 0%, 0% 0%, 0% 100%);
 }
+
+.num_cell {
+	width: 2.5rem;
+	border-width: slim;
+}
