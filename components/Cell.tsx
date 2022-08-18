@@ -5,6 +5,7 @@ import useTimetableStore from '../store'
 import { useDrop } from 'react-dnd'
 
 import SplitCell from './SplitCell'
+import { MdDeleteForever } from 'react-icons/md'
 
 interface Props {
 	subject: string | string[]
@@ -19,7 +20,7 @@ const Cell: NextPage<Props> = ({
 	position,
 	teacher,
 }) => {
-	const { addLesson, updateLesson } = useTimetableStore()
+	const { addLesson, updateLesson, deleteLesson } = useTimetableStore()
 
 	const handleDrop = () => {
 		if (itemType === 'TeacherMenuItem' && !teacher) {
@@ -65,6 +66,8 @@ const Cell: NextPage<Props> = ({
 		}
 	}
 
+	const handleRemove = () => deleteLesson(lesson_id)
+
 	const [{ isOver, canDrop, itemType, itemProps }, drop]: any = useDrop({
 		accept: ['TeacherMenuItem', 'SubjectMenuItem'],
 		canDrop: handleCanDrop,
@@ -106,6 +109,14 @@ const Cell: NextPage<Props> = ({
 								teacher={teacher[1]}
 								position="cell_down"
 							/>
+							{lesson_id && (
+								<span
+									onClick={handleRemove}
+									className={styles.btn_remove}
+								>
+									<MdDeleteForever />
+								</span>
+							)}
 						</>
 					) : Array.isArray(subject) &&
 					  !Array.isArray(teacher) ? (
@@ -122,6 +133,14 @@ const Cell: NextPage<Props> = ({
 								teacher={teacher}
 								position="cell_down"
 							/>
+							{lesson_id && (
+								<span
+									onClick={handleRemove}
+									className={styles.btn_remove}
+								>
+									<MdDeleteForever />
+								</span>
+							)}
 						</>
 					) : !Array.isArray(subject) &&
 					  Array.isArray(teacher) ? (
@@ -138,11 +157,27 @@ const Cell: NextPage<Props> = ({
 								teacher={teacher[1]}
 								position="cell_down"
 							/>
+							{lesson_id && (
+								<span
+									onClick={handleRemove}
+									className={styles.btn_remove}
+								>
+									<MdDeleteForever />
+								</span>
+							)}
 						</>
 					) : (
 						<td ref={drop} className={getClassName()}>
 							{subject}
 							{teacher && ` | ${teacher}`}
+							{lesson_id && (
+								<span
+									onClick={handleRemove}
+									className={styles.btn_remove}
+								>
+									<MdDeleteForever />
+								</span>
+							)}{' '}
 						</td>
 					)}
 				</td>
@@ -150,6 +185,14 @@ const Cell: NextPage<Props> = ({
 				<td ref={drop} className={getClassName()}>
 					{subject}
 					{teacher && ` | ${teacher}`}
+					{lesson_id && (
+						<span
+							onClick={handleRemove}
+							className={styles.btn_remove}
+						>
+							<MdDeleteForever />
+						</span>
+					)}
 				</td>
 			)}
 		</>

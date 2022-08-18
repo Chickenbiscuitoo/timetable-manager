@@ -24,6 +24,7 @@ interface TimetableState {
 		subject: string | string[],
 		teacher?: string | string[] | undefined
 	) => void
+	deleteLesson: (lessonId: number) => void
 }
 
 const useTimetableStore = create<TimetableState>((set) => ({
@@ -246,6 +247,15 @@ const useTimetableStore = create<TimetableState>((set) => ({
 				},
 			],
 		})),
+	deleteLesson: (lesson_id) => {
+		set((state) => ({
+			rawTableData: [
+				...state.rawTableData.filter(
+					(el) => el.lesson_id !== lesson_id
+				),
+			],
+		}))
+	},
 }))
 
 export default useTimetableStore

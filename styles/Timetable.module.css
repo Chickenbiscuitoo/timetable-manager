@@ -73,7 +73,7 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: #333;
+	background-color: rgb(51, 51, 51, 0.6);
 	background-size: cover;
 	clip-path: polygon(100% 0%, 0% 0%, 0% 100%);
 }
@@ -81,4 +81,17 @@
 .num_cell {
 	width: 2.5rem;
 	border-width: slim;
+}
+
+.btn_remove {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 2;
+	color: rgb(255, 0, 0, 0.3);
+}
+
+.btn_remove:hover {
+	color: rgb(255, 0, 0, 0.6);
+	cursor: pointer;
 }
