@@ -14,8 +14,11 @@ const Timetable: NextComponentType = () => {
 			.fill(0)
 			.map((_, i) => new Array(cols + 1).fill(undefined))
 		rawTableData.forEach((lesson) => {
-			const row = lesson.lesson_id % 100
-			const col = Math.floor(lesson.lesson_id / 100)
+			const position = parseInt(
+				lesson.lesson_id.toString().slice(0, 3)
+			)
+			const row = position % 100
+			const col = Math.floor(position / 100)
 			arr[row][col] = lesson
 		})
 		return arr

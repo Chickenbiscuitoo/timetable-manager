@@ -92,6 +92,13 @@ const useTimetableStore = create<TimetableState>((set) => ({
 			subject: 'FYZ',
 			teacher: ['RP', 'JK'],
 		},
+		{
+			lesson_id: 11111111111,
+			subject: 'PCI',
+			teacher: 'RP',
+			day: 'Monday',
+			lesson: '1',
+		},
 	],
 	teachers: [
 		{
