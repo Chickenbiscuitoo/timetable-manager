@@ -7,7 +7,7 @@ import { useDrop } from 'react-dnd'
 interface Props {
 	lesson_id: number
 	subject: string
-	teacher: string
+	teacher?: string
 	position: string
 }
 
@@ -19,29 +19,28 @@ const SplitCell: NextPage<Props> = ({
 }) => {
 	const { addLesson } = useTimetableStore()
 
-	////// TODO //////
-	const [{ isOver, canDrop, itemProps }, drop]: any = useDrop({
-		accept: 'MenuItem',
-		// canDrop: () => !lesson_id,
-		// drop: () => addLesson(lesson_id, itemProps.name),
-		collect: (monitor) => ({
-			canDrop: !!monitor.canDrop(),
-			isOver: !!monitor.isOver(),
-			itemProps: monitor.getItem(),
-		}),
-	})
+	// const [{ isOver, canDrop, itemProps }, drop]: any = useDrop({
+	// 	accept: 'MenuItem',
+	// 	// canDrop: () => !lesson_id,
+	// 	// drop: () => addLesson(lesson_id, itemProps.name),
+	// 	collect: (monitor) => ({
+	// 		canDrop: !!monitor.canDrop(),
+	// 		isOver: !!monitor.isOver(),
+	// 		itemProps: monitor.getItem(),
+	// 	}),
+	// })
 
-	////// TODO //////
-	const getClassName = () => {
-		if (isOver && canDrop) {
-			return styles.hovered_success
-		} else if (isOver && !canDrop) {
-			return styles.hovered_fail
-		}
-	}
+	// ////// TODO //////
+	// const getClassName = () => {
+	// 	if (isOver && canDrop) {
+	// 		return styles.hovered_success
+	// 	} else if (isOver && !canDrop) {
+	// 		return styles.hovered_fail
+	// 	}
+	// }
 
 	return (
-		<span className={styles[position]} ref={drop}>
+		<span className={styles[position]}>
 			{teacher} {subject}
 		</span>
 	)

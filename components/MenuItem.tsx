@@ -5,11 +5,12 @@ import { useDrag } from 'react-dnd'
 interface Props {
 	name: string
 	id: number
+	isTeacher: boolean
 }
 
-const MenuItem: NextPage<Props> = ({ name, id }) => {
+const MenuItem: NextPage<Props> = ({ name, id, isTeacher }) => {
 	const [collected, drag] = useDrag(() => ({
-		type: 'MenuItem',
+		type: isTeacher ? 'TeacherMenuItem' : 'SubjectMenuItem',
 		item: { id, name },
 		collect: (monitor) => ({
 			isDragging: monitor.isDragging(),

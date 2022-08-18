@@ -22,8 +22,8 @@ const Home: NextPage = () => {
 
 			<DndProvider backend={HTML5Backend}>
 				<main className={styles.main}>
-					<ScrollMenu data={teachers} />
-					<ScrollMenu data={subjects} />
+					<ScrollMenu data={teachers} isTeacher={true} />
+					<ScrollMenu data={subjects} isTeacher={false} />
 					<Timetable />
 				</main>
 			</DndProvider>

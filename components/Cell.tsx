@@ -19,15 +19,60 @@ const Cell: NextPage<Props> = ({
 	position,
 	teacher,
 }) => {
-	const { addLesson } = useTimetableStore()
+	const { addLesson, updateLesson } = useTimetableStore()
 
-	const [{ isOver, canDrop, itemProps }, drop]: any = useDrop({
-		accept: 'MenuItem',
-		canDrop: () => !lesson_id,
-		drop: () => addLesson(position, itemProps.name),
+	const handleDrop = () => {
+		if (itemType === 'TeacherMenuItem' && !teacher) {
+			updateLesson(lesson_id, subject, itemProps.name)
+		} else if (itemType === 'TeacherMenuItem' && !!teacher) {
+			updateLesson(lesson_id, subject, [teacher, itemProps.name])
+		} else if (itemType === 'SubjectMenuItem' && !lesson_id) {
+			addLesson(position, itemProps.name)
+		} else if (
+			itemType === 'SubjectMenuItem' &&
+			!!lesson_id &&
+			!teacher
+		) {
+			updateLesson(lesson_id, [subject, itemProps.name])
+		} else if (
+			itemType === 'SubjectMenuItem' &&
+			!!lesson_id &&
+			!!teacher
+		) {
+			updateLesson(lesson_id, [subject, itemProps.name], teacher)
+		}
+	}
+
+	const handleCanDrop = () => {
+		if (itemType === 'SubjectMenuItem') {
+			if (!Array.isArray(subject)) {
+				return true
+			} else {
+				return false
+			}
+		} else if (itemType === 'TeacherMenuItem') {
+			if (!!subject) {
+				if (!Array.isArray(teacher)) {
+					return true
+				} else {
+					return false
+				}
+			} else {
+				return false
+			}
+		} else {
+			return false
+		}
+	}
+
+	const [{ isOver, canDrop, itemType, itemProps }, drop]: any = useDrop({
+		accept: ['TeacherMenuItem', 'SubjectMenuItem'],
+		canDrop: handleCanDrop,
+		drop: handleDrop,
 		collect: (monitor) => ({
 			canDrop: !!monitor.canDrop(),
 			isOver: !!monitor.isOver(),
+			itemType: monitor.getItemType(),
 			itemProps: monitor.getItem(),
 		}),
 	})
@@ -42,9 +87,12 @@ const Cell: NextPage<Props> = ({
 
 	return (
 		<>
-			{Array.isArray(teacher) ? (
-				<td className={styles.cell_split}>
-					{Array.isArray(subject) ? (
+			{Array.isArray(subject) || Array.isArray(teacher) ? (
+				<td
+					ref={drop}
+					className={`${styles.cell_split} ${getClassName()}`}
+				>
+					{Array.isArray(teacher) && Array.isArray(subject) ? (
 						<>
 							<SplitCell
 								lesson_id={lesson_id}
@@ -59,7 +107,24 @@ const Cell: NextPage<Props> = ({
 								position="cell_down"
 							/>
 						</>
-					) : (
+					) : Array.isArray(subject) &&
+					  !Array.isArray(teacher) ? (
+						<>
+							<SplitCell
+								lesson_id={lesson_id}
+								subject={subject[0]}
+								teacher={teacher}
+								position="cell_up"
+							/>
+							<SplitCell
+								lesson_id={lesson_id}
+								subject={subject[1]}
+								teacher={teacher}
+								position="cell_down"
+							/>
+						</>
+					) : !Array.isArray(subject) &&
+					  Array.isArray(teacher) ? (
 						<>
 							<SplitCell
 								lesson_id={lesson_id}
@@ -74,6 +139,11 @@ const Cell: NextPage<Props> = ({
 								position="cell_down"
 							/>
 						</>
+					) : (
+						<td ref={drop} className={getClassName()}>
+							{subject}
+							{teacher && ` | ${teacher}`}
+						</td>
 					)}
 				</td>
 			) : (

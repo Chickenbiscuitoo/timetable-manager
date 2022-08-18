@@ -22,7 +22,7 @@ interface TimetableState {
 	updateLesson: (
 		lessonId: number,
 		subject: string | string[],
-		teacher: string | string[]
+		teacher?: string | string[] | undefined
 	) => void
 }
 
@@ -242,7 +242,7 @@ const useTimetableStore = create<TimetableState>((set) => ({
 				{
 					lesson_id,
 					subject,
-					teacher,
+					teacher: teacher ? teacher : '',
 				},
 			],
 		})),

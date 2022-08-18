@@ -6,9 +6,10 @@ import MenuItem from '../components/MenuItem'
 
 interface Props {
 	data: any
+	isTeacher: boolean
 }
 
-const ScrollMenu: NextPage<Props> = ({ data }) => {
+const ScrollMenu: NextPage<Props> = ({ data, isTeacher }) => {
 	const [filter, setFilter] = useState('')
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -29,7 +30,12 @@ const ScrollMenu: NextPage<Props> = ({ data }) => {
 					item.name.toLowerCase().includes(filter.toLowerCase())
 				)
 				.map((i: any) => (
-					<MenuItem key={i.id} id={i.id} name={i.name} />
+					<MenuItem
+						key={i.id}
+						id={i.id}
+						name={i.name}
+						isTeacher={isTeacher}
+					/>
 				))}
 		</div>
 	)
