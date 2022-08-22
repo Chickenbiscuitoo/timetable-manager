@@ -1,268 +1,465 @@
+import { Subject, Teacher } from '@prisma/client'
+import {
+	getDayFromPosition,
+	getPeriodFromPosition,
+} from './utils/getPosition'
+
 import create from 'zustand'
 
 interface TimetableState {
 	rawTableData: {
-		lesson_id: number
-		subject: string | string[]
-		teacher: string | string[]
+		id: number
+		class: number
+		day: number
+		period: number
+		teachers: Teacher[]
+		subjects: Subject[]
 	}[]
-	teachers: {
-		name: string
-		shortName: string
-	}[]
-	subjects: {
-		name: string
-		shortName: string
-	}[]
+	teachers: Teacher[]
+	subjects: Subject[]
+
 	addLesson: (
-		lessonId: number,
-		subject: string | string[],
-		teacher?: string | string[] | undefined
+		clas: number,
+		position: number,
+		subject: Subject[],
+		teacher: Teacher[]
 	) => void
-	updateLesson: (
-		lessonId: number,
-		subject: string | string[],
-		teacher?: string | string[] | undefined
-	) => void
-	deleteLesson: (lessonId: number) => void
 }
 
 const useTimetableStore = create<TimetableState>((set) => ({
 	rawTableData: [
 		{
-			lesson_id: 101,
-			subject: 'PCI',
-			teacher: 'RP',
-			day: 'Monday',
-			lesson: '1',
+			id: 2,
+			class: 9,
+			day: 1,
+			period: 1,
+			teachers: [
+				{
+					id: 3,
+					name: 'Gulami Bete',
+					shortname: 'GB',
+					email: 'gulami.bete@gmail.com',
+				},
+			],
+			subjects: [
+				{
+					id: 3,
+					name: 'History',
+					shortname: 'HIS',
+					commitee_id: 1,
+				},
+			],
 		},
 		{
-			lesson_id: 102,
-			subject: 'PCI',
-			teacher: 'RP',
-			day: 'Monday',
-			lesson: '2',
+			id: 3,
+			class: 9,
+			day: 1,
+			period: 6,
+			teachers: [
+				{
+					id: 2,
+					name: 'Francis Muller',
+					shortname: 'FM',
+					email: 'francis.muller@gmail.com',
+				},
+				{
+					id: 3,
+					name: 'Gulami Bete',
+					shortname: 'GB',
+					email: 'gulami.bete@gmail.com',
+				},
+			],
+			subjects: [
+				{
+					id: 5,
+					name: 'Physics',
+					shortname: 'PHY',
+					commitee_id: 1,
+				},
+				{
+					id: 6,
+					name: 'Spanish',
+					shortname: 'SPA',
+					commitee_id: 2,
+				},
+			],
 		},
 		{
-			lesson_id: 104,
-			subject: 'PCI',
-			teacher: 'RP',
+			id: 4,
+			class: 9,
+			day: 1,
+			period: 7,
+			teachers: [
+				{
+					id: 2,
+					name: 'Francis Muller',
+					shortname: 'FM',
+					email: 'francis.muller@gmail.com',
+				},
+				{
+					id: 3,
+					name: 'Gulami Bete',
+					shortname: 'GB',
+					email: 'gulami.bete@gmail.com',
+				},
+			],
+			subjects: [
+				{
+					id: 6,
+					name: 'Spanish',
+					shortname: 'SPA',
+					commitee_id: 2,
+				},
+				{
+					id: 7,
+					name: 'Chemistry',
+					shortname: 'CHE',
+					commitee_id: 1,
+				},
+			],
 		},
 		{
-			lesson_id: 201,
-			subject: 'PCI',
-			teacher: 'RP',
+			id: 5,
+			class: 9,
+			day: 1,
+			period: 2,
+			teachers: [
+				{
+					id: 1,
+					name: 'John Doe',
+					shortname: 'JD',
+					email: 'john.doe@gmail.com',
+				},
+				{
+					id: 2,
+					name: 'Francis Muller',
+					shortname: 'FM',
+					email: 'francis.muller@gmail.com',
+				},
+			],
+			subjects: [
+				{
+					id: 2,
+					name: 'English',
+					shortname: 'ENG',
+					commitee_id: 2,
+				},
+				{
+					id: 1,
+					name: 'Math',
+					shortname: 'MAT',
+					commitee_id: 1,
+				},
+			],
 		},
 		{
-			lesson_id: 203,
-			subject: 'PCI',
-			teacher: 'RP',
+			id: 6,
+			class: 9,
+			day: 1,
+			period: 3,
+			teachers: [
+				{
+					id: 5,
+					name: 'Yannick Gagnon',
+					shortname: 'YG',
+					email: 'yannic.gagnon@gmail.com',
+				},
+				{
+					id: 6,
+					name: 'Zachary Gagnon',
+					shortname: 'ZG',
+					email: 'zachary.gagnon@gmail.com',
+				},
+			],
+			subjects: [
+				{
+					id: 6,
+					name: 'Spanish',
+					shortname: 'SPA',
+					commitee_id: 2,
+				},
+				{
+					id: 7,
+					name: 'Chemistry',
+					shortname: 'CHE',
+					commitee_id: 1,
+				},
+			],
 		},
 		{
-			lesson_id: 211,
-			subject: 'PCI',
-			teacher: 'RP',
+			id: 8,
+			class: 9,
+			day: 2,
+			period: 11,
+			teachers: [
+				{
+					id: 5,
+					name: 'Yannick Gagnon',
+					shortname: 'YG',
+					email: 'yannic.gagnon@gmail.com',
+				},
+				{
+					id: 6,
+					name: 'Zachary Gagnon',
+					shortname: 'ZG',
+					email: 'zachary.gagnon@gmail.com',
+				},
+			],
+			subjects: [
+				{
+					id: 6,
+					name: 'Spanish',
+					shortname: 'SPA',
+					commitee_id: 2,
+				},
+				{
+					id: 7,
+					name: 'Chemistry',
+					shortname: 'CHE',
+					commitee_id: 1,
+				},
+			],
 		},
 		{
-			lesson_id: 301,
-			subject: 'PCI',
-			teacher: 'RP',
+			id: 9,
+			class: 9,
+			day: 2,
+			period: 6,
+			teachers: [
+				{
+					id: 5,
+					name: 'Yannick Gagnon',
+					shortname: 'YG',
+					email: 'yannic.gagnon@gmail.com',
+				},
+				{
+					id: 6,
+					name: 'Zachary Gagnon',
+					shortname: 'ZG',
+					email: 'zachary.gagnon@gmail.com',
+				},
+			],
+			subjects: [
+				{
+					id: 6,
+					name: 'Spanish',
+					shortname: 'SPA',
+					commitee_id: 2,
+				},
+				{
+					id: 7,
+					name: 'Chemistry',
+					shortname: 'CHE',
+					commitee_id: 1,
+				},
+			],
 		},
 		{
-			lesson_id: 401,
-			subject: 'PCI',
-			teacher: 'RP',
+			id: 10,
+			class: 9,
+			day: 4,
+			period: 2,
+			teachers: [
+				{
+					id: 1,
+					name: 'John Doe',
+					shortname: 'JD',
+					email: 'john.doe@gmail.com',
+				},
+			],
+			subjects: [
+				{
+					id: 6,
+					name: 'Spanish',
+					shortname: 'SPA',
+					commitee_id: 2,
+				},
+				{
+					id: 1,
+					name: 'Math',
+					shortname: 'MAT',
+					commitee_id: 1,
+				},
+			],
 		},
 		{
-			lesson_id: 501,
-			subject: 'PCI',
-			teacher: 'RP',
-			day: 'Friday',
-			lesson: '1',
+			id: 12,
+			class: 9,
+			day: 4,
+			period: 11,
+			teachers: [
+				{
+					id: 6,
+					name: 'Zachary Gagnon',
+					shortname: 'ZG',
+					email: 'zachary.gagnon@gmail.com',
+				},
+				{
+					id: 9,
+					name: 'Juan Perez',
+					shortname: 'JP',
+					email: 'juan.perez@gmail.com',
+				},
+			],
+			subjects: [
+				{
+					id: 5,
+					name: 'Physics',
+					shortname: 'PHY',
+					commitee_id: 1,
+				},
+			],
 		},
 		{
-			lesson_id: 511,
-			subject: 'PCI',
-			teacher: 'RP',
-			day: 'Friday',
-			lesson: '11',
-		},
-		{
-			lesson_id: 308,
-			subject: 'FYZ',
-			teacher: ['RP', 'JK'],
-		},
-		{
-			lesson_id: 11111111111,
-			subject: 'PCI',
-			teacher: 'RP',
-			day: 'Monday',
-			lesson: '1',
+			id: 13,
+			class: 10,
+			day: 4,
+			period: 11,
+			teachers: [
+				{
+					id: 6,
+					name: 'Zachary Gagnon',
+					shortname: 'ZG',
+					email: 'zachary.gagnon@gmail.com',
+				},
+				{
+					id: 9,
+					name: 'Juan Perez',
+					shortname: 'JP',
+					email: 'juan.perez@gmail.com',
+				},
+			],
+			subjects: [
+				{
+					id: 5,
+					name: 'Physics',
+					shortname: 'PHY',
+					commitee_id: 1,
+				},
+			],
 		},
 	],
+	// {
+	// 	lesson_id: 102,
+	// 	subject: 'PCI',
+	// 	teacher: 'RP',
+	// 	day: 'Monday',
+	// 	lesson: '2',
+	// },
 	teachers: [
 		{
-			name: 'Gulami Bete',
-			shortName: 'GB',
 			id: 1,
+			name: 'John Doe',
+			shortname: 'JD',
+			email: 'john.doe@gmail.com',
 		},
 		{
-			name: 'Jan Kohut',
-			shortName: 'JK',
 			id: 2,
+			name: 'Francis Muller',
+			shortname: 'FM',
+			email: 'francis.muller@gmail.com',
 		},
 		{
-			name: 'Gut Recht',
-			shortName: 'GR',
 			id: 3,
-		},
-		{
-			name: 'Peter Hruska',
-			shortName: 'PK',
-			id: 4,
-		},
-		{
-			name: 'Marek Mrkva',
-			shortName: 'GB',
-			id: 5,
-		},
-		{
 			name: 'Gulami Bete',
-			shortName: 'GH',
+			shortname: 'GB',
+			email: 'gulami.bete@gmail.com',
+		},
+		{
+			id: 4,
+			name: 'Xavier Dufour',
+			shortname: 'XD',
+			email: 'xavier.dufour@gmail.com',
+		},
+		{
+			id: 5,
+			name: 'Yannick Gagnon',
+			shortname: 'YG',
+			email: 'yannic.gagnon@gmail.com',
+		},
+		{
 			id: 6,
+			name: 'Zachary Gagnon',
+			shortname: 'ZG',
+			email: 'zachary.gagnon@gmail.com',
 		},
 		{
-			name: 'Jan Kohut',
-			shortName: 'HG',
 			id: 7,
+			name: 'Francisco Taveras',
+			shortname: 'FT',
+			email: 'francisco.taveras@gmail.com',
 		},
 		{
-			name: 'Gut Recht',
-			shortName: 'DM',
 			id: 8,
+			name: 'Ivan Nunez',
+			shortname: 'IN',
+			email: 'ivan.nunez@gmail.com',
 		},
 		{
-			name: 'Peter Hruska',
-			shortName: 'VP',
 			id: 9,
+			name: 'Juan Perez',
+			shortname: 'JP',
+			email: 'juan.perez@gmail.com',
 		},
 		{
-			name: 'Marek Mrkva',
-			shortName: 'GG',
 			id: 10,
+			name: 'Marshall Miller',
+			shortname: 'MM',
+			email: 'marshall.miller@gmail.com',
 		},
 	],
 	subjects: [
-		{
-			name: 'Siete',
-			shortName: 'PCI',
-			id: 1,
-		},
-		{
-			name: 'Fyzika',
-			shortName: 'FYZ',
-			id: 2,
-		},
-		{
-			name: 'Matematika',
-			shortName: 'MAT',
-			id: 3,
-		},
-		{
-			name: 'Chemia',
-			shortName: 'CHE',
-			id: 4,
-		},
-		{
-			name: 'Biologia',
-			shortName: 'BIO',
-			id: 5,
-		},
-		{
-			name: 'Siete',
-			shortName: 'PCI',
-			id: 6,
-		},
-		{
-			name: 'Fyzika',
-			shortName: 'FYZ',
-			id: 7,
-		},
-		{
-			name: 'Matematika',
-			shortName: 'MAT',
-			id: 8,
-		},
-		{
-			name: 'Chemia',
-			shortName: 'CHE',
-			id: 9,
-		},
-		{
-			name: 'Biologia',
-			shortName: 'BIO',
-			id: 10,
-		},
-		{
-			name: 'Siete',
-			shortName: 'PCI',
-			id: 11,
-		},
-		{
-			name: 'Fyzika',
-			shortName: 'FYZ',
-			id: 12,
-		},
-		{
-			name: 'Matematika',
-			shortName: 'MAT',
-			id: 13,
-		},
-		{
-			name: 'Chemia',
-			shortName: 'CHE',
-			id: 14,
-		},
-		{
-			name: 'Biologia',
-			shortName: 'BIO',
-			id: 15,
-		},
+		{ id: 2, name: 'English', shortname: 'ENG', commitee_id: 2 },
+		{ id: 3, name: 'History', shortname: 'HIS', commitee_id: 1 },
+		{ id: 4, name: 'Geography', shortname: 'GEO', commitee_id: 1 },
+		{ id: 5, name: 'Physics', shortname: 'PHY', commitee_id: 1 },
+		{ id: 6, name: 'Spanish', shortname: 'SPA', commitee_id: 2 },
+		{ id: 7, name: 'Chemistry', shortname: 'CHE', commitee_id: 1 },
+		{ id: 8, name: 'Italian', shortname: 'ITA', commitee_id: 2 },
+		{ id: 1, name: 'Math', shortname: 'MAT', commitee_id: 1 },
 	],
+	// {
+	// 	name: 'Biologia',
+	// 	shortName: 'BIO',
+	// 	id: 15,
+	// },
 
-	addLesson: (lesson_id, subject, teacher) =>
+	addLesson: (clas, position, subject, teacher) =>
 		set((state) => ({
 			rawTableData: [
 				...state.rawTableData,
 				{
-					lesson_id,
-					subject,
-					teacher: teacher ? teacher : '',
+					id: 1,
+					class: clas,
+					day: getDayFromPosition(position),
+					period: getPeriodFromPosition(position),
+					teachers: teacher,
+					subjects: subject,
 				},
 			],
 		})),
-	updateLesson: (lesson_id, subject, teacher) =>
-		set((state) => ({
-			rawTableData: [
-				...state.rawTableData.filter(
-					(el) => el.lesson_id !== lesson_id
-				),
-				{
-					lesson_id,
-					subject,
-					teacher: teacher ? teacher : '',
-				},
-			],
-		})),
-	deleteLesson: (lesson_id) => {
-		set((state) => ({
-			rawTableData: [
-				...state.rawTableData.filter(
-					(el) => el.lesson_id !== lesson_id
-				),
-			],
-		}))
-	},
+	// updateLesson: (lesson_id, subject, teacher) =>
+	// 	set((state) => ({
+	// 		rawTableData: [
+	// 			...state.rawTableData.filter(
+	// 				(el) => el.lesson_id !== lesson_id
+	// 			),
+	// 			{
+	// 				lesson_id,
+	// 				subject,
+	// 				teacher: teacher ? teacher : '',
+	// 			},
+	// 		],
+	// 	})),
+	// deleteLesson: (lesson_id) => {
+	// 	set((state) => ({
+	// 		rawTableData: [
+	// 			...state.rawTableData.filter(
+	// 				(el) => el.lesson_id !== lesson_id
+	// 			),
+	// 		],
+	// 	}))
+	// },
 }))
 
 export default useTimetableStore

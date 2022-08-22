@@ -3,15 +3,8 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-	await prisma.lesson.create({
-		data: {
-			class: 10,
-			subjects: { connect: { id: 5 } },
-			teachers: { connect: [{ id: 9 }, { id: 6 }] },
-			day: 4,
-			period: 11,
-		},
-	})
+	const lessons = await prisma.subject.findMany({})
+	console.log(JSON.parse(JSON.stringify(lessons)))
 }
 
 main()
