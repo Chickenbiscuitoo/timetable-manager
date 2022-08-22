@@ -8,7 +8,7 @@ import create from 'zustand'
 
 interface TimetableState {
 	rawTableData: {
-		id: number
+		id?: number
 		class: number
 		day: number
 		period: number
@@ -19,11 +19,18 @@ interface TimetableState {
 	subjects: Subject[]
 
 	addLesson: (
-		clas: number,
+		class_id: number,
 		position: number,
 		subject: Subject[],
 		teacher: Teacher[]
 	) => void
+	updateLesson: (
+		class_id: number,
+		position: number,
+		subject: Subject[],
+		teacher: Teacher[]
+	) => void
+	deleteLesson: (class_id: number, position: number) => void
 }
 
 const useTimetableStore = create<TimetableState>((set) => ({
@@ -424,13 +431,12 @@ const useTimetableStore = create<TimetableState>((set) => ({
 	// 	id: 15,
 	// },
 
-	addLesson: (clas, position, subject, teacher) =>
+	addLesson: (class_id, position, subject, teacher) =>
 		set((state) => ({
 			rawTableData: [
 				...state.rawTableData,
 				{
-					id: 1,
-					class: clas,
+					class: class_id,
 					day: getDayFromPosition(position),
 					period: getPeriodFromPosition(position),
 					teachers: teacher,
@@ -438,28 +444,35 @@ const useTimetableStore = create<TimetableState>((set) => ({
 				},
 			],
 		})),
-	// updateLesson: (lesson_id, subject, teacher) =>
-	// 	set((state) => ({
-	// 		rawTableData: [
-	// 			...state.rawTableData.filter(
-	// 				(el) => el.lesson_id !== lesson_id
-	// 			),
-	// 			{
-	// 				lesson_id,
-	// 				subject,
-	// 				teacher: teacher ? teacher : '',
-	// 			},
-	// 		],
-	// 	})),
-	// deleteLesson: (lesson_id) => {
-	// 	set((state) => ({
-	// 		rawTableData: [
-	// 			...state.rawTableData.filter(
-	// 				(el) => el.lesson_id !== lesson_id
-	// 			),
-	// 		],
-	// 	}))
-	// },
+	updateLesson: (class_id, position, subject, teacher) =>
+		set((state) => ({
+			rawTableData: [
+				...state.rawTableData.filter(
+					(lesson) =>
+						lesson.class !== class_id &&
+						lesson.day !== getDayFromPosition(position) &&
+						lesson.period !== getPeriodFromPosition(position)
+				),
+				{
+					class: class_id,
+					day: getDayFromPosition(position),
+					period: getPeriodFromPosition(position),
+					teachers: teacher,
+					subjects: subject,
+				},
+			],
+		})),
+	deleteLesson: (class_id, position) =>
+		set((state) => ({
+			rawTableData: [
+				...state.rawTableData.filter(
+					(lesson) =>
+						lesson.class !== class_id &&
+						lesson.day !== getDayFromPosition(position) &&
+						lesson.period !== getPeriodFromPosition(position)
+				),
+			],
+		})),
 }))
 
 export default useTimetableStore
