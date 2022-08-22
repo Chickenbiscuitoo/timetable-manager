@@ -3,6 +3,8 @@ import styles from '../styles/Timetable.module.css'
 import useTimetableStore from '../store'
 import { useEffect, useState } from 'react'
 
+import { getPosition } from '../utils/getPosition'
+
 import Cell from '../components/Cell'
 
 const Timetable: NextComponentType = () => {
@@ -56,34 +58,15 @@ const Timetable: NextComponentType = () => {
 								{row
 									.filter((_, ci) => ci)
 									.map((cell, ci) => {
-										function getKey() {
-											if (
-												(i + 1).toString()
-													.length === 1
-											) {
-												return parseInt(
-													`${(
-														ci + 1
-													).toString()}0${(
-														i + 1
-													).toString()}`
-												)
-											} else {
-												return parseInt(
-													`${(
-														ci + 1
-													).toString()}${(
-														i + 1
-													).toString()}`
-												)
-											}
-										}
 										return (
 											<Cell
-												key={getKey()}
+												key={getPosition(i, ci)}
 												subject={cell?.subject}
 												lesson_id={cell?.lesson_id}
-												position={getKey()}
+												position={getPosition(
+													i,
+													ci
+												)}
 												teacher={cell?.teacher}
 											/>
 										)
