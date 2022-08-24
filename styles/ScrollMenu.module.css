@@ -29,3 +29,8 @@
 	margin-top: 1rem;
 	border-radius: 10px;
 }
+
+.selected {
+	background-color: #777;
+	border-radius: 1rem;
+}

@@ -16,22 +16,34 @@ interface Props {
 }
 
 const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
-	const { addLesson, updateLesson, deleteLesson } = useTimetableStore()
+	const { addLesson, updateLesson, deleteLesson, selectedClass } =
+		useTimetableStore()
 
 	const handleDrop = () => {
 		if (itemType === 'TeacherMenuItem') {
 			if (!teacher) {
-				updateLesson(9, position, subject, [itemProps])
+				updateLesson(selectedClass, position, subject, [itemProps])
 			} else if (!!teacher) {
-				updateLesson(9, position, subject, [...teacher, itemProps])
+				updateLesson(selectedClass, position, subject, [
+					...teacher,
+					itemProps,
+				])
 			}
 		} else if (itemType === 'SubjectMenuItem') {
 			if (!subject && !teacher) {
-				addLesson(9, position, [itemProps])
+				addLesson(selectedClass, position, [itemProps])
 			} else if (!!subject && !teacher) {
-				updateLesson(9, position, [...subject, itemProps])
+				updateLesson(selectedClass, position, [
+					...subject,
+					itemProps,
+				])
 			} else if (!!subject && !!teacher) {
-				updateLesson(9, position, [...subject, itemProps], teacher)
+				updateLesson(
+					selectedClass,
+					position,
+					[...subject, itemProps],
+					teacher
+				)
 			}
 		}
 	}
@@ -63,7 +75,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 	}
 
 	const handleRemove = () => {
-		return deleteLesson(9, position)
+		return deleteLesson(selectedClass, position)
 	}
 
 	const [{ isOver, canDrop, itemType, itemProps }, drop]: any = useDrop({

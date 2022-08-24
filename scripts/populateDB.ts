@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-	const lessons = await prisma.subject.findMany({})
+	const lessons = await prisma.class.findMany({})
 	console.log(JSON.parse(JSON.stringify(lessons)))
 }
 

@@ -1,4 +1,4 @@
-import { Subject, Teacher } from '@prisma/client'
+import { Class, Subject, Teacher } from '@prisma/client'
 import {
 	getDayFromPosition,
 	getPeriodFromPosition,
@@ -17,6 +17,7 @@ interface TimetableState {
 	}[]
 	teachers: Teacher[]
 	subjects: Subject[]
+	classes: Class[]
 
 	addLesson: (
 		class_id: number,
@@ -32,6 +33,9 @@ interface TimetableState {
 		teacher?: Teacher[] | undefined
 	) => void
 	deleteLesson: (class_id: number, position: number) => void
+
+	selectedClass: number
+	setSelectedClass: (class_id: number) => void
 }
 
 const useTimetableStore = create<TimetableState>((set) => ({
@@ -413,6 +417,16 @@ const useTimetableStore = create<TimetableState>((set) => ({
 		{ id: 8, name: 'Italian', shortname: 'ITA', commitee_id: 2 },
 		{ id: 1, name: 'Math', shortname: 'MAT', commitee_id: 1 },
 	],
+	classes: [
+		{ id: 9, name: '1.A', teacher_id: 1 },
+		{ id: 10, name: '1.B', teacher_id: 2 },
+		{ id: 11, name: '1.C', teacher_id: 3 },
+		{ id: 12, name: '1.D', teacher_id: 4 },
+		{ id: 13, name: '2.A', teacher_id: 5 },
+		{ id: 14, name: '2.B', teacher_id: 6 },
+		{ id: 15, name: '2.C', teacher_id: 7 },
+		{ id: 16, name: '2.D', teacher_id: 8 },
+	],
 
 	addLesson: (class_id, position, subject, teacher) =>
 		set((state) => ({
@@ -458,6 +472,10 @@ const useTimetableStore = create<TimetableState>((set) => ({
 				),
 			],
 		})),
+
+	selectedClass: 9,
+	setSelectedClass: (class_id) =>
+		set((state) => ({ selectedClass: class_id })),
 }))
 
 export default useTimetableStore

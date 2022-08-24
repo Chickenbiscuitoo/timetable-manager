@@ -8,14 +8,18 @@ import { getPosition } from '../utils/getPosition'
 import Cell from '../components/Cell'
 
 const Timetable: NextComponentType = () => {
-	const { rawTableData, addLesson } = useTimetableStore()
+	const { rawTableData, selectedClass } = useTimetableStore()
+
+	const selectedClassTableData = rawTableData.filter(
+		(lesson) => lesson.class === selectedClass
+	)
 
 	// Fuction to make nested array from an array of objects
 	function tableArrayFromList(list: any, rows: number, cols: number) {
 		const arr = new Array(rows + 1)
 			.fill(0)
 			.map((_, i) => new Array(cols + 1).fill(undefined))
-		rawTableData.forEach((lesson) => {
+		selectedClassTableData.forEach((lesson) => {
 			const row = lesson.period
 			const col = lesson.day
 			arr[row][col] = lesson
@@ -24,12 +28,12 @@ const Timetable: NextComponentType = () => {
 	}
 
 	const [tableData, setTableData] = useState(
-		tableArrayFromList(rawTableData, 11, 5)
+		tableArrayFromList(selectedClassTableData, 11, 5)
 	)
 
 	useEffect(() => {
-		setTableData(tableArrayFromList(rawTableData, 11, 5))
-	}, [rawTableData])
+		setTableData(tableArrayFromList(selectedClassTableData, 11, 5))
+	}, [rawTableData, selectedClass])
 
 	return (
 		<>
