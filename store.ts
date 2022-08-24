@@ -340,42 +340,7 @@ const useTimetableStore = create<TimetableState>((set) => ({
 				},
 			],
 		},
-		{
-			id: 13,
-			class: 10,
-			day: 4,
-			period: 11,
-			teachers: [
-				{
-					id: 6,
-					name: 'Zachary Gagnon',
-					shortname: 'ZG',
-					email: 'zachary.gagnon@gmail.com',
-				},
-				{
-					id: 9,
-					name: 'Juan Perez',
-					shortname: 'JP',
-					email: 'juan.perez@gmail.com',
-				},
-			],
-			subjects: [
-				{
-					id: 5,
-					name: 'Physics',
-					shortname: 'PHY',
-					commitee_id: 1,
-				},
-			],
-		},
 	],
-	// {
-	// 	lesson_id: 102,
-	// 	subject: 'PCI',
-	// 	teacher: 'RP',
-	// 	day: 'Monday',
-	// 	lesson: '2',
-	// },
 	teachers: [
 		{
 			id: 1,

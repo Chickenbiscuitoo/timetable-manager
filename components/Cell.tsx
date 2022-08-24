@@ -29,7 +29,6 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 			if (!subject && !teacher) {
 				addLesson(9, position, [itemProps])
 			} else if (!!subject && !teacher) {
-				console.log([...subject, itemProps])
 				updateLesson(9, position, [...subject, itemProps])
 			} else if (!!subject && !!teacher) {
 				updateLesson(9, position, [...subject, itemProps], teacher)
@@ -63,7 +62,9 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 		}
 	}
 
-	const handleRemove = () => deleteLesson(9, position)
+	const handleRemove = () => {
+		return deleteLesson(9, position)
+	}
 
 	const [{ isOver, canDrop, itemType, itemProps }, drop]: any = useDrop({
 		accept: ['TeacherMenuItem', 'SubjectMenuItem'],
@@ -109,6 +110,12 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 								teacher={teacher[1]}
 								position="cell_down"
 							/>
+							<span
+								onClick={handleRemove}
+								className={styles.btn_remove}
+							>
+								<MdDeleteForever />
+							</span>
 						</td>
 					)
 				} else if (subject.length > 1 && teacher.length < 2) {
@@ -129,6 +136,12 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 								teacher={teacher[0]}
 								position="cell_down"
 							/>
+							<span
+								onClick={handleRemove}
+								className={styles.btn_remove}
+							>
+								<MdDeleteForever />
+							</span>
 						</td>
 					)
 				} else if (subject.length < 2 && teacher.length > 1) {
@@ -149,6 +162,12 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 								teacher={teacher[1]}
 								position="cell_down"
 							/>
+							<span
+								onClick={handleRemove}
+								className={styles.btn_remove}
+							>
+								<MdDeleteForever />
+							</span>
 						</td>
 					)
 				} else if (subject.length < 2 && teacher.length < 2) {
@@ -182,6 +201,12 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 									subject={subject[1]}
 									position="cell_down"
 								/>
+								<span
+									onClick={handleRemove}
+									className={styles.btn_remove}
+								>
+									<MdDeleteForever />
+								</span>
 							</td>
 						</>
 					)
