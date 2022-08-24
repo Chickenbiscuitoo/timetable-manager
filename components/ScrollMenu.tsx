@@ -34,6 +34,8 @@ const ScrollMenu: NextPage<Props> = ({ data, isTeacher }) => {
 						key={i.id}
 						id={i.id}
 						name={i.name}
+						shortname={i.shortname}
+						commitee_id={i.commitee_id}
 						isTeacher={isTeacher}
 					/>
 				))}

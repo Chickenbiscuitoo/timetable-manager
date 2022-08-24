@@ -4,21 +4,28 @@ import { useDrag } from 'react-dnd'
 
 interface Props {
 	name: string
+	shortname: string
+	commitee_id: number
 	id: number
 	isTeacher: boolean
 }
 
-const MenuItem: NextPage<Props> = ({ name, id, isTeacher }) => {
-	const [collected, drag] = useDrag(() => ({
+const MenuItem: NextPage<Props> = ({
+	name,
+	shortname,
+	commitee_id,
+	id,
+	isTeacher,
+}) => {
+	const [{ isDragging }, drag] = useDrag(() => ({
 		type: isTeacher ? 'TeacherMenuItem' : 'SubjectMenuItem',
-		item: { id, name },
+		item: { id, name, shortname, commitee_id },
 		collect: (monitor) => ({
 			isDragging: monitor.isDragging(),
-			name: name,
 		}),
 	}))
 
-	return <a ref={drag}>{name}</a>
+	return <a ref={drag}>{`${name} | ${shortname}`}</a>
 }
 
 export default MenuItem

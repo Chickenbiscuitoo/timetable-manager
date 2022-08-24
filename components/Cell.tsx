@@ -21,25 +21,18 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 	const handleDrop = () => {
 		if (itemType === 'TeacherMenuItem') {
 			if (!teacher) {
-				updateLesson(9, position, subject, itemProps.content)
+				updateLesson(9, position, subject, [itemProps])
 			} else if (!!teacher) {
-				updateLesson(9, position, subject, [
-					...teacher,
-					itemProps.content,
-				])
+				updateLesson(9, position, subject, [...teacher, itemProps])
 			}
 		} else if (itemType === 'SubjectMenuItem') {
 			if (!subject && !teacher) {
-				addLesson(9, position, itemProps.content)
+				addLesson(9, position, [itemProps])
 			} else if (!!subject && !teacher) {
-				updateLesson(9, position, [...subject, itemProps.content])
+				console.log([...subject, itemProps])
+				updateLesson(9, position, [...subject, itemProps])
 			} else if (!!subject && !!teacher) {
-				updateLesson(
-					9,
-					position,
-					[...subject, itemProps.content],
-					teacher
-				)
+				updateLesson(9, position, [...subject, itemProps], teacher)
 			}
 		}
 	}
@@ -175,7 +168,6 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 				if (subject.length > 1) {
 					return (
 						<>
-							return (
 							<td
 								ref={drop}
 								className={`${
@@ -191,7 +183,6 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 									position="cell_down"
 								/>
 							</td>
-							)
 						</>
 					)
 				} else if (subject.length < 2) {
@@ -224,7 +215,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 			} else if (subject) {
 				return (
 					<td ref={drop} className={getClassName()}>
-						${subject[0].name}
+						{subject[0].name}
 						<span
 							onClick={handleRemove}
 							className={styles.btn_remove}

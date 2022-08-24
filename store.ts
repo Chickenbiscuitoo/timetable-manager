@@ -448,11 +448,6 @@ const useTimetableStore = create<TimetableState>((set) => ({
 		{ id: 8, name: 'Italian', shortname: 'ITA', commitee_id: 2 },
 		{ id: 1, name: 'Math', shortname: 'MAT', commitee_id: 1 },
 	],
-	// {
-	// 	name: 'Biologia',
-	// 	shortName: 'BIO',
-	// 	id: 15,
-	// },
 
 	addLesson: (class_id, position, subject, teacher) =>
 		set((state) => ({
