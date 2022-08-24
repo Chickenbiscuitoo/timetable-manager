@@ -1,4 +1,6 @@
 import type { NextPage } from 'next'
+import { Subject, Teacher } from '@prisma/client'
+
 import styles from '../styles/Timetable.module.css'
 
 import useTimetableStore from '../store'
@@ -8,52 +10,54 @@ import SplitCell from './SplitCell'
 import { MdDeleteForever } from 'react-icons/md'
 
 interface Props {
-	subject: string | string[]
-	lesson_id: number
 	position: number
-	teacher?: string | string[] | undefined
+	subject: Subject[]
+	teacher?: Teacher[]
 }
 
-const Cell: NextPage<Props> = ({
-	subject,
-	lesson_id,
-	position,
-	teacher,
-}) => {
+const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 	const { addLesson, updateLesson, deleteLesson } = useTimetableStore()
 
 	const handleDrop = () => {
-		if (itemType === 'TeacherMenuItem' && !teacher) {
-			updateLesson(lesson_id, subject, itemProps.name)
-		} else if (itemType === 'TeacherMenuItem' && !!teacher) {
-			updateLesson(lesson_id, subject, [teacher, itemProps.name])
-		} else if (itemType === 'SubjectMenuItem' && !lesson_id) {
-			addLesson(position, itemProps.name)
-		} else if (
-			itemType === 'SubjectMenuItem' &&
-			!!lesson_id &&
-			!teacher
-		) {
-			updateLesson(lesson_id, [subject, itemProps.name])
-		} else if (
-			itemType === 'SubjectMenuItem' &&
-			!!lesson_id &&
-			!!teacher
-		) {
-			updateLesson(lesson_id, [subject, itemProps.name], teacher)
+		if (itemType === 'TeacherMenuItem') {
+			if (!teacher) {
+				updateLesson(9, position, subject, itemProps.content)
+			} else if (!!teacher) {
+				updateLesson(9, position, subject, [
+					...teacher,
+					itemProps.content,
+				])
+			}
+		} else if (itemType === 'SubjectMenuItem') {
+			if (!subject && !teacher) {
+				addLesson(9, position, itemProps.content)
+			} else if (!!subject && !teacher) {
+				updateLesson(9, position, [...subject, itemProps.content])
+			} else if (!!subject && !!teacher) {
+				updateLesson(
+					9,
+					position,
+					[...subject, itemProps.content],
+					teacher
+				)
+			}
 		}
 	}
 
 	const handleCanDrop = () => {
 		if (itemType === 'SubjectMenuItem') {
-			if (!Array.isArray(subject)) {
+			if (!subject) {
+				return true
+			} else if (subject.length <= 1) {
 				return true
 			} else {
 				return false
 			}
 		} else if (itemType === 'TeacherMenuItem') {
 			if (!!subject) {
-				if (!Array.isArray(teacher)) {
+				if (!teacher) {
+					return true
+				} else if (teacher.length <= 1) {
 					return true
 				} else {
 					return false
@@ -66,7 +70,7 @@ const Cell: NextPage<Props> = ({
 		}
 	}
 
-	const handleRemove = () => deleteLesson(lesson_id)
+	const handleRemove = () => deleteLesson(9, position)
 
 	const [{ isOver, canDrop, itemType, itemProps }, drop]: any = useDrop({
 		accept: ['TeacherMenuItem', 'SubjectMenuItem'],
@@ -88,117 +92,154 @@ const Cell: NextPage<Props> = ({
 		}
 	}
 
-	return (
-		<>
-			{Array.isArray(subject) || Array.isArray(teacher) ? (
-				<td
-					ref={drop}
-					className={`${styles.cell_split} ${getClassName()}`}
-				>
-					{Array.isArray(teacher) && Array.isArray(subject) ? (
-						<>
+	const renderCell = () => {
+		if (
+			(subject && subject.length > 1) ||
+			(teacher && teacher.length > 1)
+		) {
+			if (!!teacher) {
+				if (subject.length > 1 && teacher.length > 1) {
+					return (
+						<td
+							ref={drop}
+							className={`${
+								styles.cell_split
+							} ${getClassName()}`}
+						>
 							<SplitCell
-								lesson_id={lesson_id}
 								subject={subject[0]}
 								teacher={teacher[0]}
 								position="cell_up"
 							/>
 							<SplitCell
-								lesson_id={lesson_id}
 								subject={subject[1]}
 								teacher={teacher[1]}
 								position="cell_down"
 							/>
-							{lesson_id && (
-								<span
-									onClick={handleRemove}
-									className={styles.btn_remove}
-								>
-									<MdDeleteForever />
-								</span>
-							)}
-						</>
-					) : Array.isArray(subject) &&
-					  !Array.isArray(teacher) ? (
-						<>
-							<SplitCell
-								lesson_id={lesson_id}
-								subject={subject[0]}
-								teacher={teacher}
-								position="cell_up"
-							/>
-							<SplitCell
-								lesson_id={lesson_id}
-								subject={subject[1]}
-								teacher={teacher}
-								position="cell_down"
-							/>
-							{lesson_id && (
-								<span
-									onClick={handleRemove}
-									className={styles.btn_remove}
-								>
-									<MdDeleteForever />
-								</span>
-							)}
-						</>
-					) : !Array.isArray(subject) &&
-					  Array.isArray(teacher) ? (
-						<>
-							<SplitCell
-								lesson_id={lesson_id}
-								subject={subject}
-								teacher={teacher[0]}
-								position="cell_up"
-							/>
-							<SplitCell
-								lesson_id={lesson_id}
-								subject={subject}
-								teacher={teacher[1]}
-								position="cell_down"
-							/>
-							{lesson_id && (
-								<span
-									onClick={handleRemove}
-									className={styles.btn_remove}
-								>
-									<MdDeleteForever />
-								</span>
-							)}
-						</>
-					) : (
-						<td ref={drop} className={getClassName()}>
-							{subject}
-							{teacher && ` | ${teacher}`}
-							{lesson_id && (
-								<span
-									onClick={handleRemove}
-									className={styles.btn_remove}
-								>
-									<MdDeleteForever />
-								</span>
-							)}{' '}
 						</td>
-					)}
-				</td>
-			) : (
-				<td ref={drop} className={getClassName()}>
-					{subject}
-					{teacher && ` | ${teacher}`}
-					{lesson_id && (
+					)
+				} else if (subject.length > 1 && teacher.length < 2) {
+					return (
+						<td
+							ref={drop}
+							className={`${
+								styles.cell_split
+							} ${getClassName()}`}
+						>
+							<SplitCell
+								subject={subject[0]}
+								teacher={teacher[0]}
+								position="cell_up"
+							/>
+							<SplitCell
+								subject={subject[1]}
+								teacher={teacher[0]}
+								position="cell_down"
+							/>
+						</td>
+					)
+				} else if (subject.length < 2 && teacher.length > 1) {
+					return (
+						<td
+							ref={drop}
+							className={`${
+								styles.cell_split
+							} ${getClassName()}`}
+						>
+							<SplitCell
+								subject={subject[0]}
+								teacher={teacher[0]}
+								position="cell_up"
+							/>
+							<SplitCell
+								subject={subject[0]}
+								teacher={teacher[1]}
+								position="cell_down"
+							/>
+						</td>
+					)
+				} else if (subject.length < 2 && teacher.length < 2) {
+					return (
+						<td ref={drop} className={getClassName()}>
+							{`${subject[0].name} | ${teacher[0].name}`}
+							<span
+								onClick={handleRemove}
+								className={styles.btn_remove}
+							>
+								<MdDeleteForever />
+							</span>
+						</td>
+					)
+				}
+			} else if (!teacher) {
+				if (subject.length > 1) {
+					return (
+						<>
+							return (
+							<td
+								ref={drop}
+								className={`${
+									styles.cell_split
+								} ${getClassName()}`}
+							>
+								<SplitCell
+									subject={subject[0]}
+									position="cell_up"
+								/>
+								<SplitCell
+									subject={subject[1]}
+									position="cell_down"
+								/>
+							</td>
+							)
+						</>
+					)
+				} else if (subject.length < 2) {
+					return (
+						<td ref={drop} className={getClassName()}>
+							{subject[0].name}
+							<span
+								onClick={handleRemove}
+								className={styles.btn_remove}
+							>
+								<MdDeleteForever />
+							</span>
+						</td>
+					)
+				}
+			}
+		} else {
+			if (subject && teacher) {
+				return (
+					<td ref={drop} className={getClassName()}>
+						{`${subject[0].name} | ${teacher[0].name}`}
 						<span
 							onClick={handleRemove}
 							className={styles.btn_remove}
 						>
 							<MdDeleteForever />
 						</span>
-					)}
-				</td>
-			)}
-		</>
-	)
-}
+					</td>
+				)
+			} else if (subject) {
+				return (
+					<td ref={drop} className={getClassName()}>
+						${subject[0].name}
+						<span
+							onClick={handleRemove}
+							className={styles.btn_remove}
+						>
+							<MdDeleteForever />
+						</span>
+					</td>
+				)
+			} else {
+				return <td ref={drop} className={getClassName()}></td>
+			}
+		}
+	}
 
-// ref={drop} className={getClassName()
+	return <>{renderCell()}</>
+}
 
 export default Cell

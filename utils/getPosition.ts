@@ -18,19 +18,3 @@ export function getPeriodFromPosition(position: number) {
 		return parseInt(position.toString().slice(-2))
 	}
 }
-
-// addLesson: (clas: number, position: number, subject: Subject[], teacher: Teacher[]) => void
-
-// addLesson: (class, position, subjects, teachers) =>
-// set((state) => ({
-// 	rawTableData: [
-// 		...state.rawTableData,
-// 		{
-// 			class,
-// 			day: getDayFromPosition(position),
-// 			period: getPeriodFromPosition(position),
-// 			teachers,
-// 			subjects,
-// 		},
-// 	],
-// })),

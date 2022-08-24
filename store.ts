@@ -12,7 +12,7 @@ interface TimetableState {
 		class: number
 		day: number
 		period: number
-		teachers: Teacher[]
+		teachers?: Teacher[] | undefined
 		subjects: Subject[]
 	}[]
 	teachers: Teacher[]
@@ -22,13 +22,14 @@ interface TimetableState {
 		class_id: number,
 		position: number,
 		subject: Subject[],
-		teacher: Teacher[]
+		teacher?: Teacher[]
 	) => void
+	// TODO: CLASS_ID
 	updateLesson: (
 		class_id: number,
 		position: number,
 		subject: Subject[],
-		teacher: Teacher[]
+		teacher?: Teacher[] | undefined
 	) => void
 	deleteLesson: (class_id: number, position: number) => void
 }
@@ -40,6 +41,28 @@ const useTimetableStore = create<TimetableState>((set) => ({
 			class: 9,
 			day: 1,
 			period: 1,
+			teachers: [
+				{
+					id: 3,
+					name: 'Gulami Bete',
+					shortname: 'GB',
+					email: 'gulami.bete@gmail.com',
+				},
+			],
+			subjects: [
+				{
+					id: 3,
+					name: 'History',
+					shortname: 'HIS',
+					commitee_id: 1,
+				},
+			],
+		},
+		{
+			id: 2,
+			class: 9,
+			day: 5,
+			period: 5,
 			teachers: [
 				{
 					id: 3,
@@ -467,9 +490,10 @@ const useTimetableStore = create<TimetableState>((set) => ({
 			rawTableData: [
 				...state.rawTableData.filter(
 					(lesson) =>
-						lesson.class !== class_id &&
-						lesson.day !== getDayFromPosition(position) &&
-						lesson.period !== getPeriodFromPosition(position)
+						`${lesson.class}${lesson.day}${lesson.period}` !==
+						`${class_id}${getDayFromPosition(
+							position
+						)}${getPeriodFromPosition(position)}`
 				),
 			],
 		})),

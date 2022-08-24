@@ -1,47 +1,18 @@
 import type { NextPage } from 'next'
 import styles from '../styles/Timetable.module.css'
 
-import useTimetableStore from '../store'
-import { useDrop } from 'react-dnd'
+import { Subject, Teacher } from '@prisma/client'
 
 interface Props {
-	lesson_id: number
-	subject: string
-	teacher?: string
+	subject: Subject
 	position: string
+	teacher?: Teacher
 }
 
-const SplitCell: NextPage<Props> = ({
-	lesson_id,
-	subject,
-	teacher,
-	position,
-}) => {
-	const { addLesson } = useTimetableStore()
-
-	// const [{ isOver, canDrop, itemProps }, drop]: any = useDrop({
-	// 	accept: 'MenuItem',
-	// 	// canDrop: () => !lesson_id,
-	// 	// drop: () => addLesson(lesson_id, itemProps.name),
-	// 	collect: (monitor) => ({
-	// 		canDrop: !!monitor.canDrop(),
-	// 		isOver: !!monitor.isOver(),
-	// 		itemProps: monitor.getItem(),
-	// 	}),
-	// })
-
-	// ////// TODO //////
-	// const getClassName = () => {
-	// 	if (isOver && canDrop) {
-	// 		return styles.hovered_success
-	// 	} else if (isOver && !canDrop) {
-	// 		return styles.hovered_fail
-	// 	}
-	// }
-
+const SplitCell: NextPage<Props> = ({ subject, position, teacher }) => {
 	return (
 		<span className={styles[position]}>
-			{teacher} {subject}
+			{teacher?.shortname} {subject?.shortname}
 		</span>
 	)
 }
