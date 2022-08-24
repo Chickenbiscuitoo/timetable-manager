@@ -472,9 +472,10 @@ const useTimetableStore = create<TimetableState>((set) => ({
 			rawTableData: [
 				...state.rawTableData.filter(
 					(lesson) =>
-						lesson.class !== class_id &&
-						lesson.day !== getDayFromPosition(position) &&
-						lesson.period !== getPeriodFromPosition(position)
+						`${lesson.class}${lesson.day}${lesson.period}` !==
+						`${class_id}${getDayFromPosition(
+							position
+						)}${getPeriodFromPosition(position)}`
 				),
 				{
 					class: class_id,
