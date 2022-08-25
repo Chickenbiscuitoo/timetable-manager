@@ -6,22 +6,16 @@
 import type { NextPage } from 'next'
 import styles from '../styles/Checking.module.css'
 
+import { flatten } from '../utils/arraysFuncs'
+
 import useTimetableStore from '../store'
 
 const Checking: NextPage = () => {
-	const { rawTableData, teachers, selectedClass } = useTimetableStore()
+	const { rawTableData, teachers, selectedClass, classes } =
+		useTimetableStore()
 
+	// array of teachers and count of lessons they teach
 	const teachersStats = teachers.map((teacher) => {
-		// function to turn 2D array into a simple array
-		const flatten = (arr: any) =>
-			arr.reduce(
-				(flat: any, next: any) =>
-					flat.concat(
-						Array.isArray(next) ? flatten(next) : next
-					),
-				[]
-			)
-
 		// list of all teachers that are teaching some lessons
 		const activeTeachers = rawTableData.map((lesson) =>
 			lesson.teachers?.map((teacher) => teacher.id)
@@ -38,8 +32,33 @@ const Checking: NextPage = () => {
 		}
 	})
 
-	console.log(teachersStats)
+	const classTeacherTeaching = () => {
+		// TODO: MAKE MORE SIMPLE
+		const classTeacher = classes
+			.filter((cl) => cl.id === selectedClass)
+			.map((cl) => cl.teacher_id)[0]
 
+		const classLessons = rawTableData.filter(
+			(lesson) => lesson.class === selectedClass
+		)
+
+		// list of all teachers that are teaching some lessons
+		const activeTeachersInClass = classLessons.map((lesson) =>
+			lesson.teachers?.map((teacher) => teacher.id)
+		)
+
+		const teacherLessons = flatten(activeTeachersInClass).filter(
+			(id: number) => id === classTeacher
+		)
+
+		if (teacherLessons.length > 0) {
+			return true
+		} else {
+			return false
+		}
+	}
+
+	classTeacherTeaching()
 	return <div>jou</div>
 }
 
