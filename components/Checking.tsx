@@ -47,7 +47,6 @@ const Checking: NextPage = () => {
 	})
 
 	const classTeacherTeaching = () => {
-		// TODO: MAKE MORE SIMPLE
 		const classTeacher = classes
 			.filter((cl) => cl.id === selectedClass)
 			.map((cl) => cl.teacher_id)[0]
@@ -92,8 +91,32 @@ const Checking: NextPage = () => {
 		}
 	}
 
+	const lessonsWithoutTeacher = () => {
+		const classLessons = rawTableData.filter(
+			(lesson) => lesson.class === selectedClass
+		)
+
+		const noTeacherLessons = classLessons.filter(
+			(lesson) => lesson.teachers === undefined
+		)
+
+		return noTeacherLessons.map((lesson) => {
+			return (
+				<div key={lesson.id} className={styles.invalid}>
+					{lesson.day}:{lesson.period} - no teacher
+				</div>
+			)
+		})
+	}
 	return (
 		<div>
+			{!classTeacherTeaching() && (
+				<p className={styles.invalid}>
+					Class teacher is not teaching any lessons!
+				</p>
+			)}
+			{classLessonsNumInvalid()}
+			{lessonsWithoutTeacher()}
 			<div
 				onMouseEnter={() => setHovered(true)}
 				onMouseLeave={() => setHovered(false)}
@@ -105,12 +128,6 @@ const Checking: NextPage = () => {
 					</div>
 				)}
 			</div>
-			{!classTeacherTeaching() && (
-				<p className={styles.invalid}>
-					Class teacher is not teaching any lessons!
-				</p>
-			)}
-			{classLessonsNumInvalid()}
 		</div>
 	)
 }
