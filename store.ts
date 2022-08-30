@@ -25,7 +25,6 @@ interface TimetableState {
 		subject: Subject[],
 		teacher?: Teacher[]
 	) => void
-	// TODO: CLASS_ID
 	updateLesson: (
 		class_id: number,
 		position: number,
@@ -33,12 +32,13 @@ interface TimetableState {
 		teacher?: Teacher[] | undefined
 	) => void
 	deleteLesson: (class_id: number, position: number) => void
+	copyLessons: (from: number, to: number) => void
 
 	selectedClass: number
 	setSelectedClass: (class_id: number) => void
 }
 
-const useTimetableStore = create<TimetableState>((set) => ({
+const useTimetableStore = create<TimetableState>((set, get) => ({
 	rawTableData: [
 		{
 			id: 2,
@@ -472,10 +472,22 @@ const useTimetableStore = create<TimetableState>((set) => ({
 				),
 			],
 		})),
+	copyLessons: (from, to) => {
+		const srcLessons = get().rawTableData.filter(
+			(lesson) => lesson.class === from
+		)
+		const destLessons = srcLessons.map((lesson) => ({
+			...lesson,
+			class: to,
+		}))
+		set((state) => ({
+			rawTableData: [...state.rawTableData, ...destLessons],
+		}))
+	},
 
 	selectedClass: 9,
 	setSelectedClass: (class_id) =>
-		set((state) => ({ selectedClass: class_id })),
+		set(() => ({ selectedClass: class_id })),
 }))
 
 export default useTimetableStore

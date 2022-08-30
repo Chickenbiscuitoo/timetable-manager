@@ -7,8 +7,18 @@ import useTimetableStore from '../store'
 const CopyButton: NextPage = () => {
 	const [clicked, setClicked] = useState(false)
 
-	const { classes } = useTimetableStore()
-	const classList = classes.map((cl) => <a key={cl.id}>{cl.name}</a>)
+	const { selectedClass, classes, copyLessons } = useTimetableStore()
+
+	const handleClick = (e: any) => {
+		const destId = parseInt(e.target.id)
+		copyLessons(selectedClass, destId)
+	}
+
+	const classList = classes.map((cl) => (
+		<a key={cl.id} id={cl.id.toString()} onClick={handleClick}>
+			{cl.name}
+		</a>
+	))
 
 	return (
 		<div
