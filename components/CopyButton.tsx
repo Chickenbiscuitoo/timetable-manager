@@ -8,10 +8,17 @@ const CopyButton: NextPage = () => {
 	const [clicked, setClicked] = useState(false)
 
 	const { classes } = useTimetableStore()
+	const classList = classes.map((cl) => <a key={cl.id}>{cl.name}</a>)
 
 	return (
-		<div onMouseLeave={() => setClicked(false)}>
-			<button onClick={() => setClicked(true)}>COPY</button>
+		<div
+			onMouseLeave={() => setClicked(false)}
+			className={styles.copybtn}
+		>
+			<button onClick={() => setClicked(true)}>
+				{clicked ? 'COPY TO	' : 'COPY'}
+			</button>
+			{clicked && classList}
 		</div>
 	)
 }
