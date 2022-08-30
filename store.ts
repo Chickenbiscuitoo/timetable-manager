@@ -42,7 +42,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 	rawTableData: [
 		{
 			id: 2,
-			class: 9,
+			class: 1,
 			day: 1,
 			period: 1,
 			teachers: [
@@ -64,7 +64,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		},
 		{
 			id: 2,
-			class: 9,
+			class: 1,
 			day: 5,
 			period: 5,
 			teachers: [
@@ -86,7 +86,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		},
 		{
 			id: 3,
-			class: 9,
+			class: 1,
 			day: 1,
 			period: 6,
 			teachers: [
@@ -120,7 +120,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		},
 		{
 			id: 4,
-			class: 9,
+			class: 1,
 			day: 1,
 			period: 7,
 			teachers: [
@@ -154,7 +154,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		},
 		{
 			id: 5,
-			class: 9,
+			class: 1,
 			day: 1,
 			period: 2,
 			teachers: [
@@ -188,7 +188,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		},
 		{
 			id: 6,
-			class: 9,
+			class: 1,
 			day: 1,
 			period: 3,
 			teachers: [
@@ -222,7 +222,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		},
 		{
 			id: 8,
-			class: 9,
+			class: 1,
 			day: 2,
 			period: 11,
 			teachers: [
@@ -256,7 +256,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		},
 		{
 			id: 9,
-			class: 9,
+			class: 1,
 			day: 2,
 			period: 6,
 			teachers: [
@@ -290,7 +290,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		},
 		{
 			id: 10,
-			class: 9,
+			class: 1,
 			day: 4,
 			period: 2,
 			teachers: [
@@ -318,7 +318,35 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		},
 		{
 			id: 12,
-			class: 9,
+			class: 1,
+			day: 4,
+			period: 11,
+			teachers: [
+				{
+					id: 6,
+					name: 'Zachary Gagnon',
+					shortname: 'ZG',
+					email: 'zachary.gagnon@gmail.com',
+				},
+				{
+					id: 9,
+					name: 'Juan Perez',
+					shortname: 'JP',
+					email: 'juan.perez@gmail.com',
+				},
+			],
+			subjects: [
+				{
+					id: 5,
+					name: 'Physics',
+					shortname: 'PHY',
+					commitee_id: 1,
+				},
+			],
+		},
+		{
+			id: 13,
+			class: 2,
 			day: 4,
 			period: 11,
 			teachers: [
@@ -418,14 +446,14 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		{ id: 1, name: 'Math', shortname: 'MAT', commitee_id: 1 },
 	],
 	classes: [
-		{ id: 9, name: '1.A', teacher_id: 1 },
-		{ id: 10, name: '1.B', teacher_id: 2 },
-		{ id: 11, name: '1.C', teacher_id: 3 },
-		{ id: 12, name: '1.D', teacher_id: 4 },
-		{ id: 13, name: '2.A', teacher_id: 5 },
-		{ id: 14, name: '2.B', teacher_id: 6 },
-		{ id: 15, name: '2.C', teacher_id: 7 },
-		{ id: 16, name: '2.D', teacher_id: 8 },
+		{ id: 1, name: '1.A', teacher_id: 1 },
+		{ id: 2, name: '1.B', teacher_id: 2 },
+		{ id: 3, name: '1.C', teacher_id: 3 },
+		{ id: 4, name: '1.D', teacher_id: 4 },
+		{ id: 5, name: '2.A', teacher_id: 5 },
+		{ id: 6, name: '2.B', teacher_id: 6 },
+		{ id: 7, name: '2.C', teacher_id: 7 },
+		{ id: 8, name: '2.D', teacher_id: 8 },
 	],
 
 	addLesson: (class_id, position, subject, teacher) =>
@@ -485,7 +513,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		}))
 	},
 
-	selectedClass: 9,
+	selectedClass: 1,
 	setSelectedClass: (class_id) =>
 		set(() => ({ selectedClass: class_id })),
 }))

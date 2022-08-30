@@ -9,6 +9,7 @@ import ScrollMenu from '../components/ScrollMenu'
 import OptionsMenu from '../components/OptionsMenu'
 import Checking from '../components/Checking'
 import CopyButton from '../components/CopyButton'
+import Stats from '../components/Stats'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
