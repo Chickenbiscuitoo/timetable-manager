@@ -24,18 +24,20 @@ const Stats: NextPage = () => {
 
 	const teachersStats = teachersLessons.map((teacher) => {
 		const classLessons: any = []
-		let classId = 9
-		const getClassLessons = teacher.lessons.forEach((lesson) => {
-			if (lesson.class === classId) {
-				classLessons.push({
-					[classId]: [classLessons[classId - 9], lesson],
-				})
-			}
-			classId++
+		classes.forEach((cl) => {
+			const clLessons = teacher.lessons.filter(
+				(lesson) => lesson.class === cl.id
+			)
+			classLessons.push(clLessons)
 		})
-
-		return classLessons
+		return {
+			id: teacher.id,
+			name: teacher.name,
+			lessons: classLessons,
+		}
 	})
+
+	console.log(teachersStats)
 
 	return <div></div>
 }

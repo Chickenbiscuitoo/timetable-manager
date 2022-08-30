@@ -35,6 +35,7 @@ const Home: NextPage = () => {
 				</DndProvider>
 				<OptionsMenu />
 				<Checking />
+				<Stats />
 			</main>
 
 			<footer className={styles.footer}>
