@@ -37,8 +37,6 @@ const TeachersStats: NextPage = () => {
 		}
 	})
 
-	console.log(teachersStats)
-
 	const teacherItems = teachersStats.map((teacher) => {
 		return (
 			<div>
