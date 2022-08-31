@@ -7,5 +7,11 @@ module.exports = {
 	theme: {
 		extend: {},
 	},
+	// add daisyUI plugin
 	plugins: [require('daisyui')],
+
+	// daisyUI config (optional)
+	daisyui: {
+		themes: ['corporate'],
+	},
 }
