@@ -6,7 +6,7 @@ import { flatten } from '../utils/arraysFuncs'
 import { useState } from 'react'
 import useTimetableStore from '../store'
 
-const Stats: NextPage = () => {
+const TeachersStats: NextPage = () => {
 	const { teachers, subjects, classes, rawTableData } =
 		useTimetableStore()
 
@@ -61,4 +61,4 @@ const Stats: NextPage = () => {
 	return <div>{teacherItems}</div>
 }
 
-export default Stats
+export default TeachersStats
