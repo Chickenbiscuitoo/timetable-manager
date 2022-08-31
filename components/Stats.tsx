@@ -39,7 +39,26 @@ const Stats: NextPage = () => {
 
 	console.log(teachersStats)
 
-	return <div></div>
+	const teacherItems = teachersStats.map((teacher) => {
+		return (
+			<div>
+				<h3>{teacher.name}</h3>
+				{teacher.lessons.map((cl: any, i: any) => {
+					const clName = classes.find(
+						(cla) => cla.id === i + 1
+					)?.name
+					return (
+						<div>
+							<h4>{clName}</h4>
+							<h5>Number of lessons: {cl.length}</h5>
+						</div>
+					)
+				})}
+			</div>
+		)
+	})
+
+	return <div>{teacherItems}</div>
 }
 
 export default Stats
