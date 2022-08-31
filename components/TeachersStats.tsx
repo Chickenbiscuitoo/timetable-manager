@@ -56,7 +56,7 @@ const TeachersStats: NextPage = () => {
 		)
 	})
 
-	return <div>{teacherItems}</div>
+	return <>{teacherItems}</>
 }
 
 export default TeachersStats
