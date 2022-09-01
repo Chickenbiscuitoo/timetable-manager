@@ -1,6 +1,8 @@
 import type { NextPage } from 'next'
 import { Subject, Teacher } from '@prisma/client'
 
+import { useState } from 'react'
+
 import useTimetableStore from '../store'
 import { useDrop } from 'react-dnd'
 
@@ -16,6 +18,8 @@ interface Props {
 const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 	const { addLesson, updateLesson, deleteLesson, selectedClass } =
 		useTimetableStore()
+
+	const [hovered, setHovered] = useState(false)
 
 	const handleDrop = () => {
 		if (itemType === 'TeacherMenuItem') {
@@ -107,6 +111,8 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 						<td
 							className="border border-slate-700 relative h-full w-full"
 							ref={drop}
+							onMouseEnter={() => setHovered(true)}
+							onMouseLeave={() => setHovered(false)}
 						>
 							<SplitCell
 								subject={subject[0]}
@@ -118,12 +124,14 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 								teacher={teacher[1]}
 								position="right"
 							/>
-							<span
-								onClick={handleRemove}
-								className="absolute top-1 right-1 cursor-pointer"
-							>
-								<MdDeleteForever />
-							</span>
+							{hovered && (
+								<span
+									onClick={handleRemove}
+									className="absolute top-1 right-1 cursor-pointer"
+								>
+									<MdDeleteForever />
+								</span>
+							)}
 						</td>
 					)
 				} else if (subject.length > 1 && teacher.length < 2) {
@@ -131,6 +139,8 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 						<td
 							className="border border-slate-700 relative h-full w-full"
 							ref={drop}
+							onMouseEnter={() => setHovered(true)}
+							onMouseLeave={() => setHovered(false)}
 						>
 							<SplitCell
 								subject={subject[0]}
@@ -142,12 +152,14 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 								teacher={teacher[0]}
 								position="right"
 							/>
-							<span
-								onClick={handleRemove}
-								className="absolute top-1 right-1 cursor-pointer"
-							>
-								<MdDeleteForever />
-							</span>
+							{hovered && (
+								<span
+									onClick={handleRemove}
+									className="absolute top-1 right-1 cursor-pointer"
+								>
+									<MdDeleteForever />
+								</span>
+							)}
 						</td>
 					)
 				} else if (subject.length < 2 && teacher.length > 1) {
@@ -155,6 +167,8 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 						<td
 							className="border border-slate-700 relative h-full w-full"
 							ref={drop}
+							onMouseEnter={() => setHovered(true)}
+							onMouseLeave={() => setHovered(false)}
 						>
 							<SplitCell
 								subject={subject[0]}
@@ -166,12 +180,14 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 								teacher={teacher[1]}
 								position="right"
 							/>
-							<span
-								onClick={handleRemove}
-								className="absolute top-1 right-1 cursor-pointer"
-							>
-								<MdDeleteForever />
-							</span>
+							{hovered && (
+								<span
+									onClick={handleRemove}
+									className="absolute top-1 right-1 cursor-pointer"
+								>
+									<MdDeleteForever />
+								</span>
+							)}
 						</td>
 					)
 				} else if (subject.length < 2 && teacher.length < 2) {
@@ -179,14 +195,18 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 						<td
 							className="border border-slate-700 relative h-full w-full"
 							ref={drop}
+							onMouseEnter={() => setHovered(true)}
+							onMouseLeave={() => setHovered(false)}
 						>
 							{`${subject[0].name} | ${teacher[0].name}`}
-							<span
-								onClick={handleRemove}
-								className="absolute top-1 right-1 cursor-pointer"
-							>
-								<MdDeleteForever />
-							</span>
+							{hovered && (
+								<span
+									onClick={handleRemove}
+									className="absolute top-1 right-1 cursor-pointer"
+								>
+									<MdDeleteForever />
+								</span>
+							)}
 						</td>
 					)
 				}
@@ -197,6 +217,8 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 							<td
 								className="border border-slate-700 relative h-full w-full"
 								ref={drop}
+								onMouseEnter={() => setHovered(true)}
+								onMouseLeave={() => setHovered(false)}
 							>
 								<SplitCell
 									subject={subject[0]}
@@ -206,6 +228,14 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 									subject={subject[1]}
 									position="right"
 								/>
+								{hovered && (
+									<span
+										onClick={handleRemove}
+										className="absolute top-1 right-1 cursor-pointer"
+									>
+										<MdDeleteForever />
+									</span>
+								)}
 							</td>
 						</>
 					)
@@ -214,11 +244,18 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 						<td
 							className="border border-slate-700 relative h-full w-full"
 							ref={drop}
+							onMouseEnter={() => setHovered(true)}
+							onMouseLeave={() => setHovered(false)}
 						>
 							{subject[0].name}
-							<span onClick={handleRemove}>
-								<MdDeleteForever />
-							</span>
+							{hovered && (
+								<span
+									onClick={handleRemove}
+									className="absolute top-1 right-1 cursor-pointer"
+								>
+									<MdDeleteForever />
+								</span>
+							)}
 						</td>
 					)
 				}
@@ -229,17 +266,21 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 					<td
 						className="border border-slate-700 text-center relative h-full w-full"
 						ref={drop}
+						onMouseEnter={() => setHovered(true)}
+						onMouseLeave={() => setHovered(false)}
 					>
 						<h4 className="inline">{teacher[0].shortname}</h4>
 						<h4 className="text-primary inline ml-2">
 							{subject[0].shortname}
 						</h4>
-						<span
-							onClick={handleRemove}
-							className="absolute top-1 right-1 cursor-pointer"
-						>
-							<MdDeleteForever />
-						</span>
+						{hovered && (
+							<span
+								onClick={handleRemove}
+								className="absolute top-1 right-1 cursor-pointer"
+							>
+								<MdDeleteForever />
+							</span>
+						)}
 					</td>
 				)
 			} else if (subject) {
@@ -247,16 +288,20 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 					<td
 						className="border border-slate-700 text-center relative"
 						ref={drop}
+						onMouseEnter={() => setHovered(true)}
+						onMouseLeave={() => setHovered(false)}
 					>
 						<h4 className="text-primary inline ml-2">
 							{subject[0].shortname}
 						</h4>
-						<span
-							onClick={handleRemove}
-							className="absolute top-1 right-1 cursor-pointer"
-						>
-							<MdDeleteForever />
-						</span>
+						{hovered && (
+							<span
+								onClick={handleRemove}
+								className="absolute top-1 right-1 cursor-pointer"
+							>
+								<MdDeleteForever />
+							</span>
+						)}
 					</td>
 				)
 			} else {
