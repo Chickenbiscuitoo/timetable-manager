@@ -25,6 +25,9 @@ const ScrollMenu: NextPage<Props> = ({ data, isTeacher }) => {
 					placeholder="Search"
 					className="bg-indigo-100 rounded-md text-primary placeholder:text-primary placeholder-opacity-50 p-1 m-2 mt-3"
 				/>
+				<span className="absolute top-1 right-4 text-primary">
+					<TiDelete />
+				</span>
 			</div>
 
 			{data
