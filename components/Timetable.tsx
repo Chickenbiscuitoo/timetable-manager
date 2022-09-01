@@ -36,26 +36,24 @@ const Timetable: NextComponentType = () => {
 
 	return (
 		<>
-			<div className="w-full">
+			<div className="sm:w-full md:w-full lg:w-4/5 2xl:w-3/5">
 				<table className="table table-zebra w-full h-full devide-black border-collapse border border-slate-500 table-fixed ">
 					<thead>
 						<tr>
-							<th className="border border-slate-600 w-10">
-								x
-							</th>
-							<th className="border border-slate-600">
+							<th className="border border-slate-600 text-center w-12"></th>
+							<th className="border border-slate-600 text-center">
 								Monday
 							</th>
-							<th className="border border-slate-600">
+							<th className="border border-slate-600 text-center">
 								Tuesday
 							</th>
-							<th className="border border-slate-600">
+							<th className="border border-slate-600 text-center">
 								Wednesday
 							</th>
-							<th className="border border-slate-600">
+							<th className="border border-slate-600 text-center">
 								Thursday
 							</th>
-							<th className="border border-slate-600">
+							<th className="border border-slate-600 text-center">
 								Friday
 							</th>
 						</tr>
@@ -65,8 +63,8 @@ const Timetable: NextComponentType = () => {
 							.filter((_, i) => i)
 							.map((row, i) => (
 								<tr key={i}>
-									<td className="border border-slate-700 w-10">
-										{i + 1}
+									<td className="border border-slate-700 w-10 text-secondary text-center">
+										<h3>{i + 1}</h3>
 									</td>
 									{row
 										.filter((_, ci) => ci)
