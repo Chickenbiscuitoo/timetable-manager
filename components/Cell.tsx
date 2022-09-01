@@ -92,14 +92,6 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 		}),
 	})
 
-	// const getClassName = () => {
-	// 	if (isOver && canDrop) {
-	// 		return styles.hovered_success
-	// 	} else if (isOver && !canDrop) {
-	// 		return styles.hovered_fail
-	// 	}
-	// }
-
 	const renderCell = () => {
 		if (
 			(subject && subject.length > 1) ||
