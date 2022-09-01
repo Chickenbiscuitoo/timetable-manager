@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import styles from '../styles/ScrollMenu.module.css'
 import { useState } from 'react'
 
 import MenuItem from '../components/MenuItem'
@@ -16,13 +15,13 @@ const ScrollMenu: NextPage<Props> = ({ data, isTeacher }) => {
 		setFilter(e.target.value)
 
 	return (
-		<div className={styles.scrollmenu}>
+		<div className="overflow-auto bg-primary whitespace-nowrap min-h-16 text-indigo-100 sm:w-full md:w-full lg:w-4/5 2xl:w-3/5">
 			<input
 				type="text"
 				value={filter}
 				onChange={handleChange}
 				placeholder="Search"
-				className={styles.searchbar}
+				className="bg-indigo-100 rounded-md text-primary placeholder:text-primary placeholder-opacity-50 p-1 m-2 mt-3"
 			/>
 
 			{data
