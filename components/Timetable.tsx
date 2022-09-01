@@ -1,5 +1,4 @@
 import type { NextComponentType } from 'next'
-import styles from '../styles/Timetable.module.css'
 import useTimetableStore from '../store'
 import { useEffect, useState } from 'react'
 
@@ -37,44 +36,65 @@ const Timetable: NextComponentType = () => {
 
 	return (
 		<>
-			<table className={styles.tg}>
-				<thead>
-					<tr>
-						<th className={styles.num_cell}>x</th>
-						<th>Monday</th>
-						<th>Tuesday</th>
-						<th>Wednesday</th>
-						<th>Thursday</th>
-						<th>Friday</th>
-					</tr>
-				</thead>
-				<tbody>
-					{tableData
-						.filter((_, i) => i)
-						.map((row, i) => (
-							<tr key={i}>
-								<td className={styles.num_cell}>
-									{i + 1}
-								</td>
-								{row
-									.filter((_, ci) => ci)
-									.map((cell, ci) => {
-										return (
-											<Cell
-												key={getPosition(i, ci)}
-												subject={cell?.subjects}
-												position={getPosition(
-													i,
-													ci
-												)}
-												teacher={cell?.teachers}
-											/>
-										)
-									})}
-							</tr>
-						))}
-				</tbody>
-			</table>
+			<div className="w-full">
+				<table className="table table-zebra w-full h-full devide-black border-collapse border border-slate-500 table-fixed ">
+					<thead>
+						<tr>
+							<th className="border border-slate-600 w-10">
+								x
+							</th>
+							<th className="border border-slate-600">
+								Monday
+							</th>
+							<th className="border border-slate-600">
+								Tuesday
+							</th>
+							<th className="border border-slate-600">
+								Wednesday
+							</th>
+							<th className="border border-slate-600">
+								Thursday
+							</th>
+							<th className="border border-slate-600">
+								Friday
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{tableData
+							.filter((_, i) => i)
+							.map((row, i) => (
+								<tr key={i}>
+									<td className="border border-slate-700 w-10">
+										{i + 1}
+									</td>
+									{row
+										.filter((_, ci) => ci)
+										.map((cell, ci) => {
+											return (
+												<Cell
+													key={getPosition(
+														i,
+														ci
+													)}
+													subject={
+														cell?.subjects
+													}
+													position={getPosition(
+														i,
+														ci
+													)}
+													teacher={
+														cell?.teachers
+													}
+												/>
+											)
+										})}
+								</tr>
+							))}
+					</tbody>
+				</table>
+			</div>
 		</>
 	)
 }

@@ -32,7 +32,7 @@ const TeachersStats: NextPage = () => {
 					<tr>
 						<th></th>
 						{teachers.map((tch) => (
-							<th>{tch.name}</th>
+							<th key={tch.id}>{tch.name}</th>
 						))}
 					</tr>
 				</thead>
@@ -43,10 +43,12 @@ const TeachersStats: NextPage = () => {
 						)?.name
 
 						return (
-							<tr>
+							<tr key={i}>
 								<td>{clName}</td>
 								{cl.map((teacher) => (
-									<td>{teacher.lessonsNumber}</td>
+									<td key={teacher.name}>
+										{teacher.lessonsNumber}
+									</td>
 								))}
 							</tr>
 						)
@@ -56,7 +58,7 @@ const TeachersStats: NextPage = () => {
 					<tr>
 						<th></th>
 						{teachers.map((tch) => (
-							<th>{tch.name}</th>
+							<th key={tch.email}>{tch.name}</th>
 						))}
 					</tr>
 				</tfoot>

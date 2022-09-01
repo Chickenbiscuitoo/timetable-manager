@@ -1,8 +1,6 @@
 import type { NextPage } from 'next'
 import { Subject, Teacher } from '@prisma/client'
 
-import styles from '../styles/Timetable.module.css'
-
 import useTimetableStore from '../store'
 import { useDrop } from 'react-dnd'
 
@@ -90,13 +88,13 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 		}),
 	})
 
-	const getClassName = () => {
-		if (isOver && canDrop) {
-			return styles.hovered_success
-		} else if (isOver && !canDrop) {
-			return styles.hovered_fail
-		}
-	}
+	// const getClassName = () => {
+	// 	if (isOver && canDrop) {
+	// 		return styles.hovered_success
+	// 	} else if (isOver && !canDrop) {
+	// 		return styles.hovered_fail
+	// 	}
+	// }
 
 	const renderCell = () => {
 		if (
@@ -107,24 +105,22 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 				if (subject.length > 1 && teacher.length > 1) {
 					return (
 						<td
+							className="border border-slate-700 relative h-full w-full"
 							ref={drop}
-							className={`${
-								styles.cell_split
-							} ${getClassName()}`}
 						>
 							<SplitCell
 								subject={subject[0]}
 								teacher={teacher[0]}
-								position="cell_up"
+								position="left"
 							/>
 							<SplitCell
 								subject={subject[1]}
 								teacher={teacher[1]}
-								position="cell_down"
+								position="right"
 							/>
 							<span
 								onClick={handleRemove}
-								className={styles.btn_remove}
+								className="absolute top-1 right-1 cursor-pointer"
 							>
 								<MdDeleteForever />
 							</span>
@@ -133,24 +129,22 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 				} else if (subject.length > 1 && teacher.length < 2) {
 					return (
 						<td
+							className="border border-slate-700 relative h-full w-full"
 							ref={drop}
-							className={`${
-								styles.cell_split
-							} ${getClassName()}`}
 						>
 							<SplitCell
 								subject={subject[0]}
 								teacher={teacher[0]}
-								position="cell_up"
+								position="left"
 							/>
 							<SplitCell
 								subject={subject[1]}
 								teacher={teacher[0]}
-								position="cell_down"
+								position="right"
 							/>
 							<span
 								onClick={handleRemove}
-								className={styles.btn_remove}
+								className="absolute top-1 right-1 cursor-pointer"
 							>
 								<MdDeleteForever />
 							</span>
@@ -159,24 +153,22 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 				} else if (subject.length < 2 && teacher.length > 1) {
 					return (
 						<td
+							className="border border-slate-700 relative h-full w-full"
 							ref={drop}
-							className={`${
-								styles.cell_split
-							} ${getClassName()}`}
 						>
 							<SplitCell
 								subject={subject[0]}
 								teacher={teacher[0]}
-								position="cell_up"
+								position="left"
 							/>
 							<SplitCell
 								subject={subject[0]}
 								teacher={teacher[1]}
-								position="cell_down"
+								position="right"
 							/>
 							<span
 								onClick={handleRemove}
-								className={styles.btn_remove}
+								className="absolute top-1 right-1 cursor-pointer"
 							>
 								<MdDeleteForever />
 							</span>
@@ -184,11 +176,14 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 					)
 				} else if (subject.length < 2 && teacher.length < 2) {
 					return (
-						<td ref={drop} className={getClassName()}>
+						<td
+							className="border border-slate-700 relative h-full w-full"
+							ref={drop}
+						>
 							{`${subject[0].name} | ${teacher[0].name}`}
 							<span
 								onClick={handleRemove}
-								className={styles.btn_remove}
+								className="absolute top-1 right-1 cursor-pointer"
 							>
 								<MdDeleteForever />
 							</span>
@@ -200,36 +195,28 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 					return (
 						<>
 							<td
+								className="border border-slate-700 relative h-full w-full"
 								ref={drop}
-								className={`${
-									styles.cell_split
-								} ${getClassName()}`}
 							>
 								<SplitCell
 									subject={subject[0]}
-									position="cell_up"
+									position="left"
 								/>
 								<SplitCell
 									subject={subject[1]}
-									position="cell_down"
+									position="right"
 								/>
-								<span
-									onClick={handleRemove}
-									className={styles.btn_remove}
-								>
-									<MdDeleteForever />
-								</span>
 							</td>
 						</>
 					)
 				} else if (subject.length < 2) {
 					return (
-						<td ref={drop} className={getClassName()}>
+						<td
+							className="border border-slate-700 relative h-full w-full"
+							ref={drop}
+						>
 							{subject[0].name}
-							<span
-								onClick={handleRemove}
-								className={styles.btn_remove}
-							>
+							<span onClick={handleRemove}>
 								<MdDeleteForever />
 							</span>
 						</td>
@@ -239,11 +226,17 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 		} else {
 			if (subject && teacher) {
 				return (
-					<td ref={drop} className={getClassName()}>
-						{`${subject[0].name} | ${teacher[0].name}`}
+					<td
+						className="border border-slate-700 text-center relative h-full w-full"
+						ref={drop}
+					>
+						<h4 className="inline">{teacher[0].shortname}</h4>
+						<h4 className="text-primary inline ml-2">
+							{subject[0].shortname}
+						</h4>
 						<span
 							onClick={handleRemove}
-							className={styles.btn_remove}
+							className="absolute top-1 right-1 cursor-pointer"
 						>
 							<MdDeleteForever />
 						</span>
@@ -251,18 +244,28 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 				)
 			} else if (subject) {
 				return (
-					<td ref={drop} className={getClassName()}>
-						{subject[0].name}
+					<td
+						className="border border-slate-700 text-center relative"
+						ref={drop}
+					>
+						<h4 className="text-primary inline ml-2">
+							{subject[0].shortname}
+						</h4>
 						<span
 							onClick={handleRemove}
-							className={styles.btn_remove}
+							className="absolute top-1 right-1 cursor-pointer"
 						>
 							<MdDeleteForever />
 						</span>
 					</td>
 				)
 			} else {
-				return <td ref={drop} className={getClassName()}></td>
+				return (
+					<td
+						className="border border-slate-700 h-full w-full"
+						ref={drop}
+					></td>
+				)
 			}
 		}
 	}
