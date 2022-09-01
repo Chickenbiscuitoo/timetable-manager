@@ -127,7 +127,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 							{hovered && (
 								<span
 									onClick={handleRemove}
-									className="absolute top-1 right-1 cursor-pointer"
+									className="absolute top-1 right-1 cursor-pointer hover:text-red-400"
 								>
 									<MdDeleteForever />
 								</span>
@@ -155,7 +155,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 							{hovered && (
 								<span
 									onClick={handleRemove}
-									className="absolute top-1 right-1 cursor-pointer"
+									className="absolute top-1 right-1 cursor-pointer hover:text-red-400"
 								>
 									<MdDeleteForever />
 								</span>
@@ -183,7 +183,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 							{hovered && (
 								<span
 									onClick={handleRemove}
-									className="absolute top-1 right-1 cursor-pointer"
+									className="absolute top-1 right-1 cursor-pointer hover:text-red-400"
 								>
 									<MdDeleteForever />
 								</span>
@@ -202,7 +202,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 							{hovered && (
 								<span
 									onClick={handleRemove}
-									className="absolute top-1 right-1 cursor-pointer"
+									className="absolute top-1 right-1 cursor-pointer hover:text-red-400"
 								>
 									<MdDeleteForever />
 								</span>
@@ -231,7 +231,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 								{hovered && (
 									<span
 										onClick={handleRemove}
-										className="absolute top-1 right-1 cursor-pointer"
+										className="absolute top-1 right-1 cursor-pointer hover:text-red-400"
 									>
 										<MdDeleteForever />
 									</span>
@@ -251,7 +251,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 							{hovered && (
 								<span
 									onClick={handleRemove}
-									className="absolute top-1 right-1 cursor-pointer"
+									className="absolute top-1 right-1 cursor-pointer hover:text-red-400"
 								>
 									<MdDeleteForever />
 								</span>
@@ -276,7 +276,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 						{hovered && (
 							<span
 								onClick={handleRemove}
-								className="absolute top-1 right-1 cursor-pointer"
+								className="absolute top-1 right-1 cursor-pointer hover:text-red-400"
 							>
 								<MdDeleteForever />
 							</span>
@@ -297,7 +297,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 						{hovered && (
 							<span
 								onClick={handleRemove}
-								className="absolute top-1 right-1 cursor-pointer"
+								className="absolute top-1 right-1 cursor-pointer hover:text-red-400"
 							>
 								<MdDeleteForever />
 							</span>
