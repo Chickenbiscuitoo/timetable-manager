@@ -25,7 +25,12 @@ const MenuItem: NextPage<Props> = ({
 		}),
 	}))
 
-	return <a ref={drag}>{`${name} | ${shortname}`}</a>
+	return (
+		<a
+			ref={drag}
+			className="btn btn-outline btn-nautral btn-md rounded-xl m-1 mr-2 hover:cursor-grab"
+		>{`${name} | ${shortname}`}</a>
+	)
 }
 
 export default MenuItem
