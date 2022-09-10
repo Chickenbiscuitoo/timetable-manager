@@ -7,12 +7,12 @@ const SideWorkspace: NextPage = () => {
 	const { teachers, subjects } = useTimetableStore()
 
 	return (
-		<div className="min-h-screen bg-gray-800">
-			<div>
+		<div className="min-h-screen flex flex-col w-full bg-secondary">
+			<div className="h-1/2 flex flex-row">
 				<ScrollMenu data={teachers} isTeacher={true} />
 				<ScrollMenu data={subjects} isTeacher={false} />
 			</div>
-			jou
+			<div className="h-1/2">checking</div>
 		</div>
 	)
 }

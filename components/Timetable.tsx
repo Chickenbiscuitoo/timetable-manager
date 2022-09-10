@@ -35,65 +35,56 @@ const Timetable: NextComponentType = () => {
 	}, [rawTableData, selectedClass])
 
 	return (
-		<>
-			<div className="w-full p-5">
-				<table className="table table-zebra w-full h-full devide-black border-collapse border border-slate-500 table-fixed ">
-					<thead>
-						<tr>
-							<th className="border border-slate-600 text-center w-12"></th>
-							<th className="border border-slate-600 text-center">
-								Monday
-							</th>
-							<th className="border border-slate-600 text-center">
-								Tuesday
-							</th>
-							<th className="border border-slate-600 text-center">
-								Wednesday
-							</th>
-							<th className="border border-slate-600 text-center">
-								Thursday
-							</th>
-							<th className="border border-slate-600 text-center">
-								Friday
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						{tableData
-							.filter((_, i) => i)
-							.map((row, i) => (
-								<tr key={i}>
-									<td className="border border-slate-700 w-10 text-secondary text-center">
-										<h3>{i + 1}</h3>
-									</td>
-									{row
-										.filter((_, ci) => ci)
-										.map((cell, ci) => {
-											return (
-												<Cell
-													key={getPosition(
-														i,
-														ci
-													)}
-													subject={
-														cell?.subjects
-													}
-													position={getPosition(
-														i,
-														ci
-													)}
-													teacher={
-														cell?.teachers
-													}
-												/>
-											)
-										})}
-								</tr>
-							))}
-					</tbody>
-				</table>
-			</div>
-		</>
+		<div className="w-full p-5">
+			<table className="table table-zebra w-full h-full devide-black border-collapse border border-slate-500 table-fixed ">
+				<thead>
+					<tr>
+						<th className="border border-slate-600 text-center w-12"></th>
+						<th className="border border-slate-600 text-center">
+							Monday
+						</th>
+						<th className="border border-slate-600 text-center">
+							Tuesday
+						</th>
+						<th className="border border-slate-600 text-center">
+							Wednesday
+						</th>
+						<th className="border border-slate-600 text-center">
+							Thursday
+						</th>
+						<th className="border border-slate-600 text-center">
+							Friday
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{tableData
+						.filter((_, i) => i)
+						.map((row, i) => (
+							<tr key={i}>
+								<td className="border border-slate-700 w-10 text-secondary text-center">
+									<h3>{i + 1}</h3>
+								</td>
+								{row
+									.filter((_, ci) => ci)
+									.map((cell, ci) => {
+										return (
+											<Cell
+												key={getPosition(i, ci)}
+												subject={cell?.subjects}
+												position={getPosition(
+													i,
+													ci
+												)}
+												teacher={cell?.teachers}
+											/>
+										)
+									})}
+							</tr>
+						))}
+				</tbody>
+			</table>
+		</div>
 	)
 }
 
