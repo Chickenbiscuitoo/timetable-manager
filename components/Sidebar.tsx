@@ -3,7 +3,7 @@ import { NextPage } from 'next'
 const Sidebar: NextPage = () => {
 	return (
 		<div className="w-64 min-h-screen flex">
-			<div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
+			<div className="overflow-y-auto py-4 px-3 bg-gray-50 dark:bg-gray-800">
 				<a
 					href="https://flowbite.com/"
 					className="flex items-center pl-2.5 mb-5"
