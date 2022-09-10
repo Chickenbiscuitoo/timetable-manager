@@ -9,6 +9,7 @@ import ScrollMenu from '../components/ScrollMenu'
 import OptionsMenu from '../components/OptionsMenu'
 import Checking from '../components/Checking'
 import CopyButton from '../components/CopyButton'
+import Sidebar from '../components/Sidebar'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -17,23 +18,26 @@ const Home: NextPage = () => {
 	const { teachers, subjects } = useTimetableStore()
 
 	return (
-		<div className={styles.container}>
+		<div>
 			<Head>
 				<title>Timetable Manager</title>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<main className={styles.main}>
-				<CopyButton />
-				<DndProvider backend={HTML5Backend}>
-					<div>
-						<ScrollMenu data={teachers} isTeacher={true} />
-						<ScrollMenu data={subjects} isTeacher={false} />
-						<Timetable />
-					</div>
-				</DndProvider>
-				<OptionsMenu />
-				<Checking />
+			<main className="min-h-screen flex flex-row">
+				<Sidebar />
+				<div>
+					<DndProvider backend={HTML5Backend}>
+						<div>
+							<ScrollMenu data={teachers} isTeacher={true} />
+							<ScrollMenu
+								data={subjects}
+								isTeacher={false}
+							/>
+							<Timetable />
+						</div>
+					</DndProvider>
+				</div>
 			</main>
 
 			<footer className={styles.footer}>

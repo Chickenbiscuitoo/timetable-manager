@@ -23,7 +23,7 @@ const ScrollMenu: NextPage<Props> = ({ data, isTeacher }) => {
 					value={filter}
 					onChange={handleChange}
 					placeholder="Search"
-					className="input input-bordered input-primary max-w-xs w-1/4"
+					className="input input-bordered input-primary max-w-xs w-1/4 rounded-xl ml-2 mr-2 mt-1 text-neutral"
 				/>
 				<span className="absolute top-1 right-4 text-neutral">
 					<TiDelete />
