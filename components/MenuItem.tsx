@@ -28,8 +28,11 @@ const MenuItem: NextPage<Props> = ({
 	return (
 		<a
 			ref={drag}
-			className="btn btn-outline btn-neutral btn-md rounded-xl w-full hover:cursor-grab"
-		>{`${name} | ${shortname}`}</a>
+			className="gap-3 btn btn-outline btn-neutral btn-md rounded-xl w-full p-0 hover:cursor-grab"
+		>
+			<h5 className="inline">{name}</h5>
+			<h5 className="inline text-primary font-bold">{shortname}</h5>
+		</a>
 	)
 }
 
