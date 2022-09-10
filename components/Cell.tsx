@@ -101,7 +101,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 				if (subject.length > 1 && teacher.length > 1) {
 					return (
 						<td
-							className={`border border-slate-700 relative h-full w-full ${
+							className={`border border-slate-600 relative h-full w-full ${
 								isOver && canDrop && '!bg-emerald-200'
 							} ${isOver && !canDrop && '!bg-rose-200'}`}
 							ref={drop}
@@ -131,7 +131,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 				} else if (subject.length > 1 && teacher.length < 2) {
 					return (
 						<td
-							className={`border border-slate-700 relative h-full w-full ${
+							className={`border border-slate-600 relative h-full w-full ${
 								isOver && canDrop && '!bg-emerald-200'
 							} ${isOver && !canDrop && '!bg-rose-200'}`}
 							ref={drop}
@@ -161,7 +161,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 				} else if (subject.length < 2 && teacher.length > 1) {
 					return (
 						<td
-							className={`border border-slate-700 relative h-full w-full ${
+							className={`border border-slate-600 relative h-full w-full ${
 								isOver && canDrop && '!bg-emerald-200'
 							} ${isOver && !canDrop && '!bg-rose-200'}`}
 							ref={drop}
@@ -191,7 +191,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 				} else if (subject.length < 2 && teacher.length < 2) {
 					return (
 						<td
-							className={`border border-slate-700 relative h-full w-full ${
+							className={`border border-slate-600 relative h-full w-full ${
 								isOver && canDrop && '!bg-emerald-200'
 							} ${isOver && !canDrop && '!bg-rose-200'}`}
 							ref={drop}
@@ -215,7 +215,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 					return (
 						<>
 							<td
-								className={`border border-slate-700 relative h-full w-full ${
+								className={`border border-slate-600 relative h-full w-full ${
 									isOver && canDrop && '!bg-emerald-200'
 								} ${isOver && !canDrop && '!bg-rose-200'}`}
 								ref={drop}
@@ -244,7 +244,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 				} else if (subject.length < 2) {
 					return (
 						<td
-							className={`border border-slate-700 relative h-full w-full ${
+							className={`border border-slate-600 relative h-full w-full ${
 								isOver && canDrop && '!bg-emerald-200'
 							} ${isOver && !canDrop && '!bg-rose-200'}`}
 							ref={drop}
@@ -268,7 +268,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 			if (subject && teacher) {
 				return (
 					<td
-						className={`border border-slate-700 text-center relative h-full w-full ${
+						className={`border border-slate-600 text-center relative h-full w-full ${
 							isOver && canDrop && '!bg-emerald-200'
 						} ${isOver && !canDrop && '!bg-rose-200'}`}
 						ref={drop}
@@ -292,7 +292,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 			} else if (subject) {
 				return (
 					<td
-						className={`border border-slate-700 text-center relative ${
+						className={`border border-slate-600 text-center relative ${
 							isOver && canDrop && '!bg-emerald-200'
 						} ${isOver && !canDrop && '!bg-rose-200'}`}
 						ref={drop}
@@ -315,7 +315,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 			} else {
 				return (
 					<td
-						className={`border border-slate-700 h-full w-full ${
+						className={`border border-slate-600 h-full w-full ${
 							isOver && canDrop && '!bg-emerald-200'
 						} ${isOver && !canDrop && '!bg-rose-200'}`}
 						ref={drop}

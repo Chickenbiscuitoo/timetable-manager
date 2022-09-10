@@ -11,7 +11,7 @@ const TabsMenu: NextPage = () => {
 			id={cl.id.toString()}
 			onClick={() => setSelectedClass(cl.id)}
 			className={`tab tab-bordered ${
-				selectedClass === cl.id && 'tab-active'
+				selectedClass === cl.id && 'tab-active font-semibold'
 			}`}
 		>
 			{cl.name}

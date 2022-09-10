@@ -36,7 +36,7 @@ const Timetable: NextComponentType = () => {
 
 	return (
 		<div className="w-full p-5">
-			<table className="table table-zebra w-full h-full devide-black border-collapse border border-slate-500 table-fixed ">
+			<table className="table table-zebra w-full h-full devide-black table-fixed rounded-full border-separate">
 				<thead>
 					<tr>
 						<th className="border border-slate-600 text-center w-12"></th>
@@ -62,7 +62,7 @@ const Timetable: NextComponentType = () => {
 						.filter((_, i) => i)
 						.map((row, i) => (
 							<tr key={i}>
-								<td className="border border-slate-700 w-10 text-secondary text-center">
+								<td className="border border-slate-600 w-10 text-center">
 									<h3>{i + 1}</h3>
 								</td>
 								{row
