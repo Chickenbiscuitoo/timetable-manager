@@ -36,7 +36,7 @@ const Timetable: NextComponentType = () => {
 
 	return (
 		<>
-			<div className="sm:w-full md:w-full lg:w-4/5 2xl:w-3/5">
+			<div className="w-full p-5">
 				<table className="table table-zebra w-full h-full devide-black border-collapse border border-slate-500 table-fixed ">
 					<thead>
 						<tr>

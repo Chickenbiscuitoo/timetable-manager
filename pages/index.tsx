@@ -11,6 +11,7 @@ import Checking from '../components/Checking'
 import CopyButton from '../components/CopyButton'
 import Sidebar from '../components/Sidebar'
 import TabsMenu from '../components/TabsMenu'
+import SideWorkspace from '../components/SideWorkspace'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -25,22 +26,16 @@ const Home: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<main className="min-h-screen flex flex-row">
-				<Sidebar />
-				<div>
-					<TabsMenu />
-					<DndProvider backend={HTML5Backend}>
-						<div>
-							<ScrollMenu data={teachers} isTeacher={true} />
-							<ScrollMenu
-								data={subjects}
-								isTeacher={false}
-							/>
-							<Timetable />
-						</div>
-					</DndProvider>
-				</div>
-			</main>
+			<DndProvider backend={HTML5Backend}>
+				<main className="min-h-screen flex flex-row">
+					<Sidebar />
+					<div>
+						<TabsMenu />
+						<Timetable />
+					</div>
+					<SideWorkspace />
+				</main>
+			</DndProvider>
 
 			<footer className={styles.footer}>
 				<a
