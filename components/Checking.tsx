@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-import styles from '../styles/Checking.module.css'
 import { useState } from 'react'
 
 import { flatten } from '../utils/arraysFuncs'
@@ -8,11 +7,13 @@ import useTimetableStore from '../store'
 
 const Checking: NextPage = () => {
 	const [hovered, setHovered] = useState(false)
+	const [clicked, setClicked] = useState(false)
+	const [clickedTeachersMenu, setClickedTeachersMenu] = useState(false)
 
 	const { rawTableData, teachers, selectedClass, classes } =
 		useTimetableStore()
 
-	// returns  an array of teachers and count of lessons they teach
+	// returns an array of teachers and count of lessons they teach
 	const teachersStats = teachers.map((teacher) => {
 		// list of all teachers that are teaching some lessons
 		const activeTeachers = rawTableData.map((lesson) =>
@@ -26,23 +27,8 @@ const Checking: NextPage = () => {
 		return {
 			id: teacher.id,
 			name: teacher.name,
+			shortName: teacher.shortname,
 			lessons: teacherLessons.length,
-		}
-	})
-
-	const teachersInvalid = teachersStats.map((teacher) => {
-		if (teacher.lessons > 28) {
-			return (
-				<div className={styles.invalid} key={teacher.id}>
-					{teacher.name} - {teacher.lessons}
-				</div>
-			)
-		} else if (teacher.lessons < 22) {
-			return (
-				<div className={styles.warning} key={teacher.id}>
-					{teacher.name} - {teacher.lessons}
-				</div>
-			)
 		}
 	})
 
@@ -71,6 +57,10 @@ const Checking: NextPage = () => {
 		}
 	}
 
+	const handleClick = () => {
+		setClicked((prevState) => !prevState)
+	}
+
 	const classLessonsNumInvalid = () => {
 		const classLessons = rawTableData.filter(
 			(lesson) => lesson.class === selectedClass
@@ -78,14 +68,84 @@ const Checking: NextPage = () => {
 
 		if (classLessons.length > 30) {
 			return (
-				<div className={styles.invalid}>
-					{classLessons.length} - too many lessons
+				<div className="alert alert-error shadow-lg justify-center mt-2">
+					<div>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="stroke-current flex-shrink-0 h-6 w-6"
+							fill="none"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth="2"
+								d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+							/>
+						</svg>
+						<span>
+							<h5 className="inline">
+								Error: Too many lessons!
+							</h5>
+							<h5 className="inline font-bold ml-2">
+								{classLessons.length}
+							</h5>
+						</span>
+					</div>
 				</div>
 			)
 		} else if (classLessons.length < 20) {
 			return (
-				<div className={styles.warning}>
-					{classLessons.length} - too few lessons
+				<div className=" alert alert-warning shadow-lg justify-center mt-2">
+					<div>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="stroke-current flex-shrink-0 h-6 w-6"
+							fill="none"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth="2"
+								d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+							/>
+						</svg>
+						<span>
+							<h5 className="inline">
+								Warning: Too few lessons!
+							</h5>
+							<h5 className="inline font-bold ml-2">
+								{classLessons.length}
+							</h5>
+						</span>
+					</div>
+				</div>
+			)
+		} else {
+			return (
+				<div className="alert alert-success shadow-lg justify-center mt-2">
+					<div>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="stroke-current flex-shrink-0 h-6 w-6"
+							fill="none"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth="2"
+								d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+							/>
+						</svg>
+						<span>
+							<h5 className="inline font-bold mr-1">
+								{classLessons.length}
+							</h5>
+							<h5 className="inline">Lessons</h5>
+						</span>
+					</div>
 				</div>
 			)
 		}
@@ -99,35 +159,139 @@ const Checking: NextPage = () => {
 		const noTeacherLessons = classLessons.filter(
 			(lesson) => lesson.teachers === undefined
 		)
-
-		return noTeacherLessons.map((lesson) => {
-			return (
-				<div key={lesson.id} className={styles.invalid}>
-					{lesson.day}:{lesson.period} - no teacher
-				</div>
-			)
-		})
-	}
-	return (
-		<div>
-			{!classTeacherTeaching() && (
-				<p className={styles.invalid}>
-					Class teacher is not teaching any lessons!
-				</p>
-			)}
-			{classLessonsNumInvalid()}
-			{lessonsWithoutTeacher()}
+		return (
 			<div
-				onMouseEnter={() => setHovered(true)}
-				onMouseLeave={() => setHovered(false)}
+				onClick={handleClick}
+				className="indicator w-full hover:cursor-pointer"
 			>
-				<p>Teachers teaching invalid number of lessons (hover)</p>
-				{hovered && (
-					<div className={styles.teachers_list}>
-						{teachersInvalid}
+				<span className="indicator-item badge badge-primary right-2 top-2">
+					{noTeacherLessons.length}
+				</span>
+				<div className="alert alert-error shadow-lg justify-center mt-2 flex-col">
+					<div>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="stroke-current flex-shrink-0 h-6 w-6"
+							fill="none"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth="2"
+								d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+							/>
+						</svg>
+						<span>
+							<h5 className="inline">
+								Error: No teacher assigned!
+							</h5>
+						</span>
+					</div>
+					{clicked && (
+						<div className="grid grid-cols-5">
+							{noTeacherLessons.map((lesson) => (
+								<h5 className="btn btn-outline">
+									{lesson.day}:{lesson.period}
+								</h5>
+							))}
+						</div>
+					)}
+				</div>
+			</div>
+		)
+	}
+
+	const teachersInvalid = () => {
+		const teachersInv: any = []
+
+		teachersStats.map((teacher) => {
+			if (teacher.lessons > 28 || teacher.lessons < 22) {
+				teachersInv.push({
+					name: teacher.shortName,
+					lessons: teacher.lessons,
+				})
+			}
+		})
+
+		return teachersInv
+	}
+
+	const teachersInvalidError = () => (
+		<div
+			onClick={() =>
+				setClickedTeachersMenu((prevState) => !prevState)
+			}
+			className="indicator w-full hover:cursor-pointer"
+		>
+			<span className="indicator-item badge badge-primary right-2 top-2">
+				{teachersInvalid().length}
+			</span>
+			<div className="alert alert-error shadow-lg justify-center mt-2 flex-col">
+				<div>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						className="stroke-current flex-shrink-0 h-6 w-6"
+						fill="none"
+						viewBox="0 0 24 24"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth="2"
+							d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+						/>
+					</svg>
+					<span>
+						<h5 className="inline">
+							Error: Teacher teaching invalid number of
+							lessons!
+						</h5>
+					</span>
+				</div>
+				{clickedTeachersMenu && (
+					<div className="grid grid-cols-5">
+						{teachersInvalid().map((tch: any) => (
+							<h5 className="btn btn-outline btn-md">
+								{tch.name}: {tch.lessons}
+							</h5>
+						))}
 					</div>
 				)}
 			</div>
+		</div>
+	)
+
+	return (
+		<div className="mt-5 max-h-96 overflow-y-auto overflow-x-hidden p-3">
+			{!classTeacherTeaching() && (
+				<div className="alert alert-error shadow-lg justify-center mt-2">
+					<div>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="stroke-current flex-shrink-0 h-6 w-6"
+							fill="none"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth="2"
+								d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+							/>
+						</svg>
+						<span>
+							<h5 className="inline">
+								Error: Class teacher is not teaching any
+								lesson!
+							</h5>
+						</span>
+					</div>
+				</div>
+			)}
+			{classLessonsNumInvalid()}
+			{lessonsWithoutTeacher()}
+			{teachersInvalidError()}
 		</div>
 	)
 }
