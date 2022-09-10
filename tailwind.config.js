@@ -12,28 +12,6 @@ module.exports = {
 
 	// daisyUI config (optional)
 	daisyui: {
-		themes: [
-			{
-				mytheme: {
-					primary: '#1f2937',
-
-					secondary: '#E1E5F2',
-
-					accent: '#598392',
-
-					neutral: '#1D282F',
-
-					'base-100': '#EFF0F6',
-
-					info: '#68D8EE',
-
-					success: '#24A372',
-
-					warning: '#F6C73C',
-
-					error: '#F85966',
-				},
-			},
-		],
+		themes: ['light', 'dark'],
 	},
 }
