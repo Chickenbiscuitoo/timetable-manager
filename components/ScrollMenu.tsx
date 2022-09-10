@@ -16,16 +16,16 @@ const ScrollMenu: NextPage<Props> = ({ data, isTeacher }) => {
 		setFilter(e.target.value)
 
 	return (
-		<div className="h-full w-full overflow-auto bg-secondary whitespace-nowrap text-indigo-100 flex flex-col">
-			<div className="inline relative">
+		<div className="h-full w-1/2 overflow-y-auto bg-neutral whitespace-nowrap flex flex-col items-center p-3 overflow-x-hidden gap-2">
+			<div className="relative">
 				<input
 					type="text"
 					value={filter}
 					onChange={handleChange}
 					placeholder="Search"
-					className="input input-bordered input-primary max-w-xs rounded-xl ml-2 mr-2 mt-1 text-neutral"
+					className="input input-bordered input-primary rounded-xl mb-3"
 				/>
-				<span className="absolute top-1 right-4 text-neutral">
+				<span className="absolute top-4 right-2 text-neutral transition-colors ease-in duration-200 hover:text-error cursor-pointer">
 					<TiDelete />
 				</span>
 			</div>
