@@ -10,6 +10,7 @@ import OptionsMenu from '../components/OptionsMenu'
 import Checking from '../components/Checking'
 import CopyButton from '../components/CopyButton'
 import Sidebar from '../components/Sidebar'
+import TabsMenu from '../components/TabsMenu'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -27,6 +28,7 @@ const Home: NextPage = () => {
 			<main className="min-h-screen flex flex-row">
 				<Sidebar />
 				<div>
+					<TabsMenu />
 					<DndProvider backend={HTML5Backend}>
 						<div>
 							<ScrollMenu data={teachers} isTeacher={true} />
