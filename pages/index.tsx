@@ -2,7 +2,6 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { AiFillGithub } from 'react-icons/ai'
-import useTimetableStore from '../store'
 
 import Timetable from '../components/Timetable'
 import ScrollMenu from '../components/ScrollMenu'
@@ -17,8 +16,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
 
 const Home: NextPage = () => {
-	const { teachers, subjects } = useTimetableStore()
-
 	return (
 		<div>
 			<Head>
