@@ -16,7 +16,7 @@ const ScrollMenu: NextPage<Props> = ({ data, isTeacher }) => {
 		setFilter(e.target.value)
 
 	return (
-		<div className="h-full w-1/2 overflow-y-auto bg-neutral whitespace-nowrap flex flex-col items-center p-3 overflow-x-hidden gap-2">
+		<div className="h-full overflow-y-auto bg-neutral whitespace-nowrap flex flex-col items-center p-3 overflow-x-hidden gap-2">
 			<div className="relative">
 				<input
 					type="text"
