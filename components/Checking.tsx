@@ -159,47 +159,50 @@ const Checking: NextPage = () => {
 		const noTeacherLessons = classLessons.filter(
 			(lesson) => lesson.teachers === undefined
 		)
-		return (
-			<div
-				onClick={handleClick}
-				className="indicator w-full hover:cursor-pointer"
-			>
-				<span className="indicator-item badge badge-primary right-2 top-2">
-					{noTeacherLessons.length}
-				</span>
-				<div className="alert alert-error shadow-lg justify-center mt-2 flex-col">
-					<div>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="stroke-current flex-shrink-0 h-6 w-6"
-							fill="none"
-							viewBox="0 0 24 24"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth="2"
-								d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-							/>
-						</svg>
-						<span>
-							<h5 className="inline">
-								Error: No teacher assigned!
-							</h5>
-						</span>
-					</div>
-					{clicked && (
-						<div className="grid grid-cols-5">
-							{noTeacherLessons.map((lesson) => (
-								<h5 className="btn btn-outline">
-									{lesson.day}:{lesson.period}
+
+		if (noTeacherLessons.length > 0) {
+			return (
+				<div
+					onClick={handleClick}
+					className="indicator w-full hover:cursor-pointer"
+				>
+					<span className="indicator-item badge badge-primary right-2 top-2">
+						{noTeacherLessons.length}
+					</span>
+					<div className="alert alert-error shadow-lg justify-center mt-2 flex-col">
+						<div>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								className="stroke-current flex-shrink-0 h-6 w-6"
+								fill="none"
+								viewBox="0 0 24 24"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth="2"
+									d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+								/>
+							</svg>
+							<span>
+								<h5 className="inline">
+									Error: No teacher assigned!
 								</h5>
-							))}
+							</span>
 						</div>
-					)}
+						{clicked && (
+							<div className="grid grid-cols-5">
+								{noTeacherLessons.map((lesson) => (
+									<h5 className="btn btn-outline">
+										{lesson.day}:{lesson.period}
+									</h5>
+								))}
+							</div>
+						)}
+					</div>
 				</div>
-			</div>
-		)
+			)
+		}
 	}
 
 	const teachersInvalid = () => {
