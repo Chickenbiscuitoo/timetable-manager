@@ -3,7 +3,6 @@ import styles from '../styles/Stats.module.css'
 
 import { flatten } from '../utils/arraysFuncs'
 
-import { useState } from 'react'
 import useTimetableStore from '../store'
 
 const TeachersStats: NextPage = () => {
@@ -27,7 +26,7 @@ const TeachersStats: NextPage = () => {
 
 	return (
 		<div className="overflow-x-auto">
-			<table className="table table-compact w-full">
+			<table className="table table-compact w-full table-zebra">
 				<thead>
 					<tr>
 						<th></th>
@@ -44,7 +43,9 @@ const TeachersStats: NextPage = () => {
 
 						return (
 							<tr key={i}>
-								<td>{clName}</td>
+								<td className="font-bold text-md text-primary">
+									{clName}
+								</td>
 								{cl.map((teacher) => (
 									<td key={teacher.name}>
 										{teacher.lessonsNumber}
