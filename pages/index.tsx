@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
 import { AiFillGithub } from 'react-icons/ai'
 
 import Timetable from '../components/Timetable'
@@ -34,15 +33,16 @@ const Home: NextPage = () => {
 				</main>
 			</DndProvider>
 
-			<footer className={styles.footer}>
+			<footer className="flex place-content-center border-t-2 border-neutral pt-6 pb-6">
 				<a
 					href="https://github.com/Chickenbiscuitoo"
 					target="_blank"
 					rel="noopener noreferrer"
+					className="text-neutral"
 				>
 					Created by Chickenbiscuitoo
-					<span className={styles.logo}>
-						<AiFillGithub />
+					<span className="ml-1 inline">
+						<AiFillGithub className="inline h-full" />
 					</span>
 				</a>
 			</footer>
