@@ -1,7 +1,5 @@
 import type { NextPage } from 'next'
 
-import { flatten } from '../utils/arraysFuncs'
-
 import useTimetableStore from '../store'
 
 const TeachersTable: NextPage = () => {
@@ -21,21 +19,6 @@ const TeachersTable: NextPage = () => {
 			name: teacher.name,
 			classesCount: teacherToClass,
 		}
-	})
-
-	const classStats = classes.map((cl) => {
-		const activeTeachers = rawTableData
-			.filter((lesson) => lesson.class === cl.id)
-			.map((lesson) => lesson.teachers?.map((teacher) => teacher.id))
-		const classTeachers = flatten(activeTeachers)
-
-		return teachers.map((teacher) => ({
-			id: teacher.id,
-			name: teacher.name,
-			lessonsNumber: classTeachers.filter(
-				(id: number) => id === teacher.id
-			).length,
-		}))
 	})
 
 	return (
