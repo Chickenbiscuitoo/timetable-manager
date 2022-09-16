@@ -1,13 +1,27 @@
 import type { NextPage } from 'next'
-import styles from '../styles/Stats.module.css'
 
 import { flatten } from '../utils/arraysFuncs'
 
 import useTimetableStore from '../store'
 
-const TeachersStats: NextPage = () => {
+const TeachersTable: NextPage = () => {
 	const { teachers, subjects, classes, rawTableData } =
 		useTimetableStore()
+
+	const teachersStats = teachers.map((teacher) => {
+		const teacherToClass = classes.map((cl) =>
+			rawTableData
+				.filter((lesson) => lesson.class === cl.id)
+				.map((lesson) => lesson.teachers?.map((tch) => tch.id))
+				.filter((tch) => tch?.includes(teacher.id))
+		)
+
+		return {
+			id: teacher.id,
+			name: teacher.name,
+			classesCount: teacherToClass,
+		}
+	})
 
 	const classStats = classes.map((cl) => {
 		const activeTeachers = rawTableData
@@ -30,26 +44,22 @@ const TeachersStats: NextPage = () => {
 				<thead>
 					<tr>
 						<th></th>
-						{teachers.map((tch) => (
-							<th key={tch.id}>{tch.name}</th>
+						{classes.map((cl) => (
+							<th key={cl.id} className="text-primary">
+								{cl.name}
+							</th>
 						))}
 					</tr>
 				</thead>
 				<tbody>
-					{classStats.map((cl, i) => {
-						const clName = classes.find(
-							(cla) => cla.id === i + 1
-						)?.name
-
+					{teachersStats.map((tch) => {
 						return (
-							<tr key={i}>
+							<tr key={tch.id}>
 								<td className="font-bold text-md text-primary">
-									{clName}
+									{tch.name}
 								</td>
-								{cl.map((teacher) => (
-									<td key={teacher.name}>
-										{teacher.lessonsNumber}
-									</td>
+								{tch.classesCount.map((cl, i) => (
+									<td key={i}>{cl.length}</td>
 								))}
 							</tr>
 						)
@@ -58,8 +68,10 @@ const TeachersStats: NextPage = () => {
 				<tfoot>
 					<tr>
 						<th></th>
-						{teachers.map((tch) => (
-							<th key={tch.email}>{tch.name}</th>
+						{classes.map((cl) => (
+							<th key={cl.name} className="text-primary">
+								{cl.name}
+							</th>
 						))}
 					</tr>
 				</tfoot>
@@ -68,4 +80,4 @@ const TeachersStats: NextPage = () => {
 	)
 }
 
-export default TeachersStats
+export default TeachersTable

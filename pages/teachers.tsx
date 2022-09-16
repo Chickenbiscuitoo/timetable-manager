@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { AiFillGithub } from 'react-icons/ai'
 
 import Sidebar from '../components/Sidebar'
-import TeachersStats from '../components/TeachersStats'
+import TeachersTable from '../components/TeachersTable'
 import TeachersBarChart from '../components/TeachersBarChart'
 
 const Stats: NextPage = () => {
@@ -17,7 +17,7 @@ const Stats: NextPage = () => {
 			<main className="min-h-screen flex flex-row">
 				<Sidebar />
 				<div>
-					<TeachersStats />
+					<TeachersTable />
 					<TeachersBarChart />
 				</div>
 			</main>
