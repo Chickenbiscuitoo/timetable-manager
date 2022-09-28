@@ -5,10 +5,10 @@ import { Chart as ChartJS } from 'chart.js/auto'
 import { CategoryScale } from 'chart.js'
 
 interface chartData {
-	labels: number[]
+	labels: string[]
 	datasets: {
 		label: string
-		data: number[]
+		data: any[]
 		backgroundColor: string[]
 		borderColor: string
 		borderWidth: number

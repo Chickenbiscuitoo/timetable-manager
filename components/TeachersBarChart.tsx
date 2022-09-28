@@ -1,48 +1,42 @@
 import { NextPage } from 'next'
 import { useState } from 'react'
 
+import useTimetableStore from '../store'
+import { flatten } from '../utils/arraysFuncs'
+
 import BarChart from './charts/BarChart'
 
 const TeachersBarChart: NextPage = () => {
-	const UserData = [
-		{
-			id: 1,
-			year: 2016,
-			userGain: 80000,
-			userLost: 823,
-		},
-		{
-			id: 2,
-			year: 2017,
-			userGain: 45677,
-			userLost: 345,
-		},
-		{
-			id: 3,
-			year: 2018,
-			userGain: 78888,
-			userLost: 555,
-		},
-		{
-			id: 4,
-			year: 2019,
-			userGain: 90000,
-			userLost: 4555,
-		},
-		{
-			id: 5,
-			year: 2020,
-			userGain: 4300,
-			userLost: 234,
-		},
-	]
+	const { rawTableData, teachers, selectedClass, classes } =
+		useTimetableStore()
 
-	const [userData, setUserData] = useState({
-		labels: UserData.map((data) => data.year),
+	// returns an array of teachers and count of lessons they teach
+	const teachersStats = teachers
+		.map((teacher) => {
+			// list of all teachers that are teaching some lessons
+			const activeTeachers = rawTableData.map((lesson) =>
+				lesson.teachers?.map((teacher) => teacher.id)
+			)
+
+			const teacherLessons = flatten(activeTeachers).filter(
+				(id: number) => id === teacher.id
+			)
+
+			return {
+				id: teacher.id,
+				name: teacher.name,
+				shortName: teacher.shortname,
+				lessons: teacherLessons.length,
+			}
+		})
+		.filter((teacher) => teacher.lessons > 0)
+
+	const [teachersData, setUserData] = useState({
+		labels: teachersStats.map((teacher) => teacher.name),
 		datasets: [
 			{
-				label: 'Users Gained',
-				data: UserData.map((data) => data.userGain),
+				label: 'Lessons Teaching',
+				data: teachersStats.map((teacher) => teacher.lessons),
 				backgroundColor: [
 					'rgba(75,192,192,1)',
 					'#ecf0f1',
@@ -58,8 +52,8 @@ const TeachersBarChart: NextPage = () => {
 
 	return (
 		<div>
-			<div style={{ width: 700 }}>
-				<BarChart chartData={userData} />
+			<div className="w-full">
+				<BarChart chartData={teachersData} />
 			</div>
 		</div>
 	)
