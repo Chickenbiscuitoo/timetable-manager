@@ -255,7 +255,10 @@ const Checking: NextPage = () => {
 				{clickedTeachersMenu && (
 					<div className="grid grid-cols-5">
 						{teachersInvalid().map((tch: any) => (
-							<h5 className="btn btn-outline btn-md">
+							<h5
+								key={tch.name}
+								className="btn btn-outline btn-md"
+							>
 								{tch.name}: {tch.lessons}
 							</h5>
 						))}
