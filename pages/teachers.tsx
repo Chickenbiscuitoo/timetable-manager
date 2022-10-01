@@ -5,6 +5,7 @@ import { AiFillGithub } from 'react-icons/ai'
 import Sidebar from '../components/Sidebar'
 import TeachersTable from '../components/TeachersTable'
 import TeachersBarChart from '../components/TeachersBarChart'
+import TeacherForm from '../components/TeacherForm'
 
 const Stats: NextPage = () => {
 	return (
@@ -19,6 +20,7 @@ const Stats: NextPage = () => {
 				<div>
 					<TeachersTable />
 					<TeachersBarChart />
+					<TeacherForm />
 				</div>
 			</main>
 

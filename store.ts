@@ -34,6 +34,8 @@ interface TimetableState {
 	deleteLesson: (class_id: number, position: number) => void
 	copyLessons: (from: number, to: number) => void
 
+	addTeacher: (name: string, shortname: string, email: string) => void
+
 	selectedClass: number
 	setSelectedClass: (class_id: number) => void
 }
@@ -538,6 +540,13 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		}))
 		set((state) => ({
 			rawTableData: [...state.rawTableData, ...destLessons],
+		}))
+	},
+
+	addTeacher: (name, shortname, email) => {
+		const id = get().teachers.length + 1
+		set((state) => ({
+			teachers: [...state.teachers, { id, name, shortname, email }],
 		}))
 	},
 
