@@ -25,6 +25,11 @@ const TeacherForm: NextPage = () => {
 
 		if (name && shortname && email) {
 			addTeacher(name, shortname, email)
+			setFormData({
+				name: '',
+				shortname: '',
+				email: '',
+			})
 		}
 	}
 
