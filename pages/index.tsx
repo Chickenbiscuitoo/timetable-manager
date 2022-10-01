@@ -26,7 +26,10 @@ const Home: NextPage = () => {
 				<main className="min-h-screen flex flex-row">
 					<Sidebar />
 					<div>
-						<TabsMenu />
+						<div className="grid grid-cols-2 items-end">
+							<TabsMenu />
+							<CopyButton />
+						</div>
 						<Timetable />
 					</div>
 					<SideWorkspace />

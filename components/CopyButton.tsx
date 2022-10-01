@@ -1,8 +1,9 @@
 import type { NextPage } from 'next'
-import styles from '../styles/CopyButton.module.css'
 
 import { useState } from 'react'
 import useTimetableStore from '../store'
+
+import { RiFileCopyLine } from 'react-icons/ri'
 
 const CopyButton: NextPage = () => {
 	const [clicked, setClicked] = useState(false)
@@ -15,20 +16,31 @@ const CopyButton: NextPage = () => {
 	}
 
 	const classList = classes.map((cl) => (
-		<a key={cl.id} id={cl.id.toString()} onClick={handleClick}>
-			{cl.name}
-		</a>
+		<li key={cl.id}>
+			<a id={cl.id.toString()} onClick={handleClick}>
+				{cl.name}
+			</a>
+		</li>
 	))
 
 	return (
-		<div
-			onMouseLeave={() => setClicked(false)}
-			className={styles.copybtn}
-		>
-			<button onClick={() => setClicked(true)}>
-				{clicked ? 'COPY TO	' : 'COPY'}
-			</button>
-			{clicked && classList}
+		<div className="dropdown">
+			<label
+				tabIndex={0}
+				className="btn btn-sm gap-2 m-1"
+				onClick={() => setClicked((prevState) => !prevState)}
+			>
+				Copy
+				<RiFileCopyLine />
+			</label>
+			{clicked && (
+				<ul
+					tabIndex={0}
+					className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+				>
+					{classList}
+				</ul>
+			)}
 		</div>
 	)
 }
