@@ -18,6 +18,6 @@ const TabsMenu: NextPage = () => {
 		</a>
 	))
 
-	return <div className="tabs mt-5 ml-5">{tabs}</div>
+	return <div className="tabs mt-5 flex-1">{tabs}</div>
 }
 export default TabsMenu

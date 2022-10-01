@@ -26,7 +26,7 @@ const Home: NextPage = () => {
 				<main className="min-h-screen flex flex-row">
 					<Sidebar />
 					<div>
-						<div className="grid grid-cols-2 items-end">
+						<div className="flex flex-row items-end mx-5">
 							<TabsMenu />
 							<CopyButton />
 						</div>
