@@ -25,7 +25,10 @@ const ScrollMenu: NextPage<Props> = ({ data, isTeacher }) => {
 					placeholder="Search"
 					className="input input-bordered input-primary rounded-xl mb-3"
 				/>
-				<span className="absolute top-4 right-2 text-neutral transition-colors ease-in duration-200 hover:text-error cursor-pointer">
+				<span
+					className="absolute top-4 right-2 text-neutral transition-colors ease-in duration-200 hover:text-error cursor-pointer"
+					onClick={() => setFilter('')}
+				>
 					<TiDelete />
 				</span>
 			</div>
