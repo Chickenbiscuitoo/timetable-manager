@@ -192,7 +192,10 @@ const Checking: NextPage = () => {
 						{clicked && (
 							<div className="grid grid-cols-5">
 								{noTeacherLessons.map((lesson) => (
-									<h5 className="btn btn-outline">
+									<h5
+										className="btn btn-outline"
+										key={lesson.id}
+									>
 										{lesson.day}:{lesson.period}
 									</h5>
 								))}
