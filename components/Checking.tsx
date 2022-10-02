@@ -6,7 +6,6 @@ import { flatten } from '../utils/arraysFuncs'
 import useTimetableStore from '../store'
 
 const Checking: NextPage = () => {
-	const [hovered, setHovered] = useState(false)
 	const [clicked, setClicked] = useState(false)
 	const [clickedTeachersMenu, setClickedTeachersMenu] = useState(false)
 
