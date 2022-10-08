@@ -2,12 +2,8 @@ import type { NextComponentType } from 'next'
 import useTimetableStore from '../store'
 import { useEffect, useState } from 'react'
 
-import { getPosition } from '../utils/getPosition'
-
-import Cell from '../components/Cell'
-
 const BindingsTable: NextComponentType = () => {
-	const { bindings, selectedGrade, classes, teachers } =
+	const { bindings, selectedGrade, classes, subjects } =
 		useTimetableStore()
 
 	const selectedGradeTableData = bindings.filter(
@@ -20,7 +16,7 @@ const BindingsTable: NextComponentType = () => {
 			.fill(0)
 			.map((_, i) => new Array(cols + 1).fill(undefined))
 		selectedGradeTableData.forEach((binding) => {
-			const row = binding.teacher.id
+			const row = binding.subject.id
 			const col = binding.cl.id
 			arr[row][col] = binding
 		})
@@ -30,7 +26,7 @@ const BindingsTable: NextComponentType = () => {
 	const tableColsNum = classes.filter(
 		(cl) => cl.grade === selectedGrade
 	).length
-	const tableRowsNum = teachers.length
+	const tableRowsNum = subjects.length
 	const [tableData, setTableData] = useState(
 		tableArrayFromList(
 			selectedGradeTableData,
@@ -74,9 +70,9 @@ const BindingsTable: NextComponentType = () => {
 								<td className="border border-slate-600 text-center">
 									<h3>
 										{
-											teachers.find(
-												(teacher) =>
-													teacher.id === i + 1
+											subjects.find(
+												(subject) =>
+													subject.id === i + 1
 											)?.name
 										}
 									</h3>
@@ -84,18 +80,7 @@ const BindingsTable: NextComponentType = () => {
 								{row
 									.filter((_, ci) => ci)
 									.map((cell, ci) => {
-										console.log(cell)
-										return (
-											<Cell
-												key={getPosition(i, ci)}
-												subject={cell?.subjects}
-												position={getPosition(
-													i,
-													ci
-												)}
-												teacher={cell?.teachers}
-											/>
-										)
+										return <h1>jou</h1>
 									})}
 							</tr>
 						))}

@@ -9,7 +9,7 @@ import create from 'zustand'
 interface TimetableState {
 	bindings: {
 		id: number
-		teacher: Teacher
+		teachers: Teacher[]
 		subject: Subject
 		cl: {
 			id: number
@@ -59,12 +59,20 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 	bindings: [
 		{
 			id: 1,
-			teacher: {
-				id: 3,
-				name: 'Gulami Bete',
-				shortname: 'GB',
-				email: 'gulami.bete@gmail.com',
-			},
+			teachers: [
+				{
+					id: 3,
+					name: 'Gulami Bete',
+					shortname: 'GB',
+					email: 'gulami.bete@gmail.com',
+				},
+				{
+					id: 2,
+					name: 'Francis Muller',
+					shortname: 'FM',
+					email: 'francis.muller@gmail.com',
+				},
+			],
 			subject: {
 				id: 5,
 				name: 'Physics',
@@ -76,12 +84,14 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		},
 		{
 			id: 2,
-			teacher: {
-				id: 3,
-				name: 'Gulami Bete',
-				shortname: 'GB',
-				email: 'gulami.bete@gmail.com',
-			},
+			teachers: [
+				{
+					id: 3,
+					name: 'Gulami Bete',
+					shortname: 'GB',
+					email: 'gulami.bete@gmail.com',
+				},
+			],
 			subject: {
 				id: 5,
 				name: 'Physics',
@@ -93,12 +103,14 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		},
 		{
 			id: 3,
-			teacher: {
-				id: 3,
-				name: 'Gulami Bete',
-				shortname: 'GB',
-				email: 'gulami.bete@gmail.com',
-			},
+			teachers: [
+				{
+					id: 3,
+					name: 'Gulami Bete',
+					shortname: 'GB',
+					email: 'gulami.bete@gmail.com',
+				},
+			],
 			subject: {
 				id: 5,
 				name: 'Physics',
@@ -110,12 +122,14 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		},
 		{
 			id: 4,
-			teacher: {
-				id: 2,
-				name: 'Francis Muller',
-				shortname: 'FM',
-				email: 'francis.muller@gmail.com',
-			},
+			teachers: [
+				{
+					id: 2,
+					name: 'Francis Muller',
+					shortname: 'FM',
+					email: 'francis.muller@gmail.com',
+				},
+			],
 			subject: {
 				id: 3,
 				name: 'History',
@@ -127,12 +141,14 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		},
 		{
 			id: 5,
-			teacher: {
-				id: 2,
-				name: 'Francis Muller',
-				shortname: 'FM',
-				email: 'francis.muller@gmail.com',
-			},
+			teachers: [
+				{
+					id: 2,
+					name: 'Francis Muller',
+					shortname: 'FM',
+					email: 'francis.muller@gmail.com',
+				},
+			],
 			subject: {
 				id: 3,
 				name: 'History',
