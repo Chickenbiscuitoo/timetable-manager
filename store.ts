@@ -41,6 +41,94 @@ interface TimetableState {
 }
 
 const useTimetableStore = create<TimetableState>((set, get) => ({
+	bindings: [
+		{
+			id: 1,
+			teacher: {
+				id: 3,
+				name: 'Gulami Bete',
+				shortname: 'GB',
+				email: 'gulami.bete@gmail.com',
+			},
+			subject: {
+				id: 5,
+				name: 'Physics',
+				shortname: 'PHY',
+				commitee_id: 1,
+			},
+			class: { id: 1, name: '1.A', teacher_id: 1 },
+			lessons: 2,
+		},
+		{
+			id: 2,
+			teacher: {
+				id: 3,
+				name: 'Gulami Bete',
+				shortname: 'GB',
+				email: 'gulami.bete@gmail.com',
+			},
+			subject: {
+				id: 5,
+				name: 'Physics',
+				shortname: 'PHY',
+				commitee_id: 1,
+			},
+			class: { id: 2, name: '1.B', teacher_id: 2 },
+			lessons: 3,
+		},
+		{
+			id: 3,
+			teacher: {
+				id: 3,
+				name: 'Gulami Bete',
+				shortname: 'GB',
+				email: 'gulami.bete@gmail.com',
+			},
+			subject: {
+				id: 5,
+				name: 'Physics',
+				shortname: 'PHY',
+				commitee_id: 1,
+			},
+			class: { id: 3, name: '1.C', teacher_id: 3 },
+			lessons: 2,
+		},
+		{
+			id: 4,
+			teacher: {
+				id: 2,
+				name: 'Francis Muller',
+				shortname: 'FM',
+				email: 'francis.muller@gmail.com',
+			},
+			subject: {
+				id: 3,
+				name: 'History',
+				shortname: 'HIS',
+				commitee_id: 1,
+			},
+			class: { id: 1, name: '1.A', teacher_id: 1 },
+			lessons: 6,
+		},
+		{
+			id: 5,
+			teacher: {
+				id: 2,
+				name: 'Francis Muller',
+				shortname: 'FM',
+				email: 'francis.muller@gmail.com',
+			},
+			subject: {
+				id: 3,
+				name: 'History',
+				shortname: 'HIS',
+				commitee_id: 1,
+			},
+			class: { id: 1, name: '1.B', teacher_id: 2 },
+			lessons: 6,
+		},
+	],
+
 	rawTableData: [
 		{
 			id: 2,
