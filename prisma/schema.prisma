@@ -42,6 +42,7 @@ model Committee {
 model Class {
   id         Int      @id @default(autoincrement())
   name       String   @db.VarChar(255)
+  grade      Int
   teacher_id Int      @unique
   lessons    Lesson[]
 
