@@ -2,6 +2,8 @@ import type { NextComponentType } from 'next'
 import useTimetableStore from '../store'
 import { useEffect, useState } from 'react'
 
+import BindingsCell from './BindingsCell'
+
 const BindingsTable: NextComponentType = () => {
 	const { bindings, selectedGrade, classes, subjects } =
 		useTimetableStore()
@@ -80,7 +82,15 @@ const BindingsTable: NextComponentType = () => {
 								{row
 									.filter((_, ci) => ci)
 									.map((cell, ci) => {
-										return <h1>jou</h1>
+										console.log(cell)
+										return (
+											<BindingsCell
+												cl={cell?.cl}
+												subject={cell?.subject}
+												teachers={cell?.teachers}
+												lessons={cell?.lessons}
+											/>
+										)
 									})}
 							</tr>
 						))}

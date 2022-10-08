@@ -599,10 +599,13 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		{ id: 2, name: '1.B', teacher_id: 2, grade: 1 },
 		{ id: 3, name: '1.C', teacher_id: 3, grade: 1 },
 		{ id: 4, name: '1.D', teacher_id: 4, grade: 1 },
-		{ id: 5, name: '2.A', teacher_id: 5, grade: 2 },
-		{ id: 6, name: '2.B', teacher_id: 6, grade: 2 },
-		{ id: 7, name: '2.C', teacher_id: 7, grade: 2 },
-		{ id: 8, name: '2.D', teacher_id: 8, grade: 2 },
+		{ id: 5, name: '1.E', teacher_id: 10, grade: 1 },
+		{ id: 10, name: '1.F', teacher_id: 11, grade: 1 },
+		{ id: 11, name: '1.G', teacher_id: 12, grade: 1 },
+		{ id: 6, name: '2.A', teacher_id: 5, grade: 2 },
+		{ id: 7, name: '2.B', teacher_id: 6, grade: 2 },
+		{ id: 8, name: '2.C', teacher_id: 7, grade: 2 },
+		{ id: 9, name: '2.D', teacher_id: 8, grade: 2 },
 	],
 
 	addLesson: (class_id, position, subject, teacher) =>
