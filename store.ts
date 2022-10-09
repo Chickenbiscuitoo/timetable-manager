@@ -60,6 +60,11 @@ interface TimetableState {
 			grade: number
 		}
 	) => void
+	updateBindingLessonCount: (
+		bindingId: number,
+		teacherId: number,
+		operation: string
+	) => void
 
 	rawTableData: {
 		id?: number
@@ -235,6 +240,56 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 				},
 			],
 		})),
+
+	updateBindingLessonCount: (bindingId, teacherId, operation) => {
+		const oldBinding = get().bindings.find(
+			(binding) => binding.id === bindingId
+		)
+		if (!oldBinding) {
+			console.log('Binding not found')
+			return
+		}
+
+		const oldTeacher = oldBinding.teachers.find(
+			(teacher) => teacher.id === teacherId
+		)
+		if (!oldTeacher) {
+			console.log('Teacher not found')
+			return
+		}
+
+		if (oldTeacher.lessons === 0 && operation === 'decrement') {
+			return
+		} else if (operation === 'increment') {
+			oldTeacher.lessons++
+		} else if (operation === 'decrement') {
+			oldTeacher.lessons--
+		} else {
+			console.log('Invalid operation')
+			return
+		}
+
+		set((state) => ({
+			bindings: [
+				...state.bindings.filter(
+					(binding) => binding.id !== bindingId
+				),
+				{
+					id: bindingId,
+					teachers: [
+						...oldBinding.teachers.filter(
+							(teacher) => teacher.id !== teacherId
+						),
+						{
+							...oldTeacher,
+						},
+					],
+					subject: oldBinding.subject,
+					cl: oldBinding.cl,
+				},
+			],
+		}))
+	},
 
 	rawTableData: [
 		{

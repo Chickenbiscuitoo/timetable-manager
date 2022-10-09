@@ -86,6 +86,7 @@ const BindingsTable: NextComponentType = () => {
 										return (
 											<BindingsCell
 												key={ci}
+												bindingId={cell?.id}
 												cl={cell?.cl}
 												subject={cell?.subject}
 												teachers={cell?.teachers}

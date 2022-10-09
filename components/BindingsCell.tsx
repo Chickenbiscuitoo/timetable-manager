@@ -11,6 +11,7 @@ import { AiOutlinePlus } from 'react-icons/ai'
 import { AiOutlineMinus } from 'react-icons/ai'
 
 interface Props {
+	bindingId: number
 	cl: Class
 	subject: Subject
 	teachers: {
@@ -24,12 +25,14 @@ interface Props {
 }
 
 const BindingsCell: NextPage<Props> = ({
+	bindingId,
 	cl,
 	subject,
 	teachers,
 	lessons,
 }) => {
-	const { addBinding, deleteBinding } = useTimetableStore()
+	const { addBinding, deleteBinding, updateBindingLessonCount } =
+		useTimetableStore()
 
 	const [hovered, setHovered] = useState(false)
 
@@ -61,8 +64,26 @@ const BindingsCell: NextPage<Props> = ({
 											<MdDeleteForever />
 										</span>
 										<span className="w-full absolute top-1 left-9 cursor-pointer text-xs">
-											<AiOutlinePlus className="hover:text-emerald-400" />
-											<AiOutlineMinus className="hover:text-red-400" />
+											<AiOutlinePlus
+												className="hover:text-emerald-400"
+												onClick={() =>
+													updateBindingLessonCount(
+														bindingId,
+														teacher.id,
+														'increment'
+													)
+												}
+											/>
+											<AiOutlineMinus
+												className="hover:text-red-400"
+												onClick={() =>
+													updateBindingLessonCount(
+														bindingId,
+														teacher.id,
+														'decrement'
+													)
+												}
+											/>
 										</span>
 									</>
 								)}
