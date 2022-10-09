@@ -5,6 +5,7 @@ import {
 } from './utils/getPosition'
 
 import create from 'zustand'
+import { totalmem } from 'os'
 
 interface TimetableState {
 	bindings: {
@@ -42,6 +43,23 @@ interface TimetableState {
 		}
 	) => void
 	deleteBinding: (id: number) => void
+	updateBinding: (
+		id: number,
+		teachers: {
+			id: number
+			name: string
+			shortname: string
+			email: string
+			lessons: number
+		}[],
+		subject: Subject,
+		cl: {
+			id: number
+			name: string
+			teacher_id: number
+			grade: number
+		}
+	) => void
 
 	rawTableData: {
 		id?: number
@@ -202,6 +220,19 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		set((state) => ({
 			bindings: [
 				...state.bindings.filter((binding) => binding.id !== id),
+			],
+		})),
+
+	updateBinding: (id, teachers, subject, cl) =>
+		set((state) => ({
+			bindings: [
+				...state.bindings.filter((binding) => binding.id !== id),
+				{
+					id,
+					teachers,
+					subject,
+					cl,
+				},
 			],
 		})),
 
