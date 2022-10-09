@@ -24,6 +24,24 @@ interface TimetableState {
 			grade: number
 		}
 	}[]
+
+	addBinding: (
+		teachers: {
+			id: number
+			name: string
+			shortname: string
+			email: string
+			lessons: number
+		}[],
+		subject: Subject,
+		cl: {
+			id: number
+			name: string
+			teacher_id: number
+			grade: number
+		}
+	) => void
+
 	rawTableData: {
 		id?: number
 		class: number
@@ -165,6 +183,19 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 			cl: { id: 1, name: '1.B', teacher_id: 2, grade: 1 },
 		},
 	],
+
+	addBinding: (teachers, subject, cl) =>
+		set((state) => ({
+			bindings: [
+				...state.bindings,
+				{
+					id: state.bindings.length + 1,
+					teachers,
+					subject,
+					cl,
+				},
+			],
+		})),
 
 	rawTableData: [
 		{
