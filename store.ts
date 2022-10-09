@@ -8,8 +8,14 @@ import create from 'zustand'
 
 interface TimetableState {
 	bindings: {
-		id: number
-		teachers: Teacher[]
+		id?: number
+		teachers: {
+			id: number
+			name: string
+			shortname: string
+			email: string
+			lessons: number
+		}[]
 		subject: Subject
 		cl: {
 			id: number
@@ -17,7 +23,6 @@ interface TimetableState {
 			teacher_id: number
 			grade: number
 		}
-		lessons: number
 	}[]
 	rawTableData: {
 		id?: number
@@ -65,12 +70,14 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 					name: 'Gulami Bete',
 					shortname: 'GB',
 					email: 'gulami.bete@gmail.com',
+					lessons: 2,
 				},
 				{
 					id: 2,
 					name: 'Francis Muller',
 					shortname: 'FM',
 					email: 'francis.muller@gmail.com',
+					lessons: 3,
 				},
 			],
 			subject: {
@@ -80,7 +87,6 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 				commitee_id: 1,
 			},
 			cl: { id: 1, name: '1.A', teacher_id: 1, grade: 1 },
-			lessons: 2,
 		},
 		{
 			id: 2,
@@ -90,6 +96,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 					name: 'Gulami Bete',
 					shortname: 'GB',
 					email: 'gulami.bete@gmail.com',
+					lessons: 3,
 				},
 			],
 			subject: {
@@ -99,7 +106,6 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 				commitee_id: 1,
 			},
 			cl: { id: 2, name: '1.B', teacher_id: 2, grade: 1 },
-			lessons: 3,
 		},
 		{
 			id: 3,
@@ -109,6 +115,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 					name: 'Gulami Bete',
 					shortname: 'GB',
 					email: 'gulami.bete@gmail.com',
+					lessons: 5,
 				},
 			],
 			subject: {
@@ -118,7 +125,6 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 				commitee_id: 1,
 			},
 			cl: { id: 3, name: '1.C', teacher_id: 3, grade: 1 },
-			lessons: 2,
 		},
 		{
 			id: 4,
@@ -128,6 +134,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 					name: 'Francis Muller',
 					shortname: 'FM',
 					email: 'francis.muller@gmail.com',
+					lessons: 6,
 				},
 			],
 			subject: {
@@ -137,7 +144,6 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 				commitee_id: 1,
 			},
 			cl: { id: 1, name: '1.A', teacher_id: 1, grade: 1 },
-			lessons: 6,
 		},
 		{
 			id: 5,
@@ -147,6 +153,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 					name: 'Francis Muller',
 					shortname: 'FM',
 					email: 'francis.muller@gmail.com',
+					lessons: 2,
 				},
 			],
 			subject: {
@@ -156,7 +163,6 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 				commitee_id: 1,
 			},
 			cl: { id: 1, name: '1.B', teacher_id: 2, grade: 1 },
-			lessons: 6,
 		},
 	],
 
