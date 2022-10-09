@@ -26,16 +26,25 @@ const BindingsCell: NextPage<Props> = ({
 		if (teachers?.length === 1) {
 			return (
 				<td className="border border-slate-600 h-full w-full">
-					<h4 className="inline">{teachers[0]?.shortname}</h4>
-					<h4 className="text-primary inline">{lessons}</h4>
+					<div className="flex flex-row w-full">
+						<h4 className="justify-self-start flex-1">
+							{teachers[0]?.shortname}
+						</h4>
+						<h4 className="text-primary justify-self-end">
+							{lessons}
+						</h4>
+					</div>
 				</td>
 			)
 		} else if (teachers?.length > 1) {
 			return (
-				<td className="border border-slate-600 h-full w-full grid grid-cols-2">
+				<td className="border border-slate-600 h-full w-full grid grid-cols-2 gap-12">
 					<div className="flex flex-col">
 						{teachers.map((teacher, i) => (
-							<div className="w-1/2 h-full text-center top-1">
+							<div
+								key={teacher.id}
+								className="w-1/2 h-full text-center top-1"
+							>
 								<h4 className="inline">
 									{teachers[i]?.shortname}
 								</h4>
@@ -45,10 +54,7 @@ const BindingsCell: NextPage<Props> = ({
 							</div>
 						))}
 					</div>
-					<div
-						className="text-primary w-full h-full flex place-content-center items-center
-                    "
-					>
+					<div className="text-primary w-full h-full flex place-content-center items-center">
 						{lessons}
 					</div>
 				</td>
