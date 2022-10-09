@@ -13,7 +13,13 @@ import { AiOutlineMinus } from 'react-icons/ai'
 interface Props {
 	cl: Class
 	subject: Subject
-	teachers: Teacher[]
+	teachers: {
+		id: number
+		name: string
+		shortname: string
+		email: string
+		lessons: number
+	}[]
 	lessons: number
 }
 
@@ -26,6 +32,14 @@ const BindingsCell: NextPage<Props> = ({
 	const { addBinding, deleteBinding } = useTimetableStore()
 
 	const [hovered, setHovered] = useState(false)
+
+	const getTotalLessons = () => {
+		let total = 0
+		teachers?.forEach((teacher) => {
+			total += teacher.lessons
+		})
+		return teachers?.length > 1 ? total : ''
+	}
 
 	return (
 		<td
@@ -55,13 +69,13 @@ const BindingsCell: NextPage<Props> = ({
 								{teachers[i]?.shortname}
 							</h4>
 							<h4 className="text-primary inline ml-1">
-								{lessons}
+								{teachers[i]?.lessons}
 							</h4>
 						</div>
 					))}
 				</div>
 				<div className="text-primary flex place-content-right items-center">
-					{lessons}
+					{getTotalLessons()}
 				</div>
 			</div>
 		</td>
