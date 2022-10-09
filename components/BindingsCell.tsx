@@ -23,7 +23,7 @@ const BindingsCell: NextPage<Props> = ({
 	teachers,
 	lessons,
 }) => {
-	const { addBinding } = useTimetableStore()
+	const { addBinding, deleteBinding } = useTimetableStore()
 
 	const [hovered, setHovered] = useState(false)
 

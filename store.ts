@@ -41,6 +41,7 @@ interface TimetableState {
 			grade: number
 		}
 	) => void
+	deleteBinding: (id: number) => void
 
 	rawTableData: {
 		id?: number
@@ -194,6 +195,13 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 					subject,
 					cl,
 				},
+			],
+		})),
+
+	deleteBinding: (id) =>
+		set((state) => ({
+			bindings: [
+				...state.bindings.filter((binding) => binding.id !== id),
 			],
 		})),
 

@@ -47,8 +47,6 @@ const BindingsTable: NextComponentType = () => {
 		)
 	}, [bindings, selectedGrade])
 
-	console.log(tableData)
-
 	return (
 		<div className="w-full p-5">
 			<table className="table table-zebra w-full h-full devide-black table-fixed rounded-full border-separate">
@@ -58,7 +56,10 @@ const BindingsTable: NextComponentType = () => {
 						{classes
 							.filter((cl) => cl.grade === selectedGrade)
 							.map((cl) => (
-								<th className="border border-slate-600 text-center">
+								<th
+									key={cl.id}
+									className="border border-slate-600 text-center"
+								>
 									{cl.name}
 								</th>
 							))}
@@ -82,9 +83,9 @@ const BindingsTable: NextComponentType = () => {
 								{row
 									.filter((_, ci) => ci)
 									.map((cell, ci) => {
-										console.log(cell)
 										return (
 											<BindingsCell
+												key={ci}
 												cl={cell?.cl}
 												subject={cell?.subject}
 												teachers={cell?.teachers}
