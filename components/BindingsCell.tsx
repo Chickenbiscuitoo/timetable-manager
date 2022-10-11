@@ -60,7 +60,12 @@ const BindingsCell: NextPage<Props> = ({
 							<h4 className="inline relative">
 								{hovered && (
 									<>
-										<span className="w-full absolute top-1 right-4 cursor-pointer hover:text-red-400">
+										<span
+											className="w-full absolute top-1 right-4 cursor-pointer hover:text-red-400"
+											onClick={() =>
+												deleteBinding(bindingId)
+											}
+										>
 											<MdDeleteForever />
 										</span>
 										<span className="w-full absolute top-1 left-9 cursor-pointer text-xs">

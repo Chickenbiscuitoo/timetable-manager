@@ -204,7 +204,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 				shortname: 'HIS',
 				commitee_id: 1,
 			},
-			cl: { id: 1, name: '1.B', teacher_id: 2, grade: 1 },
+			cl: { id: 2, name: '1.B', teacher_id: 2, grade: 1 },
 		},
 	],
 
