@@ -31,8 +31,12 @@ const BindingsCell: NextPage<Props> = ({
 	teachers,
 	lessons,
 }) => {
-	const { addBinding, deleteBinding, updateBindingLessonCount } =
-		useTimetableStore()
+	const {
+		addBinding,
+		deleteBinding,
+		updateBindingLessonCount,
+		deleteTeacherFromBinding,
+	} = useTimetableStore()
 
 	const [hovered, setHovered] = useState(false)
 
@@ -63,7 +67,10 @@ const BindingsCell: NextPage<Props> = ({
 										<span
 											className="w-full absolute top-1 right-4 cursor-pointer hover:text-red-400"
 											onClick={() =>
-												deleteBinding(bindingId)
+												deleteTeacherFromBinding(
+													bindingId,
+													teacher.id
+												)
 											}
 										>
 											<MdDeleteForever />

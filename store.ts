@@ -60,6 +60,12 @@ interface TimetableState {
 			grade: number
 		}
 	) => void
+
+	deleteTeacherFromBinding: (
+		bindingId: number,
+		teacherId: number
+	) => void
+
 	updateBindingLessonCount: (
 		bindingId: number,
 		teacherId: number,
@@ -227,6 +233,50 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 				...state.bindings.filter((binding) => binding.id !== id),
 			],
 		})),
+
+	deleteTeacherFromBinding: (bindingId, teacherId) => {
+		const oldBinding = get().bindings.find(
+			(binding) => binding.id === bindingId
+		)
+		if (!oldBinding) {
+			console.log('Binding not found')
+			return
+		}
+
+		const oldTeacher = oldBinding.teachers.find(
+			(teacher) => teacher.id === teacherId
+		)
+		if (!oldTeacher) {
+			console.log('Teacher not found')
+			return
+		}
+
+		const newTeachersArr = oldBinding.teachers.filter(
+			(tch) => tch.id !== teacherId
+		)
+
+		if (newTeachersArr.length === 0) {
+			set((state) => ({
+				bindings: [
+					...state.bindings.filter(
+						(binding) => binding.id !== bindingId
+					),
+				],
+			}))
+		} else {
+			set((state) => ({
+				bindings: [
+					...state.bindings.filter(
+						(binding) => binding.id !== bindingId
+					),
+					{
+						...oldBinding,
+						teachers: newTeachersArr,
+					},
+				],
+			}))
+		}
+	},
 
 	updateBinding: (id, teachers, subject, cl) =>
 		set((state) => ({
