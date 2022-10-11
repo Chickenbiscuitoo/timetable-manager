@@ -6,7 +6,7 @@ import BindingsTable from '../components/BindingsTable'
 import CopyButton from '../components/CopyButton'
 import Sidebar from '../components/Sidebar'
 import TabsMenu from '../components/TabsMenu'
-import SideWorkspace from '../components/SideWorkspace'
+import BindingsSideWorkspace from '../components/BindingsSideWorkspace'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -29,7 +29,7 @@ const Bindings: NextPage = () => {
 						</div>
 						<BindingsTable />
 					</div>
-					<SideWorkspace />
+					<BindingsSideWorkspace />
 				</main>
 			</DndProvider>
 

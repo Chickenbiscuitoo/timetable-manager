@@ -12,7 +12,12 @@ import { AiOutlineMinus } from 'react-icons/ai'
 
 interface Props {
 	bindingId: number
-	cl: Class
+	cl: {
+		id: number
+		name: string
+		teacher_id: number
+		grade: number
+	}
 	subject: Subject
 	teachers: {
 		id: number
@@ -21,7 +26,6 @@ interface Props {
 		email: string
 		lessons: number
 	}[]
-	lessons: number
 }
 
 const BindingsCell: NextPage<Props> = ({
@@ -29,16 +33,60 @@ const BindingsCell: NextPage<Props> = ({
 	cl,
 	subject,
 	teachers,
-	lessons,
 }) => {
 	const {
 		addBinding,
 		deleteBinding,
+		updateBinding,
 		updateBindingLessonCount,
 		deleteTeacherFromBinding,
+		subjects,
+		classes,
 	} = useTimetableStore()
 
 	const [hovered, setHovered] = useState(false)
+
+	const handleDrop = () => {
+		const { id, name, shortname, email } = itemProps
+
+		if (bindingId === undefined) {
+			addBinding(
+				[{ id, name, shortname, email, lessons: 1 }],
+				subject,
+				cl
+			)
+		} else {
+			updateBinding(
+				bindingId,
+				[...teachers, { id, name, shortname, email, lessons: 1 }],
+				subject,
+				cl
+			)
+		}
+	}
+
+	const teacherIds = teachers?.map((t) => t.id)
+	const handleCanDrop = () => {
+		if (teachers === undefined) {
+			return true
+		} else if (teacherIds.includes(itemProps?.id)) {
+			return false
+		} else {
+			return true
+		}
+	}
+
+	const [{ isOver, canDrop, itemType, itemProps }, drop]: any = useDrop({
+		accept: ['TeacherBindingsItem'],
+		canDrop: handleCanDrop,
+		drop: handleDrop,
+		collect: (monitor) => ({
+			canDrop: !!monitor.canDrop(),
+			isOver: !!monitor.isOver(),
+			itemType: monitor.getItemType(),
+			itemProps: monitor.getItem(),
+		}),
+	})
 
 	const getTotalLessons = () => {
 		let total = 0
@@ -53,6 +101,7 @@ const BindingsCell: NextPage<Props> = ({
 			className="border border-slate-600 h-full w-full"
 			onMouseEnter={() => setHovered(true)}
 			onMouseLeave={() => setHovered(false)}
+			ref={drop}
 		>
 			<div className="h-full w-full flex flex-row">
 				<div className="flex-1 flex flex-col">

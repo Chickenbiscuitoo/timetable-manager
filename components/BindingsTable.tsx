@@ -9,7 +9,7 @@ const BindingsTable: NextComponentType = () => {
 		useTimetableStore()
 
 	const selectedGradeTableData = bindings.filter(
-		(binding) => binding.cl.grade === selectedGrade
+		(binding) => binding.cl?.grade === selectedGrade
 	)
 
 	// Fuction to make nested array from an array of objects
@@ -83,14 +83,16 @@ const BindingsTable: NextComponentType = () => {
 								{row
 									.filter((_, ci) => ci)
 									.map((cell, ci) => {
+										const cellKey = parseInt(
+											`${i}${ci}`
+										)
 										return (
 											<BindingsCell
-												key={ci}
+												key={cellKey}
 												bindingId={cell?.id}
 												cl={cell?.cl}
 												subject={cell?.subject}
 												teachers={cell?.teachers}
-												lessons={cell?.lessons}
 											/>
 										)
 									})}
