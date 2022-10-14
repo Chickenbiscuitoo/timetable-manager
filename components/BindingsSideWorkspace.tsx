@@ -13,6 +13,7 @@ const BindingsSideWorkspace: NextPage = () => {
 				<BindingsScrollMenu data={teachers} />
 			</div>
 			<div>
+				****** Incoreect checking! ******
 				<Checking />
 			</div>
 		</div>
