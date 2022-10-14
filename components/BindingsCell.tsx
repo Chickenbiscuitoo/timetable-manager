@@ -50,18 +50,11 @@ const BindingsCell: NextPage<Props> = ({
 		const { id, name, shortname, email } = itemProps
 
 		if (bindingId === undefined) {
-			const cellSubject = subjects.find(
-				(subject) => subject.id === subjectId
+			addBinding(
+				[{ id, name, shortname, email, lessons: 1 }],
+				subject,
+				cl
 			)
-			const cellClass = classes.find((cl) => cl.id === classId)
-
-			if (cellSubject && cellClass) {
-				addBinding(
-					[{ id, name, shortname, email, lessons: 1 }],
-					cellSubject,
-					cellClass
-				)
-			}
 		} else {
 			updateBinding(
 				bindingId,
@@ -74,9 +67,7 @@ const BindingsCell: NextPage<Props> = ({
 
 	const teacherIds = teachers?.map((t) => t.id)
 	const handleCanDrop = () => {
-		if (teachers === undefined) {
-			return true
-		} else if (teacherIds.includes(itemProps?.id)) {
+		if (teacherIds.includes(itemProps?.id)) {
 			return false
 		} else {
 			return true

@@ -65,8 +65,6 @@ const BindingsTable: NextComponentType = () => {
 		)
 	)
 
-	console.log(tableData)
-
 	useEffect(() => {
 		setTableData(
 			tableArrayFromList(
