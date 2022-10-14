@@ -2,11 +2,11 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { AiFillGithub } from 'react-icons/ai'
 
-import Timetable from '../components/Timetable'
+import BindingsTable from '../components/BindingsTable'
 import CopyButton from '../components/CopyButton'
 import Sidebar from '../components/Sidebar'
-import TabsMenu from '../components/TabsMenu'
-import SideWorkspace from '../components/SideWorkspace'
+import BindingsTabsMenu from '../components/BindingsTabsMenu'
+import BindingsSideWorkspace from '../components/BindingsSideWorkspace'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -24,12 +24,12 @@ const Home: NextPage = () => {
 					<Sidebar />
 					<div>
 						<div className="flex flex-row items-end mx-5">
-							<TabsMenu />
+							<BindingsTabsMenu />
 							<CopyButton />
 						</div>
-						<Timetable />
+						<BindingsTable />
 					</div>
-					<SideWorkspace />
+					<BindingsSideWorkspace />
 				</main>
 			</DndProvider>
 
