@@ -96,7 +96,9 @@ const BindingsCell: NextPage<Props> = ({
 
 	return (
 		<td
-			className="border border-slate-600 h-full w-full"
+			className={`border border-slate-600 h-full w-full ${
+				isOver && canDrop && '!bg-emerald-200'
+			} ${isOver && !canDrop && '!bg-rose-200'}`}
 			onMouseEnter={() => setHovered(true)}
 			onMouseLeave={() => setHovered(false)}
 			ref={drop}
