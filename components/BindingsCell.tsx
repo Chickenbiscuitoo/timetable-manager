@@ -26,8 +26,6 @@ interface Props {
 		email: string
 		lessons: number
 	}[]
-	classId: number
-	subjectId: number
 }
 
 const BindingsCell: NextPage<Props> = ({
@@ -35,8 +33,6 @@ const BindingsCell: NextPage<Props> = ({
 	cl,
 	subject,
 	teachers,
-	classId,
-	subjectId,
 }) => {
 	const {
 		addBinding,

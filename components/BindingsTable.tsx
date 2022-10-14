@@ -32,7 +32,25 @@ const BindingsTable: NextComponentType = () => {
 			const col = bindingClassIndex + 1
 			arr[row][col] = binding
 		})
-		return arr
+
+		// Populates emply cells with class and subject
+		return arr.map((row, rowIndex) =>
+			row.map((col, colIndex) => {
+				if (col === undefined) {
+					const bindingSubjectIndex = rowIndex - 1
+					const bindingClassIndex = colIndex - 1
+					const subject = subjects[bindingSubjectIndex]
+					const cl = classes[bindingClassIndex]
+					return {
+						cl,
+						subject,
+						teachers: [],
+					}
+				} else {
+					return col
+				}
+			})
+		)
 	}
 
 	const tableColsNum = classes.filter(
@@ -46,6 +64,8 @@ const BindingsTable: NextComponentType = () => {
 			tableColsNum
 		)
 	)
+
+	console.log(tableData)
 
 	useEffect(() => {
 		setTableData(
@@ -89,8 +109,6 @@ const BindingsTable: NextComponentType = () => {
 										const cellKey = parseInt(
 											`${i + 1}${ci + 1}`
 										)
-										const classId = ci + 1
-										const subjectId = i + 1
 
 										return (
 											<BindingsCell
@@ -102,8 +120,6 @@ const BindingsTable: NextComponentType = () => {
 													subjects[i]
 												}
 												teachers={cell?.teachers}
-												classId={classId}
-												subjectId={subjectId}
 											/>
 										)
 									})}
