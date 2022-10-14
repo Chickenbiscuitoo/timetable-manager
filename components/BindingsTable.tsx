@@ -14,12 +14,22 @@ const BindingsTable: NextComponentType = () => {
 
 	// Fuction to make nested array from an array of objects
 	function tableArrayFromList(list: any, rows: number, cols: number) {
+		// Create an empty 2D array with the given number of rows and cols
 		const arr = new Array(rows + 1)
 			.fill(0)
 			.map((_, i) => new Array(cols + 1).fill(undefined))
 		selectedGradeTableData.forEach((binding) => {
-			const row = binding.subject.id
-			const col = binding.cl.id
+			// Get index of bindings subject in arr bindings
+			const bindingSubjectIndex = subjects.findIndex(
+				(subject) => subject.id === binding.subject.id
+			)
+			// Get index of bindings class in arr classes
+			const bindingClassIndex = classes.findIndex(
+				(cl) => cl.id === binding.cl.id
+			)
+
+			const row = bindingSubjectIndex + 1
+			const col = bindingClassIndex + 1
 			arr[row][col] = binding
 		})
 		return arr
@@ -55,7 +65,7 @@ const BindingsTable: NextComponentType = () => {
 						<th className="border border-slate-600 text-center"></th>
 						{classes
 							.filter((cl) => cl.grade === selectedGrade)
-							.map((cl) => (
+							.map((cl, i) => (
 								<th
 									key={cl.id}
 									className="border border-slate-600 text-center"
@@ -71,28 +81,29 @@ const BindingsTable: NextComponentType = () => {
 						.map((row, i) => (
 							<tr key={i}>
 								<td className="border border-slate-600 text-center">
-									<h3>
-										{
-											subjects.find(
-												(subject) =>
-													subject.id === i + 1
-											)?.name
-										}
-									</h3>
+									<h3>{subjects[i]?.name}</h3>
 								</td>
 								{row
 									.filter((_, ci) => ci)
 									.map((cell, ci) => {
 										const cellKey = parseInt(
-											`${i}${ci}`
+											`${i + 1}${ci + 1}`
 										)
+										const classId = ci + 1
+										const subjectId = i + 1
+
 										return (
 											<BindingsCell
 												key={cellKey}
 												bindingId={cell?.id}
 												cl={cell?.cl}
-												subject={cell?.subject}
+												subject={
+													cell?.subject ||
+													subjects[i]
+												}
 												teachers={cell?.teachers}
+												classId={classId}
+												subjectId={subjectId}
 											/>
 										)
 									})}

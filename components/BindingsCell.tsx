@@ -26,6 +26,8 @@ interface Props {
 		email: string
 		lessons: number
 	}[]
+	classId: number
+	subjectId: number
 }
 
 const BindingsCell: NextPage<Props> = ({
@@ -33,6 +35,8 @@ const BindingsCell: NextPage<Props> = ({
 	cl,
 	subject,
 	teachers,
+	classId,
+	subjectId,
 }) => {
 	const {
 		addBinding,
@@ -50,11 +54,18 @@ const BindingsCell: NextPage<Props> = ({
 		const { id, name, shortname, email } = itemProps
 
 		if (bindingId === undefined) {
-			addBinding(
-				[{ id, name, shortname, email, lessons: 1 }],
-				subject,
-				cl
+			const cellSubject = subjects.find(
+				(subject) => subject.id === subjectId
 			)
+			const cellClass = classes.find((cl) => cl.id === classId)
+
+			if (cellSubject && cellClass) {
+				addBinding(
+					[{ id, name, shortname, email, lessons: 1 }],
+					cellSubject,
+					cellClass
+				)
+			}
 		} else {
 			updateBinding(
 				bindingId,
