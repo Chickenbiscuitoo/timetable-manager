@@ -24,9 +24,9 @@ const BindingsTable: NextComponentType = () => {
 				(subject) => subject.id === binding.subject.id
 			)
 			// Get index of bindings class in arr classes
-			const bindingClassIndex = classes.findIndex(
-				(cl) => cl.id === binding.cl.id
-			)
+			const bindingClassIndex = classes
+				.filter((cl) => cl.grade === selectedGrade)
+				.findIndex((cl) => cl.id === binding.cl.id)
 
 			const row = bindingSubjectIndex + 1
 			const col = bindingClassIndex + 1
@@ -40,7 +40,9 @@ const BindingsTable: NextComponentType = () => {
 					const bindingSubjectIndex = rowIndex - 1
 					const bindingClassIndex = colIndex - 1
 					const subject = subjects[bindingSubjectIndex]
-					const cl = classes[bindingClassIndex]
+					const cl = classes.filter(
+						(cl) => cl.grade === selectedGrade
+					)[bindingClassIndex]
 					return {
 						cl,
 						subject,
@@ -105,7 +107,9 @@ const BindingsTable: NextComponentType = () => {
 									.filter((_, ci) => ci)
 									.map((cell, ci) => {
 										const cellKey = parseInt(
-											`${i + 1}${ci + 1}`
+											`${i + 1}${
+												ci + 1
+											}${selectedGrade}`
 										)
 
 										return (

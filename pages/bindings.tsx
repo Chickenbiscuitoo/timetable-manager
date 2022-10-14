@@ -5,7 +5,7 @@ import { AiFillGithub } from 'react-icons/ai'
 import BindingsTable from '../components/BindingsTable'
 import CopyButton from '../components/CopyButton'
 import Sidebar from '../components/Sidebar'
-import TabsMenu from '../components/TabsMenu'
+import BindingsTabsMenu from '../components/BindingsTabsMenu'
 import BindingsSideWorkspace from '../components/BindingsSideWorkspace'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -24,7 +24,7 @@ const Bindings: NextPage = () => {
 					<Sidebar />
 					<div>
 						<div className="flex flex-row items-end mx-5">
-							<TabsMenu />
+							<BindingsTabsMenu />
 							<CopyButton />
 						</div>
 						<BindingsTable />

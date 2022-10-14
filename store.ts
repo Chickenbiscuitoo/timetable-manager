@@ -814,6 +814,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		{ id: 1, name: 'Math', shortname: 'MAT', commitee_id: 1 },
 	],
 	classes: [
+		{ id: 10, name: '2.C', teacher_id: 7, grade: 2 },
 		{ id: 1, name: '1.A', teacher_id: 1, grade: 1 },
 		{ id: 2, name: '1.B', teacher_id: 2, grade: 1 },
 		{ id: 3, name: '1.C', teacher_id: 3, grade: 1 },
@@ -823,7 +824,6 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		{ id: 12, name: '1.G', teacher_id: 12, grade: 1 },
 		{ id: 8, name: '2.A', teacher_id: 5, grade: 2 },
 		{ id: 9, name: '2.B', teacher_id: 6, grade: 2 },
-		{ id: 10, name: '2.C', teacher_id: 7, grade: 2 },
 		{ id: 11, name: '2.D', teacher_id: 8, grade: 2 },
 	],
 
