@@ -83,7 +83,12 @@ interface TimetableState {
 	}[]
 	teachers: Teacher[]
 	subjects: Subject[]
-	classes: Class[]
+	classes: {
+		id: number
+		name: string
+		teacher_id: number
+		grade: number
+	}[]
 
 	addLesson: (
 		class_id: number,
