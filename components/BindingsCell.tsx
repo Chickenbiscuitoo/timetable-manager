@@ -91,7 +91,7 @@ const BindingsCell: NextPage<Props> = ({
 		teachers?.forEach((teacher) => {
 			total += teacher.lessons
 		})
-		return teachers?.length > 1 ? total : ''
+		return total > 0 ? total : ''
 	}
 
 	return (
