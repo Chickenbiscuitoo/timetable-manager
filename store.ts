@@ -7,6 +7,7 @@ import {
 import create from 'zustand'
 
 interface TimetableState {
+	schoolYear: string
 	bindings: {
 		id?: number
 		teachers: {
@@ -109,6 +110,7 @@ interface TimetableState {
 }
 
 const useTimetableStore = create<TimetableState>((set, get) => ({
+	schoolYear: '2020/2021',
 	bindings: [
 		{
 			id: 1,

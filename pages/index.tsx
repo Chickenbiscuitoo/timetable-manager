@@ -1,5 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+
+import useTimetableStore from '../store'
+
 import { AiFillGithub } from 'react-icons/ai'
 
 import BindingsTable from '../components/BindingsTable'
@@ -12,6 +15,8 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
 
 const Home: NextPage = () => {
+	const { schoolYear } = useTimetableStore()
+
 	return (
 		<div>
 			<Head>
@@ -25,7 +30,9 @@ const Home: NextPage = () => {
 					<div>
 						<div className="flex flex-row items-end mx-5">
 							<BindingsTabsMenu />
-							<CopyButton />
+							<h1 className="font-semibold btn btn-sm">
+								{schoolYear}
+							</h1>
 						</div>
 						<BindingsTable />
 					</div>
