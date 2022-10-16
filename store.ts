@@ -70,6 +70,7 @@ interface TimetableState {
 		teacherId: number,
 		operation: string
 	) => void
+	copyBindings: (srcId: number, destId: number) => void
 
 	rawTableData: {
 		id?: number
@@ -375,6 +376,37 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 					subject: oldBinding.subject,
 					cl: oldBinding.cl,
 				},
+			],
+		}))
+	},
+	copyBindings: (srcId, destId) => {
+		const srcBindings = get().bindings.filter(
+			(binding) => binding.cl.id === srcId
+		)
+		const destClass = get().classes.find((cl) => cl.id === destId)
+
+		if (srcBindings.length === 0) {
+			console.log('No bindings found')
+			return
+		} else if (!destClass) {
+			console.log('Class not found')
+			return
+		}
+
+		set((state) => ({
+			bindings: [
+				...state.bindings,
+				...srcBindings.map((binding) => ({
+					id: state.bindings.length + 1,
+					teachers: binding.teachers,
+					subject: binding.subject,
+					cl: {
+						id: destId,
+						name: destClass.name,
+						teacher_id: destClass.teacher_id,
+						grade: destClass.grade,
+					},
+				})),
 			],
 		}))
 	},
