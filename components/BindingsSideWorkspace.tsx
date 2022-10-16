@@ -2,7 +2,7 @@ import { NextPage } from 'next'
 import useTimetableStore from '../store'
 
 import BindingsScrollMenu from './BindingsScrollMenu'
-import Checking from './Checking'
+import BindingsChecking from './BindingsChecking'
 
 const BindingsSideWorkspace: NextPage = () => {
 	const { teachers } = useTimetableStore()
@@ -13,8 +13,7 @@ const BindingsSideWorkspace: NextPage = () => {
 				<BindingsScrollMenu data={teachers} />
 			</div>
 			<div>
-				****** Incoreect checking! ******
-				<Checking />
+				<BindingsChecking />
 			</div>
 		</div>
 	)
