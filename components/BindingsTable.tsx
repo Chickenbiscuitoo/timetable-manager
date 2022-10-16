@@ -78,6 +78,21 @@ const BindingsTable: NextComponentType = () => {
 		)
 	}, [bindings, selectedGrade])
 
+	const getClassTotalLessons = (cl: number) => {
+		const clBindings = bindings.filter(
+			(binding) => binding.cl.id === cl
+		)
+
+		let totalLessons = 0
+		clBindings.forEach((binding) => {
+			binding.teachers.forEach((teacher) => {
+				totalLessons += teacher.lessons
+			})
+		})
+
+		return totalLessons
+	}
+
 	return (
 		<div className="w-full p-5">
 			<table className="table table-zebra w-full h-full devide-black table-fixed rounded-full border-separate">
@@ -134,6 +149,25 @@ const BindingsTable: NextComponentType = () => {
 							</tr>
 						))}
 				</tbody>
+				<tfoot>
+					<tr>
+						<th className="border border-slate-600 text-center">
+							TOTAL
+						</th>
+						{classes
+							.filter((cl) => cl.grade === selectedGrade)
+							.map((cl, i) => (
+								<th
+									key={cl.id}
+									className="border border-slate-600 text-center"
+								>
+									<h1 className="font-semibold text-primary text-base">
+										{getClassTotalLessons(cl.id)}
+									</h1>
+								</th>
+							))}
+					</tr>
+				</tfoot>
 			</table>
 		</div>
 	)
