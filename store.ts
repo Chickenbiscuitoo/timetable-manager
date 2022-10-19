@@ -239,7 +239,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 			cl: { id: 12, name: '1.G', teacher_id: 12, grade: 1 },
 		},
 		{
-			id: 6,
+			id: 7,
 			teachers: [
 				{
 					id: 3,
@@ -403,8 +403,8 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		set((state) => ({
 			bindings: [
 				...state.bindings,
-				...srcBindings.map((binding) => ({
-					id: state.bindings.length + 1,
+				...srcBindings.map((binding, i) => ({
+					id: state.bindings.length + i,
 					teachers: binding.teachers,
 					subject: binding.subject,
 					cl: {
