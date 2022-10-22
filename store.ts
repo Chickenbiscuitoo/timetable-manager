@@ -6,10 +6,12 @@ import {
 
 import create from 'zustand'
 
+import { v4 as uuidv4 } from 'uuid'
+
 interface TimetableState {
 	schoolYear: string
 	bindings: {
-		id?: number
+		id: number | string
 		teachers: {
 			id: number
 			name: string
@@ -264,7 +266,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 			bindings: [
 				...state.bindings,
 				{
-					id: state.bindings.length + 1,
+					id: uuidv4(),
 					teachers,
 					subject,
 					cl,
@@ -404,7 +406,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 			bindings: [
 				...state.bindings,
 				...srcBindings.map((binding, i) => ({
-					id: state.bindings.length + i,
+					id: uuidv4(),
 					teachers: binding.teachers,
 					subject: binding.subject,
 					cl: {
