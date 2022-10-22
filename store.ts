@@ -356,13 +356,12 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 			return
 		}
 
-		if (oldTeacher.lessons === 0 && operation === 'decrement') {
+		if (oldTeacher.lessons === 1 && operation === 'decrement') {
 			return
-		} else if (operation === 'increment') {
-			oldTeacher.lessons++
-		} else if (operation === 'decrement') {
-			oldTeacher.lessons--
-		} else {
+		} else if (
+			operation !== 'decrement' &&
+			operation !== 'increment'
+		) {
 			console.log('Invalid operation')
 			return
 		}
@@ -380,6 +379,10 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 						),
 						{
 							...oldTeacher,
+							lessons:
+								operation === 'increment'
+									? oldTeacher.lessons + 1
+									: oldTeacher.lessons - 1,
 						},
 					],
 					subject: oldBinding.subject,
@@ -405,7 +408,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		set((state) => ({
 			bindings: [
 				...state.bindings,
-				...srcBindings.map((binding, i) => ({
+				...srcBindings.map((binding) => ({
 					id: uuidv4(),
 					teachers: binding.teachers,
 					subject: binding.subject,
