@@ -127,7 +127,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 					name: 'Gulami Bete',
 					shortname: 'GB',
 					email: 'gulami.bete@gmail.com',
-					lessons: 2,
+					lessons: 1,
 				},
 				{
 					id: 2,
@@ -153,7 +153,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 					name: 'Gulami Bete',
 					shortname: 'GB',
 					email: 'gulami.bete@gmail.com',
-					lessons: 3,
+					lessons: 1,
 				},
 			],
 			subject: {
@@ -172,7 +172,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 					name: 'Gulami Bete',
 					shortname: 'GB',
 					email: 'gulami.bete@gmail.com',
-					lessons: 5,
+					lessons: 7,
 				},
 			],
 			subject: {
@@ -229,7 +229,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 					name: 'Gulami Bete',
 					shortname: 'GB',
 					email: 'gulami.bete@gmail.com',
-					lessons: 7,
+					lessons: 8,
 				},
 			],
 			subject: {
@@ -248,7 +248,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 					name: 'Gulami Bete',
 					shortname: 'GB',
 					email: 'gulami.bete@gmail.com',
-					lessons: 2,
+					lessons: 7,
 				},
 			],
 			subject: {
@@ -305,7 +305,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 					name: 'Xavier Dufour',
 					shortname: 'XD',
 					email: 'xavier.dufour@gmail.com',
-					lessons: 4,
+					lessons: 2,
 				},
 			],
 			subject: {
