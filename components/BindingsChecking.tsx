@@ -147,7 +147,7 @@ const BindingsChecking: NextPage = () => {
 				return (
 					<div
 						key={cl?.id}
-						className="alert alert-error shadow-lg justify-center mt-2"
+						className="alert alert-warning shadow-lg justify-center mt-2"
 					>
 						<div>
 							<svg
