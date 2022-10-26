@@ -12,7 +12,7 @@ const BindingsSideWorkspace: NextPage = () => {
 			<div className="h-50vh flex flex-row">
 				<BindingsScrollMenu data={teachers} />
 			</div>
-			<div>
+			<div className="h-50vh flex">
 				<BindingsChecking />
 			</div>
 		</div>

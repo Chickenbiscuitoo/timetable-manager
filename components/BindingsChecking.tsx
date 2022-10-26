@@ -114,7 +114,11 @@ const BindingsChecking: NextPage = () => {
 		})
 	}
 
-	return <div>{warningsTeachersTotalLessons()}</div>
+	return (
+		<div className="overflow-y-auto overflow-x-hidden">
+			{warningsTeachersTotalLessons()}
+		</div>
+	)
 }
 
 export default BindingsChecking
