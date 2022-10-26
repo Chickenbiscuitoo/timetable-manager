@@ -90,7 +90,10 @@ const BindingsChecking: NextPage = () => {
 				)
 			} else if (entry.lessons > teacherMaxLessons) {
 				return (
-					<div className="alert alert-error shadow-lg justify-center mt-2">
+					<div
+						key={teacher.id}
+						className="alert alert-error shadow-lg justify-center mt-2"
+					>
 						<div>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
