@@ -95,7 +95,7 @@ const Checking: NextPage = () => {
 			)
 		} else if (classLessons.length < 20) {
 			return (
-				<div className=" alert alert-warning shadow-lg justify-center mt-2">
+				<div className="alert alert-warning shadow-lg justify-center mt-2">
 					<div>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
