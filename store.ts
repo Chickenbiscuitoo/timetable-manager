@@ -259,6 +259,63 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 			},
 			cl: { id: 12, name: '1.G', teacher_id: 12, grade: 1 },
 		},
+		{
+			id: 8,
+			teachers: [
+				{
+					id: 1,
+					name: 'John Doe',
+					shortname: 'JD',
+					email: 'john.doe@gmail.com',
+					lessons: 9,
+				},
+			],
+			subject: {
+				id: 2,
+				name: 'English',
+				shortname: 'ENG',
+				commitee_id: 2,
+			},
+			cl: { id: 1, name: '1.A', teacher_id: 1, grade: 1 },
+		},
+		{
+			id: 9,
+			teachers: [
+				{
+					id: 10,
+					name: 'Marshall Miller',
+					shortname: 'MM',
+					email: 'marshall.miller@gmail.com',
+					lessons: 7,
+				},
+			],
+			subject: {
+				id: 8,
+				name: 'Italian',
+				shortname: 'ITA',
+				commitee_id: 2,
+			},
+			cl: { id: 5, name: '1.E', teacher_id: 10, grade: 1 },
+		},
+		{
+			id: 10,
+			teachers: [
+				{
+					id: 4,
+					name: 'Xavier Dufour',
+					shortname: 'XD',
+					email: 'xavier.dufour@gmail.com',
+					lessons: 4,
+				},
+			],
+			subject: {
+				id: 6,
+				name: 'Spanish',
+				shortname: 'SPA',
+				commitee_id: 2,
+			},
+			cl: { id: 4, name: '1.D', teacher_id: 4, grade: 1 },
+		},
 	],
 
 	addBinding: (teachers, subject, cl) => {
