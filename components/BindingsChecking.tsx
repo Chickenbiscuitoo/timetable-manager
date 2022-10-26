@@ -8,7 +8,8 @@ import { flatten } from '../utils/arraysFuncs'
 const BindingsChecking: NextPage = () => {
 	const [clicked, setClicked] = useState(false)
 
-	const { bindings, teachers, classes } = useTimetableStore()
+	const { bindings, teachers, classes, selectedGrade } =
+		useTimetableStore()
 
 	// returns an array of teachers and count of lessons they teach
 	const teachersTotalLessons = () => {
@@ -43,20 +44,25 @@ const BindingsChecking: NextPage = () => {
 		return teachersLessons
 	}
 
-	console.log(teachersTotalLessons())
-
 	const warningsTeachersTotalLessons = () => {
 		const teacherMinLessons = 4
 		const teacherMaxLessons = 22
 
 		const teachersLessons = teachersTotalLessons()
 
-		return teachersLessons.map((entry) => {
+		return teachersLessons.map((entry, i) => {
 			const teacher = teachers.find((tch) => tch.id === entry.id)
+
+			if (!teacher) {
+				return
+			}
 
 			if (entry.lessons < teacherMinLessons) {
 				return (
-					<div className="alert alert-warning shadow-lg justify-center mt-2">
+					<div
+						key={teacher.id}
+						className="alert alert-warning shadow-lg justify-center mt-2"
+					>
 						<div>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -114,9 +120,69 @@ const BindingsChecking: NextPage = () => {
 		})
 	}
 
+	const classTeacherTeaching = classes
+		.filter((cl) => cl.grade === selectedGrade)
+		.map((cl) => {
+			const classTeachers = bindings
+				.filter((binding) => binding.cl.id === cl.id)
+				.map((binding) =>
+					binding.teachers.map((teacher) => teacher.id)
+				)
+
+			const classTeacherTeaching = flatten(classTeachers).includes(
+				cl.teacher_id
+			)
+
+			return {
+				id: cl.id,
+				teacherTeaching: classTeacherTeaching,
+			}
+		})
+
+	const warningsClassTeacherTeaching = () => {
+		return classTeacherTeaching.map((entry) => {
+			const cl = classes.find((cl) => cl.id === entry.id)
+
+			if (!entry.teacherTeaching) {
+				return (
+					<div
+						key={cl?.id}
+						className="alert alert-error shadow-lg justify-center mt-2"
+					>
+						<div>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								className="stroke-current flex-shrink-0 h-6 w-6"
+								fill="none"
+								viewBox="0 0 24 24"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth="2"
+									d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+								/>
+							</svg>
+							<span>
+								<h5 className="inline font-semibold mr-1">
+									{cl?.name}
+								</h5>
+								<h5 className="inline">
+									does not have a class teacher teaching
+									it!
+								</h5>
+							</span>
+						</div>
+					</div>
+				)
+			}
+		})
+	}
+
 	return (
 		<div className="overflow-y-auto overflow-x-hidden">
 			{warningsTeachersTotalLessons()}
+			{warningsClassTeacherTeaching()}
 		</div>
 	)
 }
