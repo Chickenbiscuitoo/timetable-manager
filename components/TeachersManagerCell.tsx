@@ -66,10 +66,10 @@ const TeachersManagerCell: NextPage<TeacherProps> = ({
 			</td>
 			<td>{teachersTotalLessons()}</td>
 			<th>
-				<button className="btn btn-ghost btn-xs">
+				<button className="btn btn-ghost btn-xs hover:text-blue-400">
 					<BsFillPenFill />
 				</button>
-				<button className="btn btn-ghost btn-xs">
+				<button className="btn btn-ghost btn-xs hover:text-red-400">
 					<FaTrash />
 				</button>
 			</th>
