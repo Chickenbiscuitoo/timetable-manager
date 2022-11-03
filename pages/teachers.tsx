@@ -6,6 +6,7 @@ import Sidebar from '../components/Sidebar'
 import TeachersTable from '../components/TeachersTable'
 import TeachersBarChart from '../components/TeachersBarChart'
 import TeacherForm from '../components/TeacherForm'
+import TeachersManager from '../components/TeachersManager'
 
 const Stats: NextPage = () => {
 	return (
@@ -21,6 +22,7 @@ const Stats: NextPage = () => {
 					<TeachersTable />
 					<TeachersBarChart />
 					<TeacherForm />
+					<TeachersManager />
 				</div>
 			</main>
 
