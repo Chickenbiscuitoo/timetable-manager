@@ -108,6 +108,13 @@ interface TimetableState {
 	copyLessons: (from: number, to: number) => void
 
 	addTeacher: (name: string, shortname: string, email: string) => void
+	removeTeacher: (id: number) => void
+	updateTeacher: (
+		id: number,
+		name: string,
+		shortname: string,
+		email: string
+	) => void
 
 	selectedClass: number
 	setSelectedClass: (class_id: number) => void
@@ -999,6 +1006,23 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		const id = Date.now() + Math.random()
 		set((state) => ({
 			teachers: [...state.teachers, { id, name, shortname, email }],
+		}))
+	},
+
+	removeTeacher: (id) => {
+		set((state) => ({
+			teachers: state.teachers.filter(
+				(teacher) => teacher.id !== id
+			),
+		}))
+	},
+
+	updateTeacher: (id, name, shortname, email) => {
+		set((state) => ({
+			teachers: [
+				...state.teachers.filter((teacher) => teacher.id !== id),
+				{ id, name, shortname, email },
+			],
 		}))
 	},
 
