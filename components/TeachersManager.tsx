@@ -8,7 +8,7 @@ const TeachersManager: NextPage = () => {
 
 	return (
 		<div>
-			<div className="overflow-x-auto w-full">
+			<div className="overflow-x-auto w-full max-h-screen">
 				<table className="table w-full">
 					<thead>
 						<tr>
