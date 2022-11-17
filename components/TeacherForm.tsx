@@ -34,7 +34,7 @@ const TeacherForm: NextPage = () => {
 	}
 
 	return (
-		<div className="">
+		<div className="flex flex-col gap-2">
 			<div className="form-control">
 				<label className="input-group input-group-vertical">
 					<span>Name</span>
@@ -75,7 +75,7 @@ const TeacherForm: NextPage = () => {
 				</label>
 			</div>
 			<button
-				className="btn btn-outline btn-success btn-wide"
+				className="btn btn-outline btn-success w-full"
 				onClick={handleSubmit}
 			>
 				Submit

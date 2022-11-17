@@ -18,7 +18,7 @@ const Stats: NextPage = () => {
 
 			<main className="min-h-screen flex flex-row">
 				<Sidebar />
-				<div className="flex flex-col">
+				<div className="flex flex-col p-3">
 					<div className="flex flex-row">
 						<div className="grid bg-primary rounded-xl p-4 m-2 h-fit">
 							<TeachersManager />
@@ -32,7 +32,7 @@ const Stats: NextPage = () => {
 							</div>
 						</div>
 					</div>
-					<div className="grid p-2 m-1 h-fit border-8 rounded-xl border-primary">
+					<div className="grid p-2 m-2 h-fit border-8 rounded-xl border-primary">
 						<TeachersBarChart />
 					</div>
 				</div>
