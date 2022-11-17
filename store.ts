@@ -996,7 +996,7 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 	},
 
 	addTeacher: (name, shortname, email) => {
-		const id = get().teachers.length + 1
+		const id = Date.now() + Math.random()
 		set((state) => ({
 			teachers: [...state.teachers, { id, name, shortname, email }],
 		}))
