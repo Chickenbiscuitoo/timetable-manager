@@ -18,22 +18,17 @@ const Stats: NextPage = () => {
 
 			<main className="min-h-screen flex flex-row">
 				<Sidebar />
-				<div className="flex flex-col w-screen p-5">
-					<div className="flex flex-row w-full">
-						<div className="flex bg-primary p-5 m-2 place-content-center rounded-xl flex-1">
-							<TeachersManager />
-						</div>
-						<div className="flex flex-col overflow-x-auto">
-							<div className="flex bg-primary p-5 m-2 place-content-center rounded-xl">
-								<TeachersTable />
-							</div>
-							<div className="flex bg-primary p-5 m-2 place-content-center rounded-xl h-full">
-								<TeacherForm />
-							</div>
-						</div>
+				<div className="flex flex-row">
+					<div className="grid bg-primary p-5 m-1 h-fit">
+						<TeachersManager />
 					</div>
-					<div className="bg-primary p-5 m-2 rounded-xl w-full">
-						<TeachersBarChart />
+					<div className="grid grid-cols-1 grid-rows-2 h-fit">
+						<div className="grid bg-primary p-5 m-1 h-fit">
+							<TeachersTable />
+						</div>
+						<div className="grid bg-primary p-5 m-1 h-fit">
+							<TeacherForm />
+						</div>
 					</div>
 				</div>
 			</main>
