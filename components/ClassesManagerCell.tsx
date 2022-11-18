@@ -27,8 +27,10 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 		grade,
 	})
 
-	const { bindings, teachers, updateTeacher, removeTeacher } =
+	const { bindings, teachers, updateClass, removeClass } =
 		useTimetableStore()
+
+	const classTeacher = teachers.find((tch) => tch.id === teacherId)
 
 	const classesTotalLessons = () => {
 		const classesLessons = bindings
@@ -36,8 +38,6 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 			.map((binding) =>
 				binding.teachers.map((teacher) => teacher.lessons)
 			)
-
-		console.log(classesLessons)
 
 		const lessons = flatten(classesLessons).reduce(
 			(acc: number, curr: number) => acc + curr,
@@ -55,12 +55,12 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 	}
 
 	const handleSubmit = () => {
-		const name = formData.name.trim()
+		const name = formData.name.trim().toUpperCase()
 		const teacherId = formData.teacherId
 		const grade = formData.grade
 
 		if (name && teacherId && grade) {
-			// updateTeacher(id, name, shortname, email)
+			updateClass(id, name, teacherId, grade)
 			setFormData({
 				name,
 				teacherId,
@@ -69,8 +69,6 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 			setClickedUpdate(false)
 		}
 	}
-
-	const classTeacher = teachers.find((tch) => tch.id === teacherId)
 
 	return (
 		<>
@@ -106,7 +104,7 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 						<BsFillPenFill />
 					</button>
 					<button
-						onClick={() => removeTeacher(id)}
+						onClick={() => removeClass(id)}
 						className="btn btn-ghost btn-xs hover:text-red-400"
 					>
 						<FaTrash />
@@ -128,7 +126,6 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 							/>
 							<input
 								type="text"
-								// placeholder={teacherId}
 								value={formData.teacherId}
 								name="teacherId"
 								onChange={handleChange}
@@ -139,7 +136,8 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 					<td>
 						<input
 							type="text"
-							// placeholder={grade}
+							pattern="[0-9]"
+							placeholder={grade.toString()}
 							value={formData.grade}
 							name="grade"
 							onChange={handleChange}
