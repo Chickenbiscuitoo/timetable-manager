@@ -8,7 +8,7 @@ import TeachersBarChart from '../components/TeachersBarChart'
 import TeacherForm from '../components/TeacherForm'
 import TeachersManager from '../components/TeachersManager'
 
-const Stats: NextPage = () => {
+const Teachers: NextPage = () => {
 	return (
 		<div>
 			<Head>
@@ -55,4 +55,4 @@ const Stats: NextPage = () => {
 	)
 }
 
-export default Stats
+export default Teachers
