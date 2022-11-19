@@ -116,14 +116,9 @@ interface TimetableState {
 		email: string
 	) => void
 
-	addClass: (name: string, grade: number, teacher_id: number) => void
+	addClass: (name: string, teacher_id: number) => void
 	removeClass: (id: number) => void
-	updateClass: (
-		id: number,
-		name: string,
-		grade: number,
-		teacher_id: number
-	) => void
+	updateClass: (id: number, name: string, teacher_id: number) => void
 
 	selectedClass: number
 	setSelectedClass: (class_id: number) => void
@@ -1035,8 +1030,10 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		}))
 	},
 
-	addClass: (name, teacher_id, grade) => {
+	addClass: (name, teacher_id) => {
 		const id = Date.now() + Math.random()
+		const grade = parseInt(name.split('.')[0])
+
 		set((state) => ({
 			classes: [...state.classes, { id, name, teacher_id, grade }],
 		}))
@@ -1048,7 +1045,8 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		}))
 	},
 
-	updateClass: (id, name, teacher_id, grade) => {
+	updateClass: (id, name, teacher_id) => {
+		const grade = parseInt(name.split('.')[0])
 		set((state) => ({
 			classes: [
 				...state.classes.filter((class_) => class_.id !== id),

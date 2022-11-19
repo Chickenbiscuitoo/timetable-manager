@@ -60,7 +60,7 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 		const grade = formData.grade
 
 		if (name && teacherId && grade) {
-			updateClass(id, name, teacherId, grade)
+			updateClass(id, name, teacherId)
 			setFormData({
 				name,
 				teacherId,
@@ -115,31 +115,21 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 				<tr>
 					<td></td>
 					<td>
-						<div>
-							<input
-								type="text"
-								placeholder={name}
-								value={formData.name}
-								name="name"
-								onChange={handleChange}
-								className="input input-bordered max-w-xs focus:input-primary w-8/12"
-							/>
-							<input
-								type="text"
-								value={formData.teacherId}
-								name="teacherId"
-								onChange={handleChange}
-								className="input input-bordered max-w-xs focus:input-primary w-4/12"
-							/>
-						</div>
+						<input
+							type="text"
+							placeholder={name}
+							value={formData.name}
+							name="name"
+							onChange={handleChange}
+							className="input input-bordered max-w-xs focus:input-primary"
+						/>
 					</td>
 					<td>
 						<input
 							type="text"
-							pattern="[0-9]"
-							placeholder={grade.toString()}
-							value={formData.grade}
-							name="grade"
+							placeholder={formData.teacherId.toString()}
+							value={formData.teacherId}
+							name="teacherId"
 							onChange={handleChange}
 							className="input input-bordered w-full max-w-xs focus:input-primary"
 						/>
