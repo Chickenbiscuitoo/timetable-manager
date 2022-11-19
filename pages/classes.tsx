@@ -5,7 +5,7 @@ import { AiFillGithub } from 'react-icons/ai'
 import Sidebar from '../components/Sidebar'
 import TeachersTable from '../components/TeachersTable'
 import TeachersBarChart from '../components/TeachersBarChart'
-import TeacherForm from '../components/TeacherForm'
+import ClassesForm from '../components/ClassesForm'
 import ClassesManager from '../components/ClassesManager'
 
 const Classes: NextPage = () => {
@@ -28,7 +28,7 @@ const Classes: NextPage = () => {
 								<TeachersTable />
 							</div>
 							<div className="grid bg-primary bg-opacity-30 rounded-xl p-4 m-2 max-h-fit h-fit">
-								<TeacherForm />
+								<ClassesForm />
 							</div>
 						</div>
 					</div>
