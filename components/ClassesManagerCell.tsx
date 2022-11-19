@@ -24,13 +24,15 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 	const [formData, setFormData] = useState({
 		name,
 		teacherId,
-		grade,
 	})
 
 	const { bindings, teachers, updateClass, removeClass } =
 		useTimetableStore()
 
 	const classTeacher = teachers.find((tch) => tch.id === teacherId)
+	const selectedClassTeacher = teachers.find(
+		(tch) => tch.id === formData.teacherId
+	)
 
 	const classesTotalLessons = () => {
 		const classesLessons = bindings
@@ -57,14 +59,12 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 	const handleSubmit = () => {
 		const name = formData.name.trim().toUpperCase()
 		const teacherId = formData.teacherId
-		const grade = formData.grade
 
-		if (name && teacherId && grade) {
+		if (name && teacherId) {
 			updateClass(id, name, teacherId)
 			setFormData({
 				name,
 				teacherId,
-				grade,
 			})
 			setClickedUpdate(false)
 		}
@@ -88,10 +88,20 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 					</div>
 				</td>
 				<td>
-					<div className="font-bold">{classTeacher?.name}</div>
-					<div className="text-sm opacity-50">
-						{classTeacher?.shortname}
-					</div>
+					{classTeacher ? (
+						<>
+							<div className="font-bold">
+								{classTeacher?.name}
+							</div>
+							<div className="text-sm opacity-50">
+								{classTeacher?.shortname}
+							</div>
+						</>
+					) : (
+						<div className="text-sm opacity-50">
+							No teacher assigned
+						</div>
+					)}
 				</td>
 				<td>{classesTotalLessons()}</td>
 				<th>
@@ -121,18 +131,41 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 							value={formData.name}
 							name="name"
 							onChange={handleChange}
-							className="input input-bordered max-w-xs focus:input-primary"
+							className="input input-bordered max-w-xs focus:input-primary w-full"
 						/>
 					</td>
 					<td>
-						<input
-							type="text"
-							placeholder={formData.teacherId.toString()}
-							value={formData.teacherId}
-							name="teacherId"
-							onChange={handleChange}
-							className="input input-bordered w-full max-w-xs focus:input-primary"
-						/>
+						<div className="dropdown">
+							<label
+								tabIndex={0}
+								className="btn btn-outline btn-md text-xs w-full"
+							>
+								{selectedClassTeacher
+									? selectedClassTeacher.name
+									: 'Select'}
+							</label>
+							<ul
+								tabIndex={0}
+								className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+							>
+								{teachers.map((tch) => (
+									<li>
+										<a
+											onClick={() =>
+												setFormData(
+													(prevFormData) => ({
+														...prevFormData,
+														teacherId: tch.id,
+													})
+												)
+											}
+										>
+											{tch.name}
+										</a>
+									</li>
+								))}
+							</ul>
+						</div>
 					</td>
 					<td></td>
 					<td>
