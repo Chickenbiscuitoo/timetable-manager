@@ -7,8 +7,7 @@ import { flatten } from '../utils/arraysFuncs'
 import BarChart from './charts/BarChart'
 
 const ClassesBarChart: NextPage = () => {
-	const { bindings, teachers, selectedClass, classes } =
-		useTimetableStore()
+	const { bindings, classes } = useTimetableStore()
 
 	const classesStats = classes.map((cl) => {
 		const classesLessons = bindings
