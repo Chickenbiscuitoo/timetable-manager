@@ -66,7 +66,7 @@ const ClassesForm: NextPage = () => {
 							className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
 						>
 							{teachers.map((tch) => (
-								<li>
+								<li key={tch.id}>
 									<a
 										onClick={() =>
 											setFormData(
