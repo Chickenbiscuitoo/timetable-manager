@@ -1,6 +1,8 @@
 import { NextPage } from 'next'
 import useTimetableStore from '../store'
 
+import { classesSort } from '../utils/arraysFuncs'
+
 import ClassesManagerCell from './ClassesManagerCell'
 
 const ClassesManager: NextPage = () => {
@@ -27,7 +29,7 @@ const ClassesManager: NextPage = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{classes.map((cl) => (
+						{classes.sort(classesSort).map((cl) => (
 							<ClassesManagerCell
 								key={cl.id}
 								id={cl.id}
