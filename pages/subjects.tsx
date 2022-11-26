@@ -15,7 +15,6 @@ const Subjects: NextPage = () => {
 				<title>Timetable Manager</title>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-
 			<main className="min-h-screen flex flex-row">
 				<Sidebar />
 				<div className="flex flex-col p-3">
