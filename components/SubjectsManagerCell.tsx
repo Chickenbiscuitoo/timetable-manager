@@ -52,10 +52,9 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 	}
 
 	const handleSubmit = () => {
-		const name =
-			formData.name.trim().charAt(0).toUpperCase() +
-			formData.name.trim().slice(1)
+		const name = formData.name.trim()
 		const shortname = formData.shortname.trim().toUpperCase()
+		const commitee_id = formData.commitee_id
 
 		if (name && shortname && commitee_id) {
 			updateSubject(id, name, shortname, commitee_id)
@@ -109,18 +108,27 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 					</button>
 				</th>
 			</tr>
-			{/* {clickedUpdate && (
+			{clickedUpdate && (
 				<tr>
-					<td></td>
-					<td>
-						<input
-							type="text"
-							placeholder={name}
-							value={formData.name}
-							name="name"
-							onChange={handleChange}
-							className="input input-bordered max-w-xs focus:input-primary w-full"
-						/>
+					<td colSpan={2}>
+						<div>
+							<input
+								type="text"
+								placeholder={name}
+								value={formData.name}
+								name="name"
+								onChange={handleChange}
+								className="input input-bordered max-w-xs focus:input-primary w-8/12"
+							/>
+							<input
+								type="text"
+								placeholder={shortname}
+								value={formData.shortname}
+								name="shortname"
+								onChange={handleChange}
+								className="input input-bordered max-w-xs focus:input-primary w-4/12"
+							/>
+						</div>
 					</td>
 					<td>
 						<div className="dropdown">
@@ -128,30 +136,40 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 								tabIndex={0}
 								className="btn btn-outline btn-md text-xs w-full"
 							>
-								{selectedClassTeacher
-									? selectedClassTeacher.name
-									: 'Select'}
+								{formData.commitee_id}
 							</label>
 							<ul
 								tabIndex={0}
 								className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
 							>
-								{teachers.map((tch) => (
-									<li key={tch.id}>
-										<a
-											onClick={() =>
-												setFormData(
-													(prevFormData) => ({
-														...prevFormData,
-														teacherId: tch.id,
-													})
-												)
-											}
-										>
-											{tch.name}
-										</a>
-									</li>
-								))}
+								<li>
+									<a
+										onClick={() =>
+											setFormData(
+												(prevFormData) => ({
+													...prevFormData,
+													commitee_id: 1,
+												})
+											)
+										}
+									>
+										1
+									</a>
+								</li>
+								<li>
+									<a
+										onClick={() =>
+											setFormData(
+												(prevFormData) => ({
+													...prevFormData,
+													commitee_id: 2,
+												})
+											)
+										}
+									>
+										2
+									</a>
+								</li>
 							</ul>
 						</div>
 					</td>
@@ -165,7 +183,7 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 						</button>
 					</td>
 				</tr>
-			)} */}
+			)}
 		</>
 	)
 }
