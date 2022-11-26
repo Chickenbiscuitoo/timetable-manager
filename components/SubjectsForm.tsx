@@ -3,11 +3,12 @@ import { useState } from 'react'
 import useTimetableStore from '../store'
 
 const SubjectsForm: NextPage = () => {
-	const { teachers, addClass } = useTimetableStore()
+	const { addSubject } = useTimetableStore()
 
 	const [formData, setFormData] = useState({
 		name: '',
-		teacherId: -1,
+		shortname: '',
+		commitee_id: -1,
 	})
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,21 +19,19 @@ const SubjectsForm: NextPage = () => {
 	}
 
 	const handleSubmit = () => {
-		const name = formData.name.trim().toUpperCase()
-		const teacherId = formData.teacherId
+		const name = formData.name.trim()
+		const shortname = formData.shortname.trim().toUpperCase()
+		const commitee_id = formData.commitee_id
 
-		if (name && teacherId) {
-			addClass(name, teacherId)
+		if (name && commitee_id) {
+			addSubject(name, shortname, commitee_id)
 			setFormData({
 				name: '',
-				teacherId: -1,
+				shortname: '',
+				commitee_id: -1,
 			})
 		}
 	}
-
-	const selectedClassTeacher = teachers.find(
-		(tch) => tch.id == formData.teacherId
-	)
 
 	return (
 		<div className="flex flex-col gap-2">
@@ -41,10 +40,23 @@ const SubjectsForm: NextPage = () => {
 					<span>Name</span>
 					<input
 						type="text"
-						placeholder="1.A"
+						placeholder="Biology"
 						className="input input-bordered"
 						name="name"
 						value={formData.name}
+						onChange={handleChange}
+					/>
+				</label>
+			</div>
+			<div className="form-control">
+				<label className="input-group input-group-vertical">
+					<span>Shortname</span>
+					<input
+						type="text"
+						placeholder="BIO"
+						className="input input-bordered"
+						name="shortname"
+						value={formData.shortname}
 						onChange={handleChange}
 					/>
 				</label>
@@ -57,30 +69,38 @@ const SubjectsForm: NextPage = () => {
 							tabIndex={0}
 							className="btn btn-ghost bg-base-100 border-gray-200 border-opacity-20 dropdown-toggle w-full font-normal text-md text-left justify-start normal-case"
 						>
-							{selectedClassTeacher
-								? selectedClassTeacher.name
-								: 'Select Class Teacher'}
+							{formData.commitee_id !== -1
+								? formData.commitee_id
+								: 'Select Commitee'}
 						</label>
 						<ul
 							tabIndex={0}
 							className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
 						>
-							{teachers.map((tch) => (
-								<li key={tch.id}>
-									<a
-										onClick={() =>
-											setFormData(
-												(prevFormData) => ({
-													...prevFormData,
-													teacherId: tch.id,
-												})
-											)
-										}
-									>
-										{tch.name}
-									</a>
-								</li>
-							))}
+							<li>
+								<a
+									onClick={() =>
+										setFormData((prevFormData) => ({
+											...prevFormData,
+											commitee_id: 1,
+										}))
+									}
+								>
+									1
+								</a>
+							</li>
+							<li>
+								<a
+									onClick={() =>
+										setFormData((prevFormData) => ({
+											...prevFormData,
+											commitee_id: 2,
+										}))
+									}
+								>
+									2
+								</a>
+							</li>
 						</ul>
 					</div>
 				</label>
