@@ -2,24 +2,35 @@ import type { NextPage } from 'next'
 
 import useTimetableStore from '../store'
 
-const SubjectsTable: NextPage = () => {
-	const { teachers, subjects, classes, rawTableData } =
-		useTimetableStore()
+import { flatten } from '../utils/arraysFuncs'
 
-	const teachersStats = teachers.map((teacher) => {
-		const teacherToClass = classes.map((cl) =>
-			rawTableData
-				.filter((lesson) => lesson.class === cl.id)
-				.map((lesson) => lesson.teachers?.map((tch) => tch.id))
-				.filter((tch) => tch?.includes(teacher.id))
-		)
+const SubjectsTable: NextPage = () => {
+	const { subjects, classes, bindings } = useTimetableStore()
+
+	const subjectsStats = subjects.map((subject) => {
+		const classLessonsCount = classes.map((cl) => {
+			const clLessons = bindings
+				.filter((binding) => binding.cl.id === cl.id)
+				.filter((binding) => binding.subject.id === subject.id)
+				.map((bd) => bd.teachers?.map((tch) => tch.lessons))
+
+			if (clLessons.length === 0) {
+				return 0
+			} else {
+				return flatten(clLessons).reduce(
+					(a: number, b: number) => a + b
+				)
+			}
+		})
 
 		return {
-			id: teacher.id,
-			name: teacher.name,
-			classesCount: teacherToClass,
+			id: subject.id,
+			name: subject.name,
+			classLessonsCount,
 		}
 	})
+
+	console.log(subjectsStats)
 
 	return (
 		<div className="overflow-x-auto">
@@ -35,14 +46,14 @@ const SubjectsTable: NextPage = () => {
 					</tr>
 				</thead>
 				<tbody>
-					{teachersStats.map((tch) => {
+					{subjectsStats.map((subject) => {
 						return (
-							<tr key={tch.id}>
+							<tr key={subject.id}>
 								<td className="font-bold text-md text-primary">
-									{tch.name}
+									{subject.name}
 								</td>
-								{tch.classesCount.map((cl, i) => (
-									<td key={i}>{cl.length}</td>
+								{subject.classLessonsCount.map((cl, i) => (
+									<td key={i}>{cl}</td>
 								))}
 							</tr>
 						)
