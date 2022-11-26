@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { AiFillGithub } from 'react-icons/ai'
 
 import Sidebar from '../components/Sidebar'
-import TeachersTable from '../components/TeachersTable'
+import SubjectsTable from '../components/SubjectsTable'
 import ClassesBarChart from '../components/ClassesBarChart'
 import SubjectsForm from '../components/SubjectsForm'
 import SubjectsManager from '../components/SubjectsManager'
@@ -25,7 +25,7 @@ const Subjects: NextPage = () => {
 						</div>
 						<div className="grid grid-cols-1 grid-rows-2 max-h-fit">
 							<div className="grid bg-primary bg-opacity-30 rounded-xl p-4 m-2 max-h-fit h-fit">
-								<TeachersTable />
+								<SubjectsTable />
 							</div>
 							<div className="grid bg-primary bg-opacity-30 rounded-xl p-4 m-2 max-h-fit h-fit">
 								<SubjectsForm />
