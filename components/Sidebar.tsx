@@ -1,5 +1,7 @@
 import { NextPage } from 'next'
 
+import { useRouter } from 'next/router'
+
 import { BsPersonFill } from 'react-icons/bs'
 import { MdClass } from 'react-icons/md'
 import { HiUserGroup } from 'react-icons/hi'
@@ -7,10 +9,12 @@ import { AiFillCalendar } from 'react-icons/ai'
 import { AiFillFile } from 'react-icons/ai'
 
 const Sidebar: NextPage = () => {
+	const router = useRouter()
+
 	return (
 		<div className="min-h-screen flex">
 			<div className="py-4 px-3 bg-neutral w-40 relative">
-				<a className="flex items-center pl-2.5 mb-5">
+				<a className="cursor-pointer flex items-center pl-2.5 mb-5">
 					<img
 						src="https://upload.wikimedia.org/wikipedia/commons/2/21/Danny_DeVito_by_Gage_Skidmore.jpg"
 						className="mr-3 h-6 sm:h-7 rounded-full"
@@ -23,8 +27,8 @@ const Sidebar: NextPage = () => {
 				<ul className="space-y-2">
 					<li>
 						<a
-							href="#"
-							className="flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
+							onClick={() => router.push('/')}
+							className="cursor-pointer flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
 						>
 							<AiFillFile className="w-fit h-full bg-neutral transition duration-75" />
 							<span className="ml-3">Bindings</span>
@@ -32,8 +36,10 @@ const Sidebar: NextPage = () => {
 					</li>
 					<li>
 						<a
-							href="#"
-							className="flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
+							onClick={() =>
+								router.push('/timetableManager')
+							}
+							className="cursor-pointer flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
 						>
 							<AiFillCalendar className="w-fit h-full bg-neutral transition duration-75" />
 							<span className="ml-3">Timetable</span>
@@ -41,8 +47,8 @@ const Sidebar: NextPage = () => {
 					</li>
 					<li>
 						<a
-							href="#"
-							className="flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
+							onClick={() => router.push('/teachers')}
+							className="cursor-pointer flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
 						>
 							<BsPersonFill className="w-fit h-full bg-neutral transition duration-75" />
 							<span className="ml-3">Teachers</span>
@@ -50,8 +56,8 @@ const Sidebar: NextPage = () => {
 					</li>
 					<li>
 						<a
-							href="#"
-							className="flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
+							onClick={() => router.push('/subjects')}
+							className="cursor-pointer flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
 						>
 							<MdClass className="w-fit h-full bg-neutral transition duration-75" />
 							<span className="ml-3">Subjects</span>
@@ -59,8 +65,8 @@ const Sidebar: NextPage = () => {
 					</li>
 					<li>
 						<a
-							href="#"
-							className="flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
+							onClick={() => router.push('/classes')}
+							className="cursor-pointer flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
 						>
 							<HiUserGroup className="w-fit h-full bg-neutral transition duration-75" />
 							<span className="ml-3">Classes</span>
