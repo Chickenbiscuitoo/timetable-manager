@@ -21,6 +21,7 @@ const SubjectsManager: NextPage = () => {
 								</label>
 							</th>
 							<th>Name</th>
+							<th>Commitee</th>
 							<th>Lessons</th>
 							<th></th>
 						</tr>
@@ -40,6 +41,7 @@ const SubjectsManager: NextPage = () => {
 						<tr>
 							<th></th>
 							<th>Name</th>
+							<th>Commitee</th>
 							<th>Lessons</th>
 							<th></th>
 						</tr>

@@ -90,6 +90,7 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 						</div>
 					</div>
 				</td>
+				<td>{commitee_id}</td>
 				<td>{subjectTotalLessons()}</td>
 				<th>
 					<button
