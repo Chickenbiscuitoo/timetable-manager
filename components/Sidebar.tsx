@@ -1,10 +1,15 @@
 import { NextPage } from 'next'
-import { FcSoundRecordingCopyright } from 'react-icons/fc'
+
+import { BsPersonFill } from 'react-icons/bs'
+import { MdClass } from 'react-icons/md'
+import { HiUserGroup } from 'react-icons/hi'
+import { AiFillCalendar } from 'react-icons/ai'
+import { AiFillFile } from 'react-icons/ai'
 
 const Sidebar: NextPage = () => {
 	return (
 		<div className="min-h-screen flex">
-			<div className="py-4 px-3 bg-neutral w-40">
+			<div className="py-4 px-3 bg-neutral w-40 relative">
 				<a className="flex items-center pl-2.5 mb-5">
 					<img
 						src="https://upload.wikimedia.org/wikipedia/commons/2/21/Danny_DeVito_by_Gage_Skidmore.jpg"
@@ -19,73 +24,46 @@ const Sidebar: NextPage = () => {
 					<li>
 						<a
 							href="#"
-							className="flex items-center p-2 text-base font-normal rounded-lg hover:bg-primary"
+							className="flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
 						>
-							<FcSoundRecordingCopyright className="w-fit h-full bg-neutral transition duration-75" />
-							<span className="ml-3">btn</span>
+							<AiFillFile className="w-fit h-full bg-neutral transition duration-75" />
+							<span className="ml-3">Bindings</span>
 						</a>
 					</li>
 					<li>
 						<a
 							href="#"
-							className="flex items-center p-2 text-base font-normal rounded-lg hover:bg-primary"
+							className="flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
 						>
-							<FcSoundRecordingCopyright className="w-fit h-full bg-neutral transition duration-75" />
-							<span className="ml-3">btn</span>
+							<AiFillCalendar className="w-fit h-full bg-neutral transition duration-75" />
+							<span className="ml-3">Timetable</span>
 						</a>
 					</li>
 					<li>
 						<a
 							href="#"
-							className="flex items-center p-2 text-base font-normal rounded-lg hover:bg-primary"
+							className="flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
 						>
-							<FcSoundRecordingCopyright className="w-fit h-full bg-neutral transition duration-75" />
-							<span className="ml-3">btn</span>
+							<BsPersonFill className="w-fit h-full bg-neutral transition duration-75" />
+							<span className="ml-3">Teachers</span>
 						</a>
 					</li>
 					<li>
 						<a
 							href="#"
-							className="flex items-center p-2 text-base font-normal rounded-lg hover:bg-primary"
+							className="flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
 						>
-							<FcSoundRecordingCopyright className="w-fit h-full bg-neutral transition duration-75" />
-							<span className="ml-3">btn</span>
+							<MdClass className="w-fit h-full bg-neutral transition duration-75" />
+							<span className="ml-3">Subjects</span>
 						</a>
 					</li>
 					<li>
 						<a
 							href="#"
-							className="flex items-center p-2 text-base font-normal rounded-lg hover:bg-primary"
+							className="flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
 						>
-							<FcSoundRecordingCopyright className="w-fit h-full bg-neutral transition duration-75" />
-							<span className="ml-3">btn</span>
-						</a>
-					</li>
-					<li>
-						<a
-							href="#"
-							className="flex items-center p-2 text-base font-normal rounded-lg hover:bg-primary"
-						>
-							<FcSoundRecordingCopyright className="w-fit h-full bg-neutral transition duration-75" />
-							<span className="ml-3">btn</span>
-						</a>
-					</li>
-					<li>
-						<a
-							href="#"
-							className="flex items-center p-2 text-base font-normal rounded-lg hover:bg-primary"
-						>
-							<FcSoundRecordingCopyright className="w-fit h-full bg-neutral transition duration-75" />
-							<span className="ml-3">btn</span>
-						</a>
-					</li>
-					<li>
-						<a
-							href="#"
-							className="flex items-center p-2 text-base font-normal rounded-lg hover:bg-primary"
-						>
-							<FcSoundRecordingCopyright className="w-fit h-full bg-neutral transition duration-75" />
-							<span className="ml-3">btn</span>
+							<HiUserGroup className="w-fit h-full bg-neutral transition duration-75" />
+							<span className="ml-3">Classes</span>
 						</a>
 					</li>
 				</ul>
