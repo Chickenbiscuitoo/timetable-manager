@@ -7,26 +7,32 @@ import { flatten } from '../utils/arraysFuncs'
 import BarChart from './charts/BarChart'
 
 const TeachersBarChart: NextPage = () => {
-	const { rawTableData, teachers, selectedClass, classes } =
+	const { bindings, teachers, selectedClass, classes } =
 		useTimetableStore()
 
 	// returns an array of teachers and count of lessons they teach
 	const teachersStats = teachers
 		.map((teacher) => {
-			// list of all teachers that are teaching some lessons
-			const activeTeachers = rawTableData.map((lesson) =>
-				lesson.teachers?.map((teacher) => teacher.id)
-			)
+			const teachersTotalLessons = () => {
+				const teachersLessons = bindings.map((binding) =>
+					binding.teachers
+						.filter((tch) => teacher.id === tch.id)
+						.map((tch) => tch.lessons)
+				)
 
-			const teacherLessons = flatten(activeTeachers).filter(
-				(id: number) => id === teacher.id
-			)
+				const lessons = flatten(teachersLessons).reduce(
+					(acc: number, curr: number) => acc + curr,
+					0
+				)
+
+				return lessons
+			}
 
 			return {
 				id: teacher.id,
 				name: teacher.name,
 				shortName: teacher.shortname,
-				lessons: teacherLessons.length,
+				lessons: teachersTotalLessons(),
 			}
 		})
 		.filter((teacher) => teacher.lessons > 0)
