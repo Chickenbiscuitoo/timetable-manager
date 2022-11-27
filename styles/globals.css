@@ -29,6 +29,8 @@ a {
 
 * {
 	box-sizing: border-box;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(127, 127, 127, 0.6) rgb(110, 110, 110);
 }
 
 ::-webkit-scrollbar {
