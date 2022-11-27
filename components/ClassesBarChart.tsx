@@ -28,7 +28,7 @@ const ClassesBarChart: NextPage = () => {
 		labels: classes.map((cl) => cl.name),
 		datasets: [
 			{
-				label: 'Lessons Teaching',
+				label: 'Lessons',
 				data: classesStats.map((cl) => cl.lessons),
 				backgroundColor: [
 					'rgba(75,192,192,1)',

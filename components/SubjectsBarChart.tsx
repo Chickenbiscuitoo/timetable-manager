@@ -28,7 +28,7 @@ const SubjectsBarChart: NextPage = () => {
 		labels: subjects.map((subject) => subject.name),
 		datasets: [
 			{
-				label: 'Lessons Teaching',
+				label: 'Lessons',
 				data: subjectsStats.map((subject) => subject.lessons),
 				backgroundColor: [
 					'rgba(75,192,192,1)',
