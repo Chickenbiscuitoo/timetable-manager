@@ -11,66 +11,81 @@ datasource db {
 }
 
 model Teacher {
-  id        Int        @id @default(autoincrement())
-  name      String     @db.VarChar(128)
-  shortname String     @db.VarChar(8)
-  email     String     @db.VarChar(255)
-  classId   Class?
-  commitee  Committee?
-  lessons   Lesson[]
-  bindings  Binding[]
+  id                    Int                     @id @default(autoincrement())
+  name                  String                  @db.VarChar(128)
+  shortname             String                  @db.VarChar(8)
+  email                 String                  @db.VarChar(255)
+  classId               Class?
+  commitee              Committee?
+  lessons               Lesson[]
+  bindings              Binding[]
+  BindingTeacherLessons BindingTeacherLessons[]
 }
 
 model Subject {
-  id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(255)
-  shortname String   @db.VarChar(8)
-  commitee  Int
-  lessons   Lesson[]
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(255)
+  shortname  String   @db.VarChar(8)
+  commiteeId Int
+  lessons    Lesson[]
 
-  commiteeId Committee @relation(fields: [commitee], references: [id])
-  Binding    Binding[]
+  commitee Committee @relation(fields: [commiteeId], references: [id])
+  Binding  Binding[]
 }
 
 model Committee {
-  id       Int       @id @default(autoincrement())
-  name     String    @db.VarChar(255)
-  chairman Int       @unique
-  subjects Subject[]
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  chairmanId Int       @unique
+  subjects   Subject[]
 
-  chairmanId Teacher @relation(fields: [chairman], references: [id])
+  chairman Teacher @relation(fields: [chairmanId], references: [id])
 }
 
 model Class {
-  id      Int      @id @default(autoincrement())
-  name    String   @db.VarChar(32)
-  grade   Int
-  teacher Int      @unique
-  lessons Lesson[]
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(32)
+  grade     Int
+  teacherId Int      @unique
+  lessons   Lesson[]
 
-  teacherId Teacher   @relation(fields: [teacher], references: [id])
-  Binding   Binding[]
+  teacher Teacher   @relation(fields: [teacherId], references: [id])
+  Binding Binding[]
 }
 
 model Lesson {
   id       Int       @id @default(autoincrement())
-  class    Int
+  classId  Int
   subjects Subject[]
   teachers Teacher[]
   day      Int
   period   Int
 
-  classId Class @relation(fields: [class], references: [id])
+  class Class @relation(fields: [classId], references: [id])
 
-  @@unique([day, period, class])
+  @@unique([day, period, classId])
 }
 
 model Binding {
-  id       Int       @id @default(autoincrement())
-  teachers Teacher[]
-  subject  Int
-  class    Int
+  id        Int       @id @default(autoincrement())
+  teachers  Teacher[]
+  subjectId Int
+  classId   Int
 
-  classId   Class   @relation(fields: [class], references: [id])
-  subjectId Subject @relation(fields: [subject], references: [id])
+  class                 Class                   @relation(fields: [classId], references: [id])
+  subject               Subject                 @relation(fields: [subjectId], references: [id])
+  BindingTeacherLessons BindingTeacherLessons[]
+
+  @@unique([subjectId, classId])
+}
+
+model BindingTeacherLessons {
+  bindingId Int
+  teacherId Int
+  lessons   Int
+
+  binding Binding @relation(fields: [bindingId], references: [id])
+  teacher Teacher @relation(fields: [teacherId], references: [id])
+
+  @@id([bindingId, teacherId])
 }

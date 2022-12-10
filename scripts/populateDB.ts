@@ -3,8 +3,16 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-	const lessons = await prisma.class.findMany({})
-	console.log(JSON.parse(JSON.stringify(lessons)))
+	const data = await prisma.binding.findMany({
+		include: {
+			teachers: true,
+			class: true,
+			subject: true,
+			BindingTeacherLessons: true,
+		},
+	})
+
+	console.log(JSON.parse(JSON.stringify(data)))
 }
 
 main()
