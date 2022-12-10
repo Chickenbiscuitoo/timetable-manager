@@ -1,4 +1,11 @@
-import { Class, Subject, Teacher } from '@prisma/client'
+import {
+	Class,
+	Subject,
+	Teacher,
+	Committee,
+	Binding,
+} from '@prisma/client'
+
 import {
 	getDayFromPosition,
 	getPeriodFromPosition,
