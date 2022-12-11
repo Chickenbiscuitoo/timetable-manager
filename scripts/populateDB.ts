@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from '../server/client'
 
 async function main() {
 	const data = await prisma.binding.findMany({
