@@ -25,9 +25,6 @@ export default async function handler(
 
 	try {
 		const data = await prisma.binding.findMany({
-			where: {
-				id: 1,
-			},
 			include: {
 				teachers: true,
 				class: true,
