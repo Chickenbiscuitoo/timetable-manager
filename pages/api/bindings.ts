@@ -1,5 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { Teacher, Class, Subject } from '@prisma/client'
 import { prisma } from '../../server/client'
+
+interface FormatedTeacher extends Teacher {
+	lessons: number
+}
+
+interface FormatedBinding {
+	id: number
+	teachers: FormatedTeacher[]
+	class: Class
+	subject: Subject
+}
 
 export default async function handler(
 	req: NextApiRequest,
@@ -25,7 +37,7 @@ export default async function handler(
 		})
 
 		// map each binding from data and insert number of lessons each teacher teaches from BindingTeacherLessons into teachers object
-		const updatedData = data.map((binding) => {
+		const updatedData: FormatedBinding[] = data.map((binding) => {
 			const updatedTeachers = binding.teachers.map((teacher) => {
 				const records = binding.BindingTeacherLessons.find(
 					(entry) => entry.teacherId === teacher.id
@@ -41,6 +53,8 @@ export default async function handler(
 				...binding,
 				teachers: updatedTeachers,
 				BindingTeacherLessons: undefined,
+				subjectId: undefined,
+				classId: undefined,
 			}
 
 			return updatedBinding
@@ -57,11 +71,10 @@ export default async function handler(
 	}
 }
 
+// Output:
 // [
 // 	{
 // 		id: 1,
-// 		subjectId: 4,
-// 		classId: 1,
 // 		teachers: [
 // 			{
 // 				id: 1,
