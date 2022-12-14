@@ -49,6 +49,8 @@ export default async function handler(
 			return res.status(500).json({ message })
 		}
 	} else {
-		return res.status(400).json({ message: 'Only GET method allowed' })
+		return res
+			.status(400)
+			.json({ message: 'Only GET and PUT method allowed' })
 	}
 }
