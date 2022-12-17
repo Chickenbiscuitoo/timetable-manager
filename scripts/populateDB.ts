@@ -108,7 +108,14 @@ const commitees = [
 ]
 
 async function main() {
-	const data = await prisma.binding.findMany({})
+	const data = await prisma.binding.findMany({
+		include: {
+			teachers: true,
+			class: true,
+			subject: true,
+			BindingTeacherLessons: true,
+		},
+	})
 
 	console.log(JSON.parse(JSON.stringify(data)))
 }
