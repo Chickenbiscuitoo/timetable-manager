@@ -12,9 +12,9 @@ datasource db {
 
 model Teacher {
   id                    Int                     @id @default(autoincrement())
-  name                  String                  @db.VarChar(128)
-  shortname             String                  @db.VarChar(8)
-  email                 String                  @db.VarChar(255)
+  name                  String                  @unique @db.VarChar(128)
+  shortname             String                  @unique @db.VarChar(8)
+  email                 String                  @unique @db.VarChar(255)
   classId               Class?
   commitee              Committee?
   lessons               Lesson[]
@@ -24,8 +24,8 @@ model Teacher {
 
 model Subject {
   id         Int      @id @default(autoincrement())
-  name       String   @db.VarChar(255)
-  shortname  String   @db.VarChar(8)
+  name       String   @unique @db.VarChar(255)
+  shortname  String   @unique @db.VarChar(8)
   commiteeId Int
   lessons    Lesson[]
 
@@ -35,7 +35,7 @@ model Subject {
 
 model Committee {
   id         Int       @id @default(autoincrement())
-  name       String    @db.VarChar(255)
+  name       String    @unique @db.VarChar(255)
   chairmanId Int       @unique
   subjects   Subject[]
 
@@ -44,7 +44,7 @@ model Committee {
 
 model Class {
   id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(32)
+  name      String   @unique @db.VarChar(32)
   grade     Int
   teacherId Int      @unique
   lessons   Lesson[]
