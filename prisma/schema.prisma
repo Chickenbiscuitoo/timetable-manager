@@ -84,8 +84,8 @@ model BindingTeacherLessons {
   teacherId Int
   lessons   Int
 
-  binding Binding @relation(fields: [bindingId], references: [id])
-  teacher Teacher @relation(fields: [teacherId], references: [id])
+  binding Binding @relation(fields: [bindingId], references: [id], onDelete: Cascade)
+  teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
 
   @@id([bindingId, teacherId])
 }

@@ -119,12 +119,6 @@ export default async function handler(
 				},
 			})
 
-			await prisma.bindingTeacherLessons.deleteMany({
-				where: {
-					bindingId: data.id,
-				},
-			})
-
 			return res.status(200).json({ message: response })
 		} catch (error) {
 			let message = 'Unknown Error'
