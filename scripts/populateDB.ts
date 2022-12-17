@@ -80,20 +80,20 @@ const subjects = [
 ]
 
 const classes = [
-	{ name: '1.A', teacher_id: 1, grade: 1 },
-	{ name: '1.B', teacher_id: 2, grade: 1 },
-	{ name: '1.C', teacher_id: 3, grade: 1 },
-	{ name: '1.D', teacher_id: 4, grade: 1 },
+	{ name: '1.A', teacherId: 1, grade: 1 },
+	{ name: '1.B', teacherId: 2, grade: 1 },
+	{ name: '1.C', teacherId: 3, grade: 1 },
+	{ name: '1.D', teacherId: 4, grade: 1 },
 
-	{ name: '2.A', teacher_id: 5, grade: 2 },
-	{ name: '2.B', teacher_id: 6, grade: 2 },
-	{ name: '2.C', teacher_id: 7, grade: 2 },
-	{ name: '2.D', teacher_id: 8, grade: 2 },
+	{ name: '2.A', teacherId: 5, grade: 2 },
+	{ name: '2.B', teacherId: 6, grade: 2 },
+	{ name: '2.C', teacherId: 7, grade: 2 },
+	{ name: '2.D', teacherId: 8, grade: 2 },
 
-	{ name: '3.A', teacher_id: 9, grade: 3 },
-	{ name: '3.B', teacher_id: 10, grade: 3 },
-	{ name: '3.C', teacher_id: 11, grade: 3 },
-	{ name: '3.D', teacher_id: 12, grade: 3 },
+	{ name: '3.A', teacherId: 9, grade: 3 },
+	{ name: '3.B', teacherId: 10, grade: 3 },
+	{ name: '3.C', teacherId: 11, grade: 3 },
+	{ name: '3.D', teacherId: 12, grade: 3 },
 ]
 
 const commitees = [
@@ -108,9 +108,7 @@ const commitees = [
 ]
 
 async function main() {
-	const data = await prisma.teacher.createMany({
-		data: teachers,
-	})
+	const data = await prisma.binding.findMany({})
 
 	console.log(JSON.parse(JSON.stringify(data)))
 }
