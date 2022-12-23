@@ -19,19 +19,6 @@ const schemaDELETE = z.object({
 	id: z.number().int().positive(),
 })
 
-const schemaPATCH = z.object({
-	id: z.number().int().positive(),
-	teachers: z.array(z.number().int().positive()),
-	classId: z.number().int().positive(),
-	subjectId: z.number().int().positive(),
-	bindingTeacherLessons: z.array(
-		z.object({
-			teacherId: z.number().int().positive(),
-			lessons: z.number().int().positive(),
-		})
-	),
-})
-
 interface FormatedTeacher extends Teacher {
 	lessons: number
 }
