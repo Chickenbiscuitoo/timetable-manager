@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Teacher, Class, Subject } from '@prisma/client'
-import { prisma } from '../../server/client'
+import { prisma } from '../../../server/client'
 import { z } from 'zod'
 
 const schemaPUT = z.object({
@@ -17,6 +17,19 @@ const schemaPUT = z.object({
 
 const schemaDELETE = z.object({
 	id: z.number().int().positive(),
+})
+
+const schemaPATCH = z.object({
+	id: z.number().int().positive(),
+	teachers: z.array(z.number().int().positive()),
+	classId: z.number().int().positive(),
+	subjectId: z.number().int().positive(),
+	bindingTeacherLessons: z.array(
+		z.object({
+			teacherId: z.number().int().positive(),
+			lessons: z.number().int().positive(),
+		})
+	),
 })
 
 interface FormatedTeacher extends Teacher {
