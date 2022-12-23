@@ -108,16 +108,57 @@ const commitees = [
 ]
 
 async function main() {
-	const data = await prisma.binding.findMany({
-		include: {
-			teachers: true,
-			class: true,
-			subject: true,
-			BindingTeacherLessons: true,
-		},
-	})
-
-	console.log(JSON.parse(JSON.stringify(data)))
+	// const teachersData = await prisma.teacher.createMany({
+	// 	data: teachers,
+	// })
+	// const commiteesData = await prisma.committee.createMany({
+	// 	data: commitees,
+	// })
+	// const subjectsData = await prisma.subject.createMany({
+	// 	data: subjects,
+	// })
+	// const classesData = await prisma.class.createMany({
+	// 	data: classes,
+	// })
+	// console.log(JSON.parse(JSON.stringify(teachersData)))
+	// console.log(JSON.parse(JSON.stringify(commiteesData)))
+	// console.log(JSON.parse(JSON.stringify(subjectsData)))
+	// console.log(JSON.parse(JSON.stringify(classesData)))
+	// const bindingsData = await prisma.binding.create({
+	// 	data: {
+	// 		subjectId: 3,
+	// 		classId: 1,
+	// 		teachers: {
+	// 			connect: [{ id: 1 }, { id: 2 }],
+	// 		},
+	// 	},
+	// })
+	// console.log(JSON.parse(JSON.stringify(bindingsData)))
+	// const bindingTeacherLessonsData =
+	// 	await prisma.bindingTeacherLessons.createMany({
+	// 		data: [
+	// 			{
+	// 				bindingId: 1,
+	// 				teacherId: 1,
+	// 				lessons: 7,
+	// 			},
+	// 			{
+	// 				bindingId: 1,
+	// 				teacherId: 2,
+	// 				lessons: 4,
+	// 			},
+	// 			{
+	// 				bindingId: 2,
+	// 				teacherId: 1,
+	// 				lessons: 6,
+	// 			},
+	// 			{
+	// 				bindingId: 2,
+	// 				teacherId: 2,
+	// 				lessons: 1,
+	// 			},
+	// 		],
+	// 	})
 }
 
 main()
