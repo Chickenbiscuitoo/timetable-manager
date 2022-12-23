@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Teacher {
@@ -31,6 +32,8 @@ model Subject {
 
   commitee Committee @relation(fields: [commiteeId], references: [id])
   Binding  Binding[]
+
+  @@index([commiteeId])
 }
 
 model Committee {
@@ -64,6 +67,7 @@ model Lesson {
   class Class @relation(fields: [classId], references: [id])
 
   @@unique([day, period, classId])
+  @@index([classId])
 }
 
 model Binding {
@@ -77,6 +81,7 @@ model Binding {
   BindingTeacherLessons BindingTeacherLessons[]
 
   @@unique([subjectId, classId])
+  @@index([classId])
 }
 
 model BindingTeacherLessons {
@@ -88,4 +93,6 @@ model BindingTeacherLessons {
   teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
 
   @@id([bindingId, teacherId])
+  @@index([bindingId])
+  @@index([teacherId])
 }
