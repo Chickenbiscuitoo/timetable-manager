@@ -135,30 +135,20 @@ async function main() {
 	// })
 	// console.log(JSON.parse(JSON.stringify(bindingsData)))
 	// const bindingTeacherLessonsData =
-	// 	await prisma.bindingTeacherLessons.createMany({
-	// 		data: [
-	// 			{
+	// 	await prisma.bindingTeacherLessons.update({
+	// 		where: {
+	// 			bindingId_teacherId: {
 	// 				bindingId: 1,
 	// 				teacherId: 1,
-	// 				lessons: 7,
 	// 			},
-	// 			{
-	// 				bindingId: 1,
-	// 				teacherId: 2,
-	// 				lessons: 4,
+	// 		},
+	// 		data: {
+	// 			lessons: {
+	// 				increment: 1,
 	// 			},
-	// 			{
-	// 				bindingId: 2,
-	// 				teacherId: 1,
-	// 				lessons: 6,
-	// 			},
-	// 			{
-	// 				bindingId: 2,
-	// 				teacherId: 2,
-	// 				lessons: 1,
-	// 			},
-	// 		],
+	// 		},
 	// 	})
+	// console.log(JSON.parse(JSON.stringify(bindingTeacherLessonsData)))
 }
 
 main()
