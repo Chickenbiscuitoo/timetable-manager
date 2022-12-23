@@ -32,17 +32,19 @@ export default async function handler(
 
 		if (data.operation === 'increment') {
 			try {
-				const response = prisma.bindingTeacherLessons.update({
-					where: {
-						bindingId_teacherId: {
-							bindingId: data.bindingId,
-							teacherId: data.teacherId,
+				const response = await prisma.bindingTeacherLessons.update(
+					{
+						where: {
+							bindingId_teacherId: {
+								bindingId: data.bindingId,
+								teacherId: data.teacherId,
+							},
 						},
-					},
-					data: {
-						lessons: { increment: 1 },
-					},
-				})
+						data: {
+							lessons: { increment: 1 },
+						},
+					}
+				)
 
 				return res.status(200).json(response)
 			} catch (error) {
@@ -55,17 +57,19 @@ export default async function handler(
 			}
 		} else if (data.operation === 'decrement') {
 			try {
-				const response = prisma.bindingTeacherLessons.update({
-					where: {
-						bindingId_teacherId: {
-							bindingId: data.bindingId,
-							teacherId: data.teacherId,
+				const response = await prisma.bindingTeacherLessons.update(
+					{
+						where: {
+							bindingId_teacherId: {
+								bindingId: data.bindingId,
+								teacherId: data.teacherId,
+							},
 						},
-					},
-					data: {
-						lessons: { decrement: 1 },
-					},
-				})
+						data: {
+							lessons: { decrement: 1 },
+						},
+					}
+				)
 
 				return res.status(200).json(response)
 			} catch (error) {
