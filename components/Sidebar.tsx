@@ -1,6 +1,11 @@
 import { NextPage } from 'next'
 
+import { useSession, signIn, signOut } from 'next-auth/react'
+
 import { useRouter } from 'next/router'
+import Link from 'next/link'
+
+import LoginButton from './LoginButton'
 
 import { BsPersonFill } from 'react-icons/bs'
 import { MdClass } from 'react-icons/md'
@@ -10,6 +15,11 @@ import { AiFillFile } from 'react-icons/ai'
 
 const Sidebar: NextPage = () => {
 	const router = useRouter()
+
+	const { data: session, status } = useSession()
+
+	if (status === 'unauthenticated') {
+	}
 
 	return (
 		<div className="min-h-screen flex">
@@ -73,6 +83,7 @@ const Sidebar: NextPage = () => {
 						</a>
 					</li>
 				</ul>
+				<LoginButton />
 			</div>
 		</div>
 	)
