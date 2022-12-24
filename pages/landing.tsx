@@ -23,8 +23,15 @@ const Landing: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<main className="min-h-screen flex flex-row">
-				Landing
-				<LoginButton />
+				{
+					// modern landing page design with a login button
+				}
+				<div className="flex flex-col justify-center items-center w-full">
+					<h1 className="text-5xl font-bold text-center mb-5">
+						timetableManager
+					</h1>
+					<LoginButton />
+				</div>
 			</main>
 
 			<footer className="flex place-content-center border-t-2 border-neutral pt-6 pb-6">
