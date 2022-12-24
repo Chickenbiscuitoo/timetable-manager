@@ -16,22 +16,27 @@ import { AiFillFile } from 'react-icons/ai'
 const Sidebar: NextPage = () => {
 	const router = useRouter()
 
-	const { data: session, status } = useSession()
-
-	if (status === 'unauthenticated') {
-	}
+	const { data: session, status } = useSession({
+		required: true,
+		onUnauthenticated() {
+			router.push('/landing')
+		},
+	})
 
 	return (
 		<div className="min-h-screen flex">
-			<div className="py-4 px-3 bg-neutral w-40 relative">
+			<div className="py-4 px-3 bg-neutral w-52 relative">
 				<a className="cursor-pointer flex items-center pl-2.5 mb-5">
 					<img
-						src="https://upload.wikimedia.org/wikipedia/commons/2/21/Danny_DeVito_by_Gage_Skidmore.jpg"
+						src={
+							session?.user?.image ||
+							'https://upload.wikimedia.org/wikipedia/commons/2/21/Danny_DeVito_by_Gage_Skidmore.jpg'
+						}
 						className="mr-3 h-6 sm:h-7 rounded-full"
 						alt="User avatar"
 					/>
-					<span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-						Username
+					<span className="self-center text-xl font-semibold whitespace-nowrap text-white overflow-hidden">
+						{session?.user?.name || 'User'}
 					</span>
 				</a>
 				<ul className="space-y-2">
@@ -83,7 +88,9 @@ const Sidebar: NextPage = () => {
 						</a>
 					</li>
 				</ul>
-				<LoginButton />
+				<div className="p-2 absolute bottom-10">
+					<LoginButton />
+				</div>
 			</div>
 		</div>
 	)
