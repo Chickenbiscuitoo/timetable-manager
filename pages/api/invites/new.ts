@@ -45,12 +45,12 @@ export default async function handler(
 			},
 		})
 
-		if (recipientData?.organizationId === data.orgId) {
-			return res.status(403).json({
-				message:
-					'Recipient is already a member of this organization',
-			})
-		}
+		// if (recipientData?.organizationId === data.orgId) {
+		// 	return res.status(403).json({
+		// 		message:
+		// 			'Recipient is already a member of this organization',
+		// 	})
+		// }
 
 		const organizationData = await prisma.organization.findUnique({
 			where: {
@@ -96,7 +96,7 @@ export default async function handler(
 
 		return res
 			.status(200)
-			.json({ message: 'Invite sent' }, emailData, response)
+			.json({ message: 'Invite sent', emailData, response })
 	} catch (error) {
 		let message = 'Unknown Error'
 
