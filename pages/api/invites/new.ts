@@ -3,6 +3,8 @@ import { prisma } from '../../../server/client'
 import { Invite } from '@prisma/client'
 import { z } from 'zod'
 
+import axios from 'axios'
+
 const schemaPOST = z.object({
 	senderEmail: z.string().email(),
 	recipientEmail: z.string().email(),
@@ -50,6 +52,18 @@ export default async function handler(
 			})
 		}
 
+		const organizationData = await prisma.organization.findUnique({
+			where: {
+				id: data.orgId,
+			},
+		})
+
+		if (!organizationData || !senderData || !recipientData) {
+			return res.status(404).json({
+				message: 'Organization, sender, or recipient not found',
+			})
+		}
+
 		function addDays(date: Date, days: number) {
 			const result = new Date(date)
 			result.setDate(result.getDate() + days)
@@ -65,7 +79,24 @@ export default async function handler(
 			},
 		})
 
-		return res.status(200).json(response)
+		const emailData = await axios.post(
+			'https://api.emailjs.com/api/v1.0/email/send',
+			{
+				service_id: process.env.EMAILJS_SERVICE_ID,
+				template_id: process.env.EMAILJS_TEMPLATE_ID,
+				user_id: process.env.EMAILJS_USER_ID,
+				template_params: {
+					recipient_name: recipientData.name,
+					sender_name: senderData.name,
+					organization_name: organizationData.name,
+					invite_id: response.id,
+				},
+			}
+		)
+
+		return res
+			.status(200)
+			.json({ message: 'Invite sent' }, emailData, response)
 	} catch (error) {
 		let message = 'Unknown Error'
 
