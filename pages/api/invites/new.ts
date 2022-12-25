@@ -82,9 +82,10 @@ export default async function handler(
 		const emailData = await axios.post(
 			'https://api.emailjs.com/api/v1.0/email/send',
 			{
-				service_id: process.env.EMAILJS_SERVICE_ID,
+				service_id: 'default_service',
 				template_id: process.env.EMAILJS_TEMPLATE_ID,
 				user_id: process.env.EMAILJS_USER_ID,
+				accessToken: process.env.EMAILJS_ACCESS_TOKEN,
 				template_params: {
 					recipient_name: recipientData.name,
 					sender_name: senderData.name,
@@ -94,9 +95,10 @@ export default async function handler(
 			}
 		)
 
-		return res
-			.status(200)
-			.json({ message: 'Invite sent', emailData, response })
+		return res.status(200).json({
+			message: 'Invite sent',
+			response,
+		})
 	} catch (error) {
 		let message = 'Unknown Error'
 
