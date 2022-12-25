@@ -24,6 +24,19 @@ export default async function handler(
 	try {
 		const data = schemaPOST.parse(req.body)
 
+		const senderData = await prisma.user.findUnique({
+			where: {
+				email: data.senderEmail,
+			},
+		})
+
+		if (senderData?.organizationId !== data.orgId) {
+			return res.status(403).json({
+				message:
+					'You are not authorized to invite to this organization',
+			})
+		}
+
 		function addDays(date: Date, days: number) {
 			const result = new Date(date)
 			result.setDate(result.getDate() + days)
