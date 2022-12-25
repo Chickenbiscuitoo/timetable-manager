@@ -37,6 +37,19 @@ export default async function handler(
 			})
 		}
 
+		const recipientData = await prisma.user.findUnique({
+			where: {
+				email: data.recipientEmail,
+			},
+		})
+
+		if (recipientData?.organizationId === data.orgId) {
+			return res.status(403).json({
+				message:
+					'Recipient is already a member of this organization',
+			})
+		}
+
 		function addDays(date: Date, days: number) {
 			const result = new Date(date)
 			result.setDate(result.getDate() + days)
