@@ -2,10 +2,12 @@ import { NextPage } from 'next'
 
 import { useSession, signIn, signOut } from 'next-auth/react'
 
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import LoginButton from './LoginButton'
+import ProfileCard from './ProfileCard'
 
 import { BsPersonFill } from 'react-icons/bs'
 import { MdClass } from 'react-icons/md'
@@ -14,6 +16,8 @@ import { AiFillCalendar } from 'react-icons/ai'
 import { AiFillFile } from 'react-icons/ai'
 
 const Sidebar: NextPage = () => {
+	const [popup, setPopup] = useState(false)
+
 	const router = useRouter()
 
 	const { data: session, status } = useSession({
@@ -26,7 +30,10 @@ const Sidebar: NextPage = () => {
 	return (
 		<div className="min-h-screen flex">
 			<div className="py-4 px-3 bg-neutral w-52 relative">
-				<a className="cursor-pointer flex items-center pl-2.5 mb-5">
+				<a
+					onClick={() => setPopup(!popup)}
+					className="cursor-pointer flex items-center pl-2.5 mb-5"
+				>
 					<img
 						src={
 							session?.user?.image ||
@@ -39,6 +46,7 @@ const Sidebar: NextPage = () => {
 						{session?.user?.name || 'User'}
 					</span>
 				</a>
+				{popup && <ProfileCard />}
 				<ul className="space-y-2">
 					<li>
 						<a
