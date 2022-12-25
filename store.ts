@@ -16,6 +16,11 @@ import create from 'zustand'
 import { v4 as uuidv4 } from 'uuid'
 
 interface TimetableState {
+	organization: {
+		id: number
+		name: string
+		members: number
+	}
 	schoolYear: string
 	bindings: {
 		id: number | string
@@ -148,6 +153,12 @@ interface TimetableState {
 }
 
 const useTimetableStore = create<TimetableState>((set, get) => ({
+	organization: {
+		id: 1,
+		name: 'Band Of The Hawk',
+		members: 16,
+	},
+
 	schoolYear: '2020/2021',
 	bindings: [
 		{
