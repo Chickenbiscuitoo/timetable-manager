@@ -7,7 +7,7 @@ const ProfileCardOrg: NextPage = () => {
 
 	return (
 		<div className="bg-base-100 rounded-xl p-6 mt-2">
-			<div className="">
+			<div>
 				<img
 					src="https://static.vecteezy.com/system/resources/thumbnails/001/500/616/small/building-icon-free-vector.jpg"
 					className="rounded-full h-24 w-24 inline table m-auto"
@@ -19,6 +19,16 @@ const ProfileCardOrg: NextPage = () => {
 					<h2 className="whitespace-nowrap">
 						{organization.members} members
 					</h2>
+				</div>
+				<div className="table m-auto text-center mt-5">
+					<input
+						type="text"
+						placeholder="email@gmail.com"
+						className="input input-bordered input-primary w-8/12 max-w-xs mr-2"
+					/>
+					<button className="btn btn-outline btn-success w-3/12 min-h-full">
+						Invite
+					</button>
 				</div>
 			</div>
 		</div>
