@@ -20,7 +20,7 @@ interface TimetableState {
 		id: number
 		name: string
 		members: number
-	}
+	} | null
 	schoolYear: string
 	bindings: {
 		id: number | string
