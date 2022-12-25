@@ -45,12 +45,12 @@ export default async function handler(
 			},
 		})
 
-		// if (recipientData?.organizationId === data.orgId) {
-		// 	return res.status(403).json({
-		// 		message:
-		// 			'Recipient is already a member of this organization',
-		// 	})
-		// }
+		if (recipientData?.organizationId === data.orgId) {
+			return res.status(403).json({
+				message:
+					'Recipient is already a member of this organization',
+			})
+		}
 
 		const organizationData = await prisma.organization.findUnique({
 			where: {
