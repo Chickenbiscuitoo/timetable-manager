@@ -102,7 +102,7 @@ export default async function handler(
 		}
 	} else {
 		return res.status(400).json({
-			message: 'Only GET, PUT, DELETE and PATCH method allowed',
+			message: 'Only GET, POST, DELETE and PATCH method allowed',
 		})
 	}
 }
