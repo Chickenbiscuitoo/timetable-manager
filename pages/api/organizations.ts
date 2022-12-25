@@ -14,7 +14,7 @@ const schemaDELETE = z.object({
 
 const schemaPATCH = z.object({
 	orgId: z.number().int().positive(),
-	userId: z.string().email(),
+	userId: z.string().min(3),
 })
 
 export default async function handler(
