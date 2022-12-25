@@ -150,7 +150,20 @@ model VerificationToken {
 }
 
 model Organization {
-  id      Int    @id @default(autoincrement())
-  name    String @unique
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
   members User[]
+  Invite  Invite[]
+}
+
+model Invite {
+  id             String       @id @default(cuid())
+  senderEmail    String
+  recipientEmail String
+  expires        DateTime
+  Organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
+
+  @@unique([senderEmail, recipientEmail])
+  @@index([organizationId])
 }
