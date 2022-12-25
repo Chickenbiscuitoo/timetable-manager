@@ -12,7 +12,7 @@ const ProfileCardUser: NextPage<ProfileCardUserProps> = ({
 	image,
 }) => {
 	return (
-		<div className="bg-base-100 rounded-xl p-6">
+		<div className="bg-base-100 rounded-xl p-6 duration-300 ease-in-out transition-opacity">
 			<div>
 				<img
 					src={image}

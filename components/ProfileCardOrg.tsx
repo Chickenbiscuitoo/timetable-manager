@@ -9,7 +9,7 @@ const ProfileCardOrg: NextPage = () => {
 	const [inviteEmail, setInviteEmail] = useState('')
 
 	return (
-		<div className="bg-base-100 rounded-xl p-6 mt-2">
+		<div className="bg-base-100 rounded-xl p-6 mt-2 duration-300 ease-in-out transition-opacity">
 			<div>
 				<img
 					src="https://static.vecteezy.com/system/resources/thumbnails/001/500/616/small/building-icon-free-vector.jpg"
