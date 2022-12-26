@@ -24,11 +24,30 @@ const schemaPATCH = z.object({
 	commiteeId: z.number().int().positive(),
 })
 
+type UpdatedSubject = Omit<Subject, 'organizationId' | 'ownerId'>
+
+// Exclude keys from subject
+function excludeFromSubject<Subject, Key extends keyof Subject>(
+	subject: Subject,
+	keys: Key[]
+): Omit<Subject, Key> {
+	for (let key of keys) {
+		delete subject[key]
+	}
+	return subject
+}
+
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
 ) {
 	const session = await getServerAuthSession({ req, res })
+
+	if (!session) {
+		return res.status(403).send({
+			error: 'You must be signed in to view the protected content on this page.',
+		})
+	}
 
 	const cookies = cookie.parse(req.headers.cookie || '')
 	const token =
@@ -40,7 +59,7 @@ export default async function handler(
 		where: { sessionToken: token },
 	})
 
-	if (!session || !userSession) {
+	if (!userSession) {
 		return res.status(403).send({
 			error: 'You must be signed in to view the protected content on this page.',
 		})
@@ -56,7 +75,11 @@ export default async function handler(
 				},
 			})
 
-			return res.status(200).json(data)
+			const updatedSubjects: UpdatedSubject[] = data.map((subject) =>
+				excludeFromSubject(subject, ['organizationId', 'ownerId'])
+			)
+
+			return res.status(200).json(updatedSubjects)
 		} catch (error) {
 			let message = 'Unknown Error'
 

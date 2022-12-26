@@ -58,6 +58,12 @@ export default async function handler(
 ) {
 	const session = await getServerAuthSession({ req, res })
 
+	if (!session) {
+		return res.status(403).send({
+			error: 'You must be signed in to view the protected content on this page.',
+		})
+	}
+
 	const cookies = cookie.parse(req.headers.cookie || '')
 	const token =
 		process.env.NODE_ENV == 'development'
@@ -68,7 +74,7 @@ export default async function handler(
 		where: { sessionToken: token },
 	})
 
-	if (!session || !userSession) {
+	if (!userSession) {
 		return res.status(403).send({
 			error: 'You must be signed in to view the protected content on this page.',
 		})
