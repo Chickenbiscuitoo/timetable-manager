@@ -1,4 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { getServerAuthSession } from '../../../server/common/get-server-auth-session'
+
 import { prisma } from '../../../server/client'
 import { z } from 'zod'
 
@@ -19,6 +21,19 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
 ) {
+	const session = await getServerAuthSession({ req, res })
+
+	if (session) {
+		res.send({
+			content:
+				'This is protected content. You can access this content because you are signed in.',
+		})
+	} else {
+		res.send({
+			error: 'You must be signed in to view the protected content on this page.',
+		})
+	}
+
 	const { method } = req
 
 	if (method !== 'PATCH') {
