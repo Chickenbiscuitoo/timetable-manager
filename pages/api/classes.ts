@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerAuthSession } from '../../server/common/get-server-auth-session'
 
-import { Class } from '@prisma/client'
+import { Class, Teacher } from '@prisma/client'
 import { prisma } from '../../server/client'
 import { z } from 'zod'
 
@@ -24,7 +24,33 @@ const schemaPATCH = z.object({
 	teacherId: z.number().int().positive(),
 })
 
-type updatedClass = Omit<Class, 'teacherId'>
+type UpdatedClass = Omit<Class, 'teacherId' | 'organizationId' | 'ownerId'>
+
+interface PopulatedClass extends Class {
+	teacher: Teacher
+}
+
+// Exclude keys from class
+function excludeFromClass<Class, Key extends keyof Class>(
+	cl: Class,
+	keys: Key[]
+): Omit<Class, Key> {
+	for (let key of keys) {
+		delete cl[key]
+	}
+	return cl
+}
+
+// Exclude keys from teacher
+function excludeFromTeacher<Teacher, Key extends keyof Teacher>(
+	teacher: Teacher,
+	keys: Key[]
+): Omit<Teacher, Key> {
+	for (let key of keys) {
+		delete teacher[key]
+	}
+	return teacher
+}
 
 export default async function handler(
 	req: NextApiRequest,
@@ -52,7 +78,7 @@ export default async function handler(
 
 	if (method === 'GET') {
 		try {
-			const data: Class[] = await prisma.class.findMany({
+			const data: PopulatedClass[] = await prisma.class.findMany({
 				where: {
 					ownerId: userSession.userId,
 				},
@@ -62,9 +88,16 @@ export default async function handler(
 			})
 
 			// Excluded TeacherId field from teacher
-			const updatedClasses: updatedClass[] = data.map((item) => ({
-				...item,
-				teacherId: undefined,
+			const updatedClasses: UpdatedClass[] = data.map((cl) => ({
+				...excludeFromClass(cl, [
+					'teacherId',
+					'organizationId',
+					'ownerId',
+				]),
+				teacher: excludeFromTeacher(cl.teacher, [
+					'organizationId',
+					'ownerId',
+				]),
 			}))
 
 			return res.status(200).json(updatedClasses)
