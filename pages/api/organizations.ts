@@ -6,6 +6,8 @@ import { Organization } from '@prisma/client'
 
 import { z } from 'zod'
 
+import cookie from 'cookie'
+
 const schemaPOST = z.object({
 	name: z.string().min(3).max(255),
 })
@@ -25,8 +27,18 @@ export default async function handler(
 ) {
 	const session = await getServerAuthSession({ req, res })
 
-	if (!session) {
-		res.send({
+	const cookies = cookie.parse(req.headers.cookie || '')
+	const token =
+		process.env.NODE_ENV == 'development'
+			? cookies['next-auth.session-token']
+			: cookies['__Secure-next-auth.session-token']
+
+	const userSession = await prisma.session.findUnique({
+		where: { sessionToken: token },
+	})
+
+	if (!session || !userSession) {
+		return res.status(403).send({
 			error: 'You must be signed in to view the protected content on this page.',
 		})
 	}
@@ -37,6 +49,13 @@ export default async function handler(
 		try {
 			const data: Organization[] =
 				await prisma.organization.findMany({
+					where: {
+						members: {
+							some: {
+								id: userSession.userId,
+							},
+						},
+					},
 					include: {
 						members: true,
 					},
@@ -57,6 +76,9 @@ export default async function handler(
 			const response = await prisma.organization.create({
 				data: {
 					name: data.name,
+					members: {
+						connect: { id: userSession.userId },
+					},
 				},
 			})
 

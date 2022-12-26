@@ -5,6 +5,8 @@ import { Teacher, Class, Subject } from '@prisma/client'
 import { prisma } from '../../../server/client'
 import { z } from 'zod'
 
+import cookie from 'cookie'
+
 const schemaPUT = z.object({
 	teachers: z.array(z.number().int().positive()),
 	classId: z.number().int().positive(),
@@ -38,8 +40,18 @@ export default async function handler(
 ) {
 	const session = await getServerAuthSession({ req, res })
 
-	if (!session) {
-		res.send({
+	const cookies = cookie.parse(req.headers.cookie || '')
+	const token =
+		process.env.NODE_ENV == 'development'
+			? cookies['next-auth.session-token']
+			: cookies['__Secure-next-auth.session-token']
+
+	const userSession = await prisma.session.findUnique({
+		where: { sessionToken: token },
+	})
+
+	if (!session || !userSession) {
+		return res.status(403).send({
 			error: 'You must be signed in to view the protected content on this page.',
 		})
 	}
@@ -49,6 +61,9 @@ export default async function handler(
 	if (method === 'GET') {
 		try {
 			const data = await prisma.binding.findMany({
+				where: {
+					ownerId: userSession.userId,
+				},
 				include: {
 					teachers: true,
 					class: true,
@@ -100,6 +115,7 @@ export default async function handler(
 					teachers: {
 						connect: data.teachers.map((id) => ({ id })),
 					},
+					ownerId: userSession.userId,
 				},
 			})
 
