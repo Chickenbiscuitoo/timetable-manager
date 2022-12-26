@@ -13,14 +13,22 @@ datasource db {
 
 model Teacher {
   id                    Int                     @id @default(autoincrement())
-  name                  String                  @unique @db.VarChar(128)
-  shortname             String                  @unique @db.VarChar(8)
-  email                 String                  @unique @db.VarChar(255)
+  name                  String                  @db.VarChar(128)
+  shortname             String                  @db.VarChar(8)
+  email                 String                  @db.VarChar(255)
   classId               Class?
   commitee              Committee?
   lessons               Lesson[]
   bindings              Binding[]
   BindingTeacherLessons BindingTeacherLessons[]
+
+  ownerId String @default("clc3kje0800007r511s00ipmi")
+  owner   User?  @relation(fields: [ownerId], references: [id])
+
+  @@unique([ownerId, email])
+  @@unique([ownerId, name])
+  @@unique([ownerId, shortname])
+  @@index([ownerId])
 }
 
 model Subject {
@@ -33,27 +41,45 @@ model Subject {
   commitee Committee @relation(fields: [commiteeId], references: [id])
   Binding  Binding[]
 
+  ownerId String @default("clc3kje0800007r511s00ipmi")
+  owner   User?  @relation(fields: [ownerId], references: [id])
+
+  @@unique([ownerId, name])
+  @@unique([ownerId, shortname])
+  @@index([ownerId])
   @@index([commiteeId])
 }
 
 model Committee {
   id         Int       @id @default(autoincrement())
-  name       String    @unique @db.VarChar(255)
+  name       String    @db.VarChar(255)
   chairmanId Int       @unique
   subjects   Subject[]
 
+  ownerId String @default("clc3kje0800007r511s00ipmi")
+  owner   User?  @relation(fields: [ownerId], references: [id])
+
   chairman Teacher @relation(fields: [chairmanId], references: [id])
+
+  @@unique([ownerId, name])
+  @@index([ownerId])
 }
 
 model Class {
   id        Int      @id @default(autoincrement())
-  name      String   @unique @db.VarChar(32)
+  name      String   @db.VarChar(32)
   grade     Int
   teacherId Int      @unique
   lessons   Lesson[]
 
+  ownerId String @default("clc3kje0800007r511s00ipmi")
+  owner   User?  @relation(fields: [ownerId], references: [id])
+
   teacher Teacher   @relation(fields: [teacherId], references: [id])
   Binding Binding[]
+
+  @@unique([ownerId, name])
+  @@index([ownerId])
 }
 
 model Lesson {
@@ -80,7 +106,12 @@ model Binding {
   subject               Subject                 @relation(fields: [subjectId], references: [id])
   BindingTeacherLessons BindingTeacherLessons[]
 
-  @@unique([subjectId, classId])
+  ownerId String @default("clc3kje0800007r511s00ipmi")
+  owner   User?  @relation(fields: [ownerId], references: [id])
+
+  @@unique([ownerId, subjectId, classId])
+  @@index([ownerId])
+  @@index([subjectId])
   @@index([classId])
 }
 
@@ -92,7 +123,12 @@ model BindingTeacherLessons {
   binding Binding @relation(fields: [bindingId], references: [id], onDelete: Cascade)
   teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
 
+  ownerId String @default("clc3kje0800007r511s00ipmi")
+  owner   User?  @relation(fields: [ownerId], references: [id])
+
   @@id([bindingId, teacherId])
+  @@unique([bindingId, teacherId])
+  @@index([ownerId])
   @@index([bindingId])
   @@index([teacherId])
 }
@@ -137,6 +173,13 @@ model User {
   sessions       Session[]
   Organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId Int?
+
+  Teacher               Teacher[]
+  Subject               Subject[]
+  Committee             Committee[]
+  Class                 Class[]
+  Binding               Binding[]
+  BindingTeacherLessons BindingTeacherLessons[]
 
   @@index([organizationId])
 }
