@@ -108,8 +108,16 @@ model Lesson {
 
   class Class @relation(fields: [classId], references: [id])
 
-  @@unique([day, period, classId])
+  ownerId String @default("clc3kje0800007r511s00ipmi")
+  owner   User?  @relation(fields: [ownerId], references: [id])
+
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId Int?
+
+  @@unique([ownerId, day, period, classId])
   @@index([classId])
+  @@index([ownerId])
+  @@index([organizationId])
 }
 
 model Binding {
@@ -204,6 +212,7 @@ model User {
   Class                 Class[]
   Binding               Binding[]
   BindingTeacherLessons BindingTeacherLessons[]
+  Lesson                Lesson[]
 
   @@index([organizationId])
 }
@@ -227,6 +236,7 @@ model Organization {
   Class                 Class[]
   Binding               Binding[]
   BindingTeacherLessons BindingTeacherLessons[]
+  Lesson                Lesson[]
 }
 
 model Invite {
