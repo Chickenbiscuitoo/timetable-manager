@@ -25,10 +25,14 @@ model Teacher {
   ownerId String @default("clc3kje0800007r511s00ipmi")
   owner   User?  @relation(fields: [ownerId], references: [id])
 
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId Int?
+
   @@unique([ownerId, email])
   @@unique([ownerId, name])
   @@unique([ownerId, shortname])
   @@index([ownerId])
+  @@index([organizationId])
 }
 
 model Subject {
@@ -44,10 +48,14 @@ model Subject {
   ownerId String @default("clc3kje0800007r511s00ipmi")
   owner   User?  @relation(fields: [ownerId], references: [id])
 
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId Int?
+
   @@unique([ownerId, name])
   @@unique([ownerId, shortname])
   @@index([ownerId])
   @@index([commiteeId])
+  @@index([organizationId])
 }
 
 model Committee {
@@ -61,8 +69,12 @@ model Committee {
 
   chairman Teacher @relation(fields: [chairmanId], references: [id])
 
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId Int?
+
   @@unique([ownerId, name])
   @@index([ownerId])
+  @@index([organizationId])
 }
 
 model Class {
@@ -78,8 +90,12 @@ model Class {
   teacher Teacher   @relation(fields: [teacherId], references: [id])
   Binding Binding[]
 
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId Int?
+
   @@unique([ownerId, name])
   @@index([ownerId])
+  @@index([organizationId])
 }
 
 model Lesson {
@@ -109,10 +125,14 @@ model Binding {
   ownerId String @default("clc3kje0800007r511s00ipmi")
   owner   User?  @relation(fields: [ownerId], references: [id])
 
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId Int?
+
   @@unique([ownerId, subjectId, classId])
   @@index([ownerId])
   @@index([subjectId])
   @@index([classId])
+  @@index([organizationId])
 }
 
 model BindingTeacherLessons {
@@ -126,11 +146,15 @@ model BindingTeacherLessons {
   ownerId String @default("clc3kje0800007r511s00ipmi")
   owner   User?  @relation(fields: [ownerId], references: [id])
 
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId Int?
+
   @@id([bindingId, teacherId])
   @@unique([bindingId, teacherId])
   @@index([ownerId])
   @@index([bindingId])
   @@index([teacherId])
+  @@index([organizationId])
 }
 
 model Account {
@@ -193,10 +217,16 @@ model VerificationToken {
 }
 
 model Organization {
-  id      Int      @id @default(autoincrement())
-  name    String   @unique
-  members User[]
-  Invite  Invite[]
+  id                    Int                     @id @default(autoincrement())
+  name                  String                  @unique
+  members               User[]
+  Invite                Invite[]
+  Teacher               Teacher[]
+  Subject               Subject[]
+  Committee             Committee[]
+  Class                 Class[]
+  Binding               Binding[]
+  BindingTeacherLessons BindingTeacherLessons[]
 }
 
 model Invite {
