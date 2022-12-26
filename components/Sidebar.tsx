@@ -27,6 +27,10 @@ const Sidebar: NextPage = () => {
 		},
 	})
 
+	const image =
+		session?.user?.image ||
+		'https://upload.wikimedia.org/wikipedia/commons/2/21/Danny_DeVito_by_Gage_Skidmore.jpg'
+
 	return (
 		<div className="min-h-screen flex">
 			<div className="py-4 px-3 bg-neutral w-52 relative">
@@ -35,12 +39,9 @@ const Sidebar: NextPage = () => {
 					className="cursor-pointer flex items-center pl-2.5 mb-5"
 				>
 					<img
-						src={
-							session?.user?.image ||
-							'https://upload.wikimedia.org/wikipedia/commons/2/21/Danny_DeVito_by_Gage_Skidmore.jpg'
-						}
+						src={image}
 						className="mr-3 h-6 sm:h-7 rounded-full"
-						alt="User avatar"
+						alt="https://upload.wikimedia.org/wikipedia/commons/2/21/Danny_DeVito_by_Gage_Skidmore.jpg"
 					/>
 					<span className="self-center text-xl font-semibold whitespace-nowrap text-white overflow-hidden">
 						{session?.user?.name || 'User'}
