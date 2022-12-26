@@ -27,11 +27,40 @@ interface FormatedTeacher extends Teacher {
 	lessons: number
 }
 
+type TeacherWithoutOwnerId = Omit<
+	FormatedTeacher,
+	'ownerId' | 'organizationId'
+>
+type FormatedClass = Omit<Class, 'ownerId' | 'organizationId'>
+type FormatedSubject = Omit<Subject, 'ownerId' | 'organizationId'>
+
 interface FormatedBinding {
 	id: number
-	teachers: FormatedTeacher[]
-	class: Class
-	subject: Subject
+	teachers: TeacherWithoutOwnerId[]
+	class: FormatedClass
+	subject: FormatedSubject
+}
+
+// Exclude keys from subject
+function excludeFromSubject<Subject, Key extends keyof Subject>(
+	subject: Subject,
+	keys: Key[]
+): Omit<Subject, Key> {
+	for (let key of keys) {
+		delete subject[key]
+	}
+	return subject
+}
+
+// Exclude keys from class
+function excludeFromClass<Class, Key extends keyof Class>(
+	cl: Class,
+	keys: Key[]
+): Omit<Class, Key> {
+	for (let key of keys) {
+		delete cl[key]
+	}
+	return cl
 }
 
 export default async function handler(
@@ -81,6 +110,8 @@ export default async function handler(
 
 					return {
 						...teacher,
+						ownerId: undefined,
+						organizationId: undefined,
 						lessons: records ? records.lessons : 0,
 					}
 				})
@@ -88,9 +119,19 @@ export default async function handler(
 				const updatedBinding = {
 					...binding,
 					teachers: updatedTeachers,
+					class: excludeFromClass(binding.class, [
+						'ownerId',
+						'organizationId',
+					]),
+					subject: excludeFromSubject(binding.subject, [
+						'ownerId',
+						'organizationId',
+					]),
 					BindingTeacherLessons: undefined,
 					subjectId: undefined,
 					classId: undefined,
+					ownerId: undefined,
+					organizationId: undefined,
 				}
 
 				return updatedBinding
