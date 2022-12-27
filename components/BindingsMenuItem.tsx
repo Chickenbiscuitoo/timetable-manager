@@ -17,7 +17,7 @@ const BindingsMenuItem: NextPage<Props> = ({
 }) => {
 	const [{ isDragging }, drag] = useDrag(() => ({
 		type: 'TeacherBindingsItem',
-		item: { id, name, shortname, email },
+		item: { teacherId: id },
 		collect: (monitor) => ({
 			isDragging: monitor.isDragging(),
 		}),

@@ -33,7 +33,7 @@ const SubjectsManager: NextPage = () => {
 								id={subject.id}
 								name={subject.name}
 								shortname={subject.shortname}
-								commitee_id={subject.commitee_id}
+								commitee_id={subject.commiteeId}
 							/>
 						))}
 					</tbody>

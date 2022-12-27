@@ -34,7 +34,7 @@ const ClassesManager: NextPage = () => {
 								key={cl.id}
 								id={cl.id}
 								name={cl.name}
-								teacherId={cl.teacher_id}
+								teacherId={cl.teacherId}
 								grade={cl.grade}
 							/>
 						))}

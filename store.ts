@@ -6,6 +6,8 @@ import {
 	Binding,
 } from '@prisma/client'
 
+import axios from 'axios'
+
 import {
 	getDayFromPosition,
 	getPeriodFromPosition,
@@ -15,109 +17,88 @@ import create from 'zustand'
 
 import { v4 as uuidv4 } from 'uuid'
 
-interface TimetableState {
+interface TimetableStore {
+	schoolYear: string
+
 	organization: {
 		id: number
 		name: string
 		members: number
 	} | null
-	schoolYear: string
-	bindings: {
-		id: number | string
-		teachers: {
-			id: number
-			name: string
-			shortname: string
-			email: string
-			lessons: number
-		}[]
-		subject: Subject
-		cl: {
-			id: number
-			name: string
-			teacher_id: number
-			grade: number
-		}
-	}[]
+	fetchOrganization: () => void
+
+	teachers:
+		| {
+				id: number
+				name: string
+				shortname: string
+				email: string
+		  }[]
+		| []
+	fetchTeachers: () => void
+
+	subjects:
+		| {
+				id: number
+				name: string
+				shortname: string
+				commiteeId: number
+		  }[]
+		| []
+	fetchSubjects: () => void
+
+	classes:
+		| {
+				id: number
+				name: string
+				grade: number
+				teacherId: number
+		  }[]
+		| []
+	fetchClasses: () => void
+
+	bindings:
+		| {
+				id: number
+				teachers: {
+					id: number
+					name: string
+					shortname: string
+					email: string
+					lessons: number
+				}[]
+				subject: {
+					id: number
+					name: string
+					shortname: string
+					commiteeId: number
+				}
+				cl: {
+					id: number
+					name: string
+					grade: number
+					teacherId: number
+				}
+		  }[]
+		| []
+	fetchBindings: () => void
 
 	addBinding: (
-		teachers: {
-			id: number
-			name: string
-			shortname: string
-			email: string
-			lessons: number
-		}[],
-		subject: Subject,
-		cl: {
-			id: number
-			name: string
-			teacher_id: number
-			grade: number
-		}
+		teacherId: number,
+		subjectId: number,
+		classId: number
 	) => void
 	deleteBinding: (id: number) => void
-	updateBinding: (
-		id: number,
-		teachers: {
-			id: number
-			name: string
-			shortname: string
-			email: string
-			lessons: number
-		}[],
-		subject: Subject,
-		cl: {
-			id: number
-			name: string
-			teacher_id: number
-			grade: number
-		}
-	) => void
-
 	deleteTeacherFromBinding: (
 		bindingId: number,
 		teacherId: number
 	) => void
-
+	addTeacherToBinding: (bindingId: number, teacherId: number) => void
 	updateBindingLessonCount: (
 		bindingId: number,
 		teacherId: number,
 		operation: string
 	) => void
-	copyBindings: (srcId: number, destId: number) => void
-
-	rawTableData: {
-		id?: number
-		class: number
-		day: number
-		period: number
-		teachers?: Teacher[] | undefined
-		subjects: Subject[]
-	}[]
-	teachers: Teacher[]
-	subjects: Subject[]
-	classes: {
-		id: number
-		name: string
-		teacher_id: number
-		grade: number
-	}[]
-
-	addLesson: (
-		class_id: number,
-		position: number,
-		subject: Subject[],
-		teacher?: Teacher[]
-	) => void
-	updateLesson: (
-		class_id: number,
-		position: number,
-		subject: Subject[],
-		teacher?: Teacher[] | undefined
-	) => void
-	deleteLesson: (class_id: number, position: number) => void
-	copyLessons: (from: number, to: number) => void
 
 	addTeacher: (name: string, shortname: string, email: string) => void
 	removeTeacher: (id: number) => void
@@ -128,258 +109,157 @@ interface TimetableState {
 		email: string
 	) => void
 
-	addClass: (name: string, teacher_id: number) => void
+	addClass: (name: string, grade: number, teacherId: number) => void
 	removeClass: (id: number) => void
-	updateClass: (id: number, name: string, teacher_id: number) => void
+	updateClass: (
+		id: number,
+		name: string,
+		grade: number,
+		teacherId: number
+	) => void
 
 	addSubject: (
 		name: string,
 		shortname: string,
 		commiteeId: number
 	) => void
+	removeSubject: (id: number) => void
 	updateSubject: (
 		id: number,
 		name: string,
 		shortname: string,
 		commiteeId: number
 	) => void
-	removeSubject: (id: number) => void
 
 	selectedClass: number
-	setSelectedClass: (class_id: number) => void
+	setSelectedClass: (classId: number) => void
 
 	selectedGrade: number
 	setSelectedGrade: (grade: number) => void
 }
 
-const useTimetableStore = create<TimetableState>((set, get) => ({
-	organization: {
-		id: 1,
-		name: 'Band Of The Hawk',
-		members: 16,
-	},
+// TODO: Copy bindings func
 
+const useTimetableStore = create<TimetableStore>((set, get) => ({
 	schoolYear: '2020/2021',
-	bindings: [
-		{
-			id: 1,
-			teachers: [
-				{
-					id: 3,
-					name: 'Gulami Bete',
-					shortname: 'GB',
-					email: 'gulami.bete@gmail.com',
-					lessons: 1,
-				},
-				{
-					id: 2,
-					name: 'Francis Muller',
-					shortname: 'FM',
-					email: 'francis.muller@gmail.com',
-					lessons: 3,
-				},
-			],
-			subject: {
-				id: 5,
-				name: 'Physics',
-				shortname: 'PHY',
-				commiteeId: 1,
-			},
-			cl: { id: 1, name: '1.A', teacher_id: 1, grade: 1 },
-		},
-		{
-			id: 2,
-			teachers: [
-				{
-					id: 3,
-					name: 'Gulami Bete',
-					shortname: 'GB',
-					email: 'gulami.bete@gmail.com',
-					lessons: 1,
-				},
-			],
-			subject: {
-				id: 5,
-				name: 'Physics',
-				shortname: 'PHY',
-				commiteeId: 1,
-			},
-			cl: { id: 2, name: '1.B', teacher_id: 2, grade: 1 },
-		},
-		{
-			id: 3,
-			teachers: [
-				{
-					id: 3,
-					name: 'Gulami Bete',
-					shortname: 'GB',
-					email: 'gulami.bete@gmail.com',
-					lessons: 7,
-				},
-			],
-			subject: {
-				id: 5,
-				name: 'Physics',
-				shortname: 'PHY',
-				commiteeId: 1,
-			},
-			cl: { id: 3, name: '1.C', teacher_id: 3, grade: 1 },
-		},
-		{
-			id: 4,
-			teachers: [
-				{
-					id: 2,
-					name: 'Francis Muller',
-					shortname: 'FM',
-					email: 'francis.muller@gmail.com',
-					lessons: 6,
-				},
-			],
-			subject: {
-				id: 3,
-				name: 'History',
-				shortname: 'HIS',
-				commiteeId: 1,
-			},
-			cl: { id: 1, name: '1.A', teacher_id: 1, grade: 1 },
-		},
-		{
-			id: 5,
-			teachers: [
-				{
-					id: 2,
-					name: 'Francis Muller',
-					shortname: 'FM',
-					email: 'francis.muller@gmail.com',
-					lessons: 2,
-				},
-			],
-			subject: {
-				id: 3,
-				name: 'History',
-				shortname: 'HIS',
-				commiteeId: 1,
-			},
-			cl: { id: 2, name: '1.B', teacher_id: 2, grade: 1 },
-		},
-		{
-			id: 6,
-			teachers: [
-				{
-					id: 3,
-					name: 'Gulami Bete',
-					shortname: 'GB',
-					email: 'gulami.bete@gmail.com',
-					lessons: 8,
-				},
-			],
-			subject: {
-				id: 1,
-				name: 'Math',
-				shortname: 'MAT',
-				commiteeId: 1,
-			},
-			cl: { id: 12, name: '1.G', teacher_id: 12, grade: 1 },
-		},
-		{
-			id: 7,
-			teachers: [
-				{
-					id: 3,
-					name: 'Gulami Bete',
-					shortname: 'GB',
-					email: 'gulami.bete@gmail.com',
-					lessons: 7,
-				},
-			],
-			subject: {
-				id: 2,
-				name: 'English',
-				shortname: 'ENG',
-				commiteeId: 2,
-			},
-			cl: { id: 12, name: '1.G', teacher_id: 12, grade: 1 },
-		},
-		{
-			id: 8,
-			teachers: [
-				{
-					id: 1,
-					name: 'John Doe',
-					shortname: 'JD',
-					email: 'john.doe@gmail.com',
-					lessons: 9,
-				},
-			],
-			subject: {
-				id: 2,
-				name: 'English',
-				shortname: 'ENG',
-				commiteeId: 2,
-			},
-			cl: { id: 1, name: '1.A', teacher_id: 1, grade: 1 },
-		},
-		{
-			id: 9,
-			teachers: [
-				{
-					id: 10,
-					name: 'Marshall Miller',
-					shortname: 'MM',
-					email: 'marshall.miller@gmail.com',
-					lessons: 7,
-				},
-			],
-			subject: {
-				id: 8,
-				name: 'Italian',
-				shortname: 'ITA',
-				commiteeId: 2,
-			},
-			cl: { id: 5, name: '1.E', teacher_id: 10, grade: 1 },
-		},
-		{
-			id: 10,
-			teachers: [
-				{
-					id: 4,
-					name: 'Xavier Dufour',
-					shortname: 'XD',
-					email: 'xavier.dufour@gmail.com',
-					lessons: 2,
-				},
-			],
-			subject: {
-				id: 6,
-				name: 'Spanish',
-				shortname: 'SPA',
-				commiteeId: 2,
-			},
-			cl: { id: 4, name: '1.D', teacher_id: 4, grade: 1 },
-		},
-	],
 
-	addBinding: (teachers, subject, cl) => {
-		set((state) => ({
-			bindings: [
-				...state.bindings,
-				{
-					id: uuidv4(),
-					teachers,
-					subject,
-					cl,
-				},
-			],
-		}))
+	organization: null,
+	fetchOrganization: async () => {
+		const response = await axios.get(
+			'http://localhost:3000/api/organizations'
+		)
+
+		if (response.data.message === 'No organization') {
+			return
+		}
+
+		set({
+			organization: response.data,
+		})
 	},
 
-	deleteBinding: (id) =>
+	teachers: [],
+	fetchTeachers: async () => {
+		const response = await axios.get(
+			'http://localhost:3000/api/teachers'
+		)
+
+		set({
+			teachers: response.data,
+		})
+	},
+
+	subjects: [],
+	fetchSubjects: async () => {
+		const response = await axios.get(
+			'http://localhost:3000/api/subjects'
+		)
+
+		set({
+			subjects: response.data,
+		})
+	},
+
+	classes: [],
+	fetchClasses: async () => {
+		const response = await axios.get(
+			'http://localhost:3000/api/classes'
+		)
+
+		set({
+			classes: response.data,
+		})
+	},
+
+	bindings: [],
+	fetchBindings: async () => {
+		const response = await axios.get(
+			'http://localhost:3000/api/bindings'
+		)
+
+		set({
+			bindings: response.data,
+		})
+	},
+
+	addBinding: async (teacherId, subjectId, classId) => {
+		const teacherData = get().teachers.find(
+			(teacher) => teacher.id === teacherId
+		)
+
+		const subjectData = get().subjects.find(
+			(subject) => subject.id === subjectId
+		)
+
+		const classData = get().classes.find((cl) => cl.id === classId)
+
+		if (!teacherData || !subjectData || !classData) {
+			console.log('Error: No data found')
+			return
+		}
+
+		const newBinding = {
+			id: Math.floor(Math.random() * Date.now()),
+			teachers: [
+				{
+					...teacherData,
+					lessons: 1,
+				},
+			],
+			subject: subjectData,
+			cl: classData,
+		}
+
+		set((state) => ({
+			bindings: [...state.bindings, newBinding],
+		}))
+
+		const response = await axios.put(
+			'http://localhost:3000/api/bindings',
+			{
+				teacherId,
+				subjectId,
+				classId,
+			}
+		)
+	},
+
+	deleteBinding: async (id) => {
 		set((state) => ({
 			bindings: [
 				...state.bindings.filter((binding) => binding.id !== id),
 			],
-		})),
+		}))
+
+		const response = await axios.delete(
+			'http://localhost:3000/api/bindings',
+			{
+				data: {
+					id,
+				},
+			}
+		)
+	},
 
 	deleteTeacherFromBinding: (bindingId, teacherId) => {
 		const oldBinding = get().bindings.find(
@@ -423,22 +303,76 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 				],
 			}))
 		}
+
+		const response = axios.delete(
+			'http://localhost:3000/api/bindings/teachers',
+			{
+				data: {
+					bindingId,
+					teacherId,
+				},
+			}
+		)
 	},
 
-	updateBinding: (id, teachers, subject, cl) =>
+	addTeacherToBinding: (bindingId, teacherId) => {
+		const teacherData = get().teachers.find(
+			(teacher) => teacher.id === teacherId
+		)
+
+		const oldBinding = get().bindings.find(
+			(binding) => binding.id === bindingId
+		)
+
+		if (!teacherData || !oldBinding) {
+			console.log('Error: No data found')
+			return
+		}
+
 		set((state) => ({
 			bindings: [
-				...state.bindings.filter((binding) => binding.id !== id),
+				...state.bindings.filter(
+					(binding) => binding.id !== bindingId
+				),
 				{
-					id,
-					teachers,
-					subject,
-					cl,
+					id: oldBinding.id,
+					teachers: [
+						...oldBinding.teachers,
+						{
+							...teacherData,
+							lessons: 1,
+						},
+					],
+					subject: oldBinding.subject,
+					cl: oldBinding.cl,
 				},
 			],
-		})),
+		}))
+
+		const response = axios.patch(
+			'http://localhost:3000/api/bindings/teachers',
+			{
+				bindingId,
+				teacherId,
+			}
+		)
+	},
 
 	updateBindingLessonCount: (bindingId, teacherId, operation) => {
+		if (operation !== 'increment' && operation !== 'decrement') {
+			console.log('Operation not found')
+			return
+		}
+
+		const response = axios.patch(
+			'http://localhost:3000/api/bindings/lessonsCount',
+			{
+				bindingId,
+				teacherId,
+				operation,
+			}
+		)
+
 		const oldBinding = get().bindings.find(
 			(binding) => binding.id === bindingId
 		)
@@ -490,554 +424,72 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 			],
 		}))
 	},
-	copyBindings: (srcId, destId) => {
-		const srcBindings = get().bindings.filter(
-			(binding) => binding.cl.id === srcId
-		)
-		const destClass = get().classes.find((cl) => cl.id === destId)
 
-		if (srcBindings.length === 0) {
-			console.log('No bindings found')
-			return
-		} else if (!destClass) {
-			console.log('Class not found')
-			return
-		}
-
-		set((state) => ({
-			bindings: [
-				...state.bindings,
-				...srcBindings.map((binding) => ({
-					id: uuidv4(),
-					teachers: binding.teachers,
-					subject: binding.subject,
-					cl: {
-						id: destId,
-						name: destClass.name,
-						teacher_id: destClass.teacher_id,
-						grade: destClass.grade,
-					},
-				})),
-			],
-		}))
-	},
-
-	rawTableData: [
-		{
-			id: 2,
-			class: 1,
-			day: 1,
-			period: 1,
-			teachers: [
-				{
-					id: 3,
-					name: 'Gulami Bete',
-					shortname: 'GB',
-					email: 'gulami.bete@gmail.com',
-				},
-			],
-			subjects: [
-				{
-					id: 3,
-					name: 'History',
-					shortname: 'HIS',
-					commiteeId: 1,
-				},
-			],
-		},
-		{
-			id: 2,
-			class: 1,
-			day: 5,
-			period: 5,
-			teachers: [
-				{
-					id: 3,
-					name: 'Gulami Bete',
-					shortname: 'GB',
-					email: 'gulami.bete@gmail.com',
-				},
-			],
-			subjects: [
-				{
-					id: 3,
-					name: 'History',
-					shortname: 'HIS',
-					commiteeId: 1,
-				},
-			],
-		},
-		{
-			id: 3,
-			class: 1,
-			day: 1,
-			period: 6,
-			teachers: [
-				{
-					id: 2,
-					name: 'Francis Muller',
-					shortname: 'FM',
-					email: 'francis.muller@gmail.com',
-				},
-				{
-					id: 3,
-					name: 'Gulami Bete',
-					shortname: 'GB',
-					email: 'gulami.bete@gmail.com',
-				},
-			],
-			subjects: [
-				{
-					id: 5,
-					name: 'Physics',
-					shortname: 'PHY',
-					commiteeId: 1,
-				},
-				{
-					id: 6,
-					name: 'Spanish',
-					shortname: 'SPA',
-					commiteeId: 2,
-				},
-			],
-		},
-		{
-			id: 4,
-			class: 1,
-			day: 1,
-			period: 7,
-			teachers: [
-				{
-					id: 2,
-					name: 'Francis Muller',
-					shortname: 'FM',
-					email: 'francis.muller@gmail.com',
-				},
-				{
-					id: 3,
-					name: 'Gulami Bete',
-					shortname: 'GB',
-					email: 'gulami.bete@gmail.com',
-				},
-			],
-			subjects: [
-				{
-					id: 6,
-					name: 'Spanish',
-					shortname: 'SPA',
-					commiteeId: 2,
-				},
-				{
-					id: 7,
-					name: 'Chemistry',
-					shortname: 'CHE',
-					commiteeId: 1,
-				},
-			],
-		},
-		{
-			id: 5,
-			class: 1,
-			day: 1,
-			period: 2,
-			teachers: [
-				{
-					id: 1,
-					name: 'John Doe',
-					shortname: 'JD',
-					email: 'john.doe@gmail.com',
-				},
-				{
-					id: 2,
-					name: 'Francis Muller',
-					shortname: 'FM',
-					email: 'francis.muller@gmail.com',
-				},
-			],
-			subjects: [
-				{
-					id: 2,
-					name: 'English',
-					shortname: 'ENG',
-					commiteeId: 2,
-				},
-				{
-					id: 1,
-					name: 'Math',
-					shortname: 'MAT',
-					commiteeId: 1,
-				},
-			],
-		},
-		{
-			id: 6,
-			class: 1,
-			day: 1,
-			period: 3,
-			teachers: [
-				{
-					id: 5,
-					name: 'Yannick Gagnon',
-					shortname: 'YG',
-					email: 'yannic.gagnon@gmail.com',
-				},
-				{
-					id: 6,
-					name: 'Zachary Gagnon',
-					shortname: 'ZG',
-					email: 'zachary.gagnon@gmail.com',
-				},
-			],
-			subjects: [
-				{
-					id: 6,
-					name: 'Spanish',
-					shortname: 'SPA',
-					commiteeId: 2,
-				},
-				{
-					id: 7,
-					name: 'Chemistry',
-					shortname: 'CHE',
-					commiteeId: 1,
-				},
-			],
-		},
-		{
-			id: 8,
-			class: 1,
-			day: 2,
-			period: 11,
-			teachers: [
-				{
-					id: 5,
-					name: 'Yannick Gagnon',
-					shortname: 'YG',
-					email: 'yannic.gagnon@gmail.com',
-				},
-				{
-					id: 6,
-					name: 'Zachary Gagnon',
-					shortname: 'ZG',
-					email: 'zachary.gagnon@gmail.com',
-				},
-			],
-			subjects: [
-				{
-					id: 6,
-					name: 'Spanish',
-					shortname: 'SPA',
-					commiteeId: 2,
-				},
-				{
-					id: 7,
-					name: 'Chemistry',
-					shortname: 'CHE',
-					commiteeId: 1,
-				},
-			],
-		},
-		{
-			id: 9,
-			class: 1,
-			day: 2,
-			period: 6,
-			teachers: [
-				{
-					id: 5,
-					name: 'Yannick Gagnon',
-					shortname: 'YG',
-					email: 'yannic.gagnon@gmail.com',
-				},
-				{
-					id: 6,
-					name: 'Zachary Gagnon',
-					shortname: 'ZG',
-					email: 'zachary.gagnon@gmail.com',
-				},
-			],
-			subjects: [
-				{
-					id: 6,
-					name: 'Spanish',
-					shortname: 'SPA',
-					commiteeId: 2,
-				},
-				{
-					id: 7,
-					name: 'Chemistry',
-					shortname: 'CHE',
-					commiteeId: 1,
-				},
-			],
-		},
-		{
-			id: 10,
-			class: 1,
-			day: 4,
-			period: 2,
-			teachers: [
-				{
-					id: 1,
-					name: 'John Doe',
-					shortname: 'JD',
-					email: 'john.doe@gmail.com',
-				},
-			],
-			subjects: [
-				{
-					id: 6,
-					name: 'Spanish',
-					shortname: 'SPA',
-					commiteeId: 2,
-				},
-				{
-					id: 1,
-					name: 'Math',
-					shortname: 'MAT',
-					commiteeId: 1,
-				},
-			],
-		},
-		{
-			id: 12,
-			class: 1,
-			day: 4,
-			period: 11,
-			teachers: [
-				{
-					id: 6,
-					name: 'Zachary Gagnon',
-					shortname: 'ZG',
-					email: 'zachary.gagnon@gmail.com',
-				},
-				{
-					id: 9,
-					name: 'Juan Perez',
-					shortname: 'JP',
-					email: 'juan.perez@gmail.com',
-				},
-			],
-			subjects: [
-				{
-					id: 5,
-					name: 'Physics',
-					shortname: 'PHY',
-					commiteeId: 1,
-				},
-			],
-		},
-		{
-			id: 13,
-			class: 2,
-			day: 4,
-			period: 11,
-			teachers: [
-				{
-					id: 6,
-					name: 'Zachary Gagnon',
-					shortname: 'ZG',
-					email: 'zachary.gagnon@gmail.com',
-				},
-				{
-					id: 9,
-					name: 'Juan Perez',
-					shortname: 'JP',
-					email: 'juan.perez@gmail.com',
-				},
-			],
-			subjects: [
-				{
-					id: 5,
-					name: 'Physics',
-					shortname: 'PHY',
-					commiteeId: 1,
-				},
-			],
-		},
-		{
-			id: 14,
-			class: 6,
-			day: 4,
-			period: 11,
-			teachers: [
-				{
-					id: 6,
-					name: 'Zachary Gagnon',
-					shortname: 'ZG',
-					email: 'zachary.gagnon@gmail.com',
-				},
-				{
-					id: 9,
-					name: 'Juan Perez',
-					shortname: 'JP',
-					email: 'juan.perez@gmail.com',
-				},
-			],
-			subjects: [
-				{
-					id: 5,
-					name: 'Physics',
-					shortname: 'PHY',
-					commiteeId: 1,
-				},
-			],
-		},
-	],
-	teachers: [
-		{
-			id: 1,
-			name: 'John Doe',
-			shortname: 'JD',
-			email: 'john.doe@gmail.com',
-		},
-		{
-			id: 2,
-			name: 'Francis Muller',
-			shortname: 'FM',
-			email: 'francis.muller@gmail.com',
-		},
-		{
-			id: 3,
-			name: 'Gulami Bete',
-			shortname: 'GB',
-			email: 'gulami.bete@gmail.com',
-		},
-		{
-			id: 4,
-			name: 'Xavier Dufour',
-			shortname: 'XD',
-			email: 'xavier.dufour@gmail.com',
-		},
-		{
-			id: 5,
-			name: 'Yannick Gagnon',
-			shortname: 'YG',
-			email: 'yannic.gagnon@gmail.com',
-		},
-		{
-			id: 6,
-			name: 'Zachary Gagnon',
-			shortname: 'ZG',
-			email: 'zachary.gagnon@gmail.com',
-		},
-		{
-			id: 7,
-			name: 'Francisco Taveras',
-			shortname: 'FT',
-			email: 'francisco.taveras@gmail.com',
-		},
-		{
-			id: 8,
-			name: 'Ivan Nunez',
-			shortname: 'IN',
-			email: 'ivan.nunez@gmail.com',
-		},
-		{
-			id: 9,
-			name: 'Juan Perez',
-			shortname: 'JP',
-			email: 'juan.perez@gmail.com',
-		},
-		{
-			id: 10,
-			name: 'Marshall Miller',
-			shortname: 'MM',
-			email: 'marshall.miller@gmail.com',
-		},
-	],
-	subjects: [
-		{ id: 2, name: 'English', shortname: 'ENG', commiteeId: 2 },
-		{ id: 3, name: 'History', shortname: 'HIS', commiteeId: 1 },
-		{ id: 4, name: 'Geography', shortname: 'GEO', commiteeId: 1 },
-		{ id: 5, name: 'Physics', shortname: 'PHY', commiteeId: 1 },
-		{ id: 6, name: 'Spanish', shortname: 'SPA', commiteeId: 2 },
-		{ id: 7, name: 'Chemistry', shortname: 'CHE', commiteeId: 1 },
-		{ id: 8, name: 'Italian', shortname: 'ITA', commiteeId: 2 },
-		{ id: 1, name: 'Math', shortname: 'MAT', commiteeId: 1 },
-	],
-	classes: [
-		{ id: 10, name: '2.C', teacher_id: 7, grade: 2 },
-		{ id: 1, name: '1.A', teacher_id: 1, grade: 1 },
-		{ id: 2, name: '1.B', teacher_id: 2, grade: 1 },
-		{ id: 3, name: '1.C', teacher_id: 3, grade: 1 },
-		{ id: 4, name: '1.D', teacher_id: 4, grade: 1 },
-		{ id: 5, name: '1.E', teacher_id: 10, grade: 1 },
-		{ id: 6, name: '1.F', teacher_id: 11, grade: 1 },
-		{ id: 12, name: '1.G', teacher_id: 12, grade: 1 },
-		{ id: 8, name: '2.A', teacher_id: 5, grade: 2 },
-		{ id: 9, name: '2.B', teacher_id: 6, grade: 2 },
-		{ id: 11, name: '2.D', teacher_id: 8, grade: 2 },
-		{ id: 13, name: '2.F', teacher_id: 13, grade: 2 },
-		{ id: 14, name: '3.A', teacher_id: 14, grade: 3 },
-		{ id: 15, name: '3.B', teacher_id: 15, grade: 3 },
-		{ id: 16, name: '3.C', teacher_id: 16, grade: 3 },
-		{ id: 17, name: '3.D', teacher_id: 17, grade: 3 },
-		{ id: 18, name: '3.E', teacher_id: 18, grade: 3 },
-		{ id: 19, name: '4.A', teacher_id: 19, grade: 4 },
-		{ id: 20, name: '4.B', teacher_id: 20, grade: 4 },
-		{ id: 21, name: '4.C', teacher_id: 21, grade: 4 },
-		{ id: 22, name: '4.D', teacher_id: 22, grade: 4 },
-		{ id: 24, name: '4.E', teacher_id: 23, grade: 4 },
-	],
-	addLesson: (class_id, position, subject, teacher) =>
-		set((state) => ({
-			rawTableData: [
-				...state.rawTableData,
-				{
-					class: class_id,
-					day: getDayFromPosition(position),
-					period: getPeriodFromPosition(position),
-					teachers: teacher,
-					subjects: subject,
-				},
-			],
-		})),
-	updateLesson: (class_id, position, subject, teacher) =>
-		set((state) => ({
-			rawTableData: [
-				...state.rawTableData.filter(
-					(lesson) =>
-						`${lesson.class}${lesson.day}${lesson.period}` !==
-						`${class_id}${getDayFromPosition(
-							position
-						)}${getPeriodFromPosition(position)}`
-				),
-				{
-					class: class_id,
-					day: getDayFromPosition(position),
-					period: getPeriodFromPosition(position),
-					teachers: teacher,
-					subjects: subject,
-				},
-			],
-		})),
-	deleteLesson: (class_id, position) =>
-		set((state) => ({
-			rawTableData: [
-				...state.rawTableData.filter(
-					(lesson) =>
-						`${lesson.class}${lesson.day}${lesson.period}` !==
-						`${class_id}${getDayFromPosition(
-							position
-						)}${getPeriodFromPosition(position)}`
-				),
-			],
-		})),
-	copyLessons: (from, to) => {
-		const srcLessons = get().rawTableData.filter(
-			(lesson) => lesson.class === from
-		)
-		const destLessons = srcLessons.map((lesson) => ({
-			...lesson,
-			class: to,
-		}))
-		set((state) => ({
-			rawTableData: [...state.rawTableData, ...destLessons],
-		}))
-	},
+	// rawTableData: [],
+	// addLesson: (class_id, position, subject, teacher) =>
+	// 	set((state) => ({
+	// 		rawTableData: [
+	// 			...state.rawTableData,
+	// 			{
+	// 				class: class_id,
+	// 				day: getDayFromPosition(position),
+	// 				period: getPeriodFromPosition(position),
+	// 				teachers: teacher,
+	// 				subjects: subject,
+	// 			},
+	// 		],
+	// 	})),
+	// updateLesson: (class_id, position, subject, teacher) =>
+	// 	set((state) => ({
+	// 		rawTableData: [
+	// 			...state.rawTableData.filter(
+	// 				(lesson) =>
+	// 					`${lesson.class}${lesson.day}${lesson.period}` !==
+	// 					`${class_id}${getDayFromPosition(
+	// 						position
+	// 					)}${getPeriodFromPosition(position)}`
+	// 			),
+	// 			{
+	// 				class: class_id,
+	// 				day: getDayFromPosition(position),
+	// 				period: getPeriodFromPosition(position),
+	// 				teachers: teacher,
+	// 				subjects: subject,
+	// 			},
+	// 		],
+	// 	})),
+	// deleteLesson: (class_id, position) =>
+	// 	set((state) => ({
+	// 		rawTableData: [
+	// 			...state.rawTableData.filter(
+	// 				(lesson) =>
+	// 					`${lesson.class}${lesson.day}${lesson.period}` !==
+	// 					`${class_id}${getDayFromPosition(
+	// 						position
+	// 					)}${getPeriodFromPosition(position)}`
+	// 			),
+	// 		],
+	// 	})),
+	// copyLessons: (from, to) => {
+	// 	const srcLessons = get().rawTableData.filter(
+	// 		(lesson) => lesson.class === from
+	// 	)
+	// 	const destLessons = srcLessons.map((lesson) => ({
+	// 		...lesson,
+	// 		class: to,
+	// 	}))
+	// 	set((state) => ({
+	// 		rawTableData: [...state.rawTableData, ...destLessons],
+	// 	}))
+	// },
 
 	addTeacher: (name, shortname, email) => {
+		const response = axios.put('http://localhost:3000/api/teachers', {
+			name,
+			shortname,
+			email,
+		})
+
 		const id = Date.now() + Math.random()
 		set((state) => ({
 			teachers: [...state.teachers, { id, name, shortname, email }],
@@ -1045,6 +497,15 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 	},
 
 	removeTeacher: (id) => {
+		const response = axios.delete(
+			'http://localhost:3000/api/teachers',
+			{
+				data: {
+					id,
+				},
+			}
+		)
+
 		set((state) => ({
 			teachers: state.teachers.filter(
 				(teacher) => teacher.id !== id
@@ -1053,6 +514,16 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 	},
 
 	updateTeacher: (id, name, shortname, email) => {
+		const response = axios.patch(
+			'http://localhost:3000/api/teachers',
+			{
+				id,
+				name,
+				shortname,
+				email,
+			}
+		)
+
 		set((state) => ({
 			teachers: [
 				...state.teachers.filter((teacher) => teacher.id !== id),
@@ -1061,64 +532,80 @@ const useTimetableStore = create<TimetableState>((set, get) => ({
 		}))
 	},
 
-	addClass: (name, teacher_id) => {
-		const id = Date.now() + Math.random()
-		const grade = parseInt(name.split('.')[0])
-
-		set((state) => ({
-			classes: [...state.classes, { id, name, teacher_id, grade }],
-		}))
+	addClass: (name, grade, teacherId) => {
+		const response = axios.put('http://localhost:3000/api/classes', {
+			name,
+			grade,
+			teacherId,
+		})
 	},
 
 	removeClass: (id) => {
-		set((state) => ({
-			classes: state.classes.filter((class_) => class_.id !== id),
-		}))
+		const response = axios.delete(
+			'http://localhost:3000/api/classes',
+			{
+				data: {
+					id,
+				},
+			}
+		)
 	},
 
-	updateClass: (id, name, teacher_id) => {
-		const grade = parseInt(name.split('.')[0])
-		set((state) => ({
-			classes: [
-				...state.classes.filter((class_) => class_.id !== id),
-				{ id, name, teacher_id, grade },
-			],
-		}))
+	updateClass: (id, name, grade, teacherId) => {
+		const response = axios.patch('http://localhost:3000/api/classes', {
+			id,
+			name,
+			grade,
+			teacherId,
+		})
 	},
 
 	addSubject: (name, shortname, commiteeId) => {
-		const id = Date.now() + Math.random()
-		set((state) => ({
-			subjects: [
-				...state.subjects,
-				{ id, name, shortname, commiteeId },
-			],
-		}))
+		const response = axios.put('http://localhost:3000/api/subjects', {
+			data: {
+				name,
+				shortname,
+				commiteeId,
+			},
+		})
 	},
 
 	updateSubject: (id, name, shortname, commiteeId) => {
-		set((state) => ({
-			subjects: [
-				...state.subjects.filter((subject) => subject.id !== id),
-				{ id, name, shortname, commiteeId },
-			],
-		}))
+		const response = axios.patch(
+			'http://localhost:3000/api/subjects',
+			{
+				data: {
+					id,
+					name,
+					shortname,
+					commiteeId,
+				},
+			}
+		)
 	},
 
 	removeSubject: (id) => {
-		set((state) => ({
-			subjects: state.subjects.filter(
-				(subject) => subject.id !== id
-			),
-		}))
+		const response = axios.delete(
+			'http://localhost:3000/api/subjects',
+			{
+				data: {
+					id,
+				},
+			}
+		)
 	},
 
 	selectedClass: 1,
-	setSelectedClass: (class_id) =>
-		set(() => ({ selectedClass: class_id })),
+	setSelectedClass: (classId) => set(() => ({ selectedClass: classId })),
 
 	selectedGrade: 1,
 	setSelectedGrade: (grade) => set(() => ({ selectedGrade: grade })),
 }))
+
+useTimetableStore.getState().fetchOrganization()
+useTimetableStore.getState().fetchTeachers()
+useTimetableStore.getState().fetchSubjects()
+useTimetableStore.getState().fetchClasses()
+useTimetableStore.getState().fetchBindings()
 
 export default useTimetableStore

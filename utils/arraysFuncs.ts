@@ -1,5 +1,3 @@
-import { Class } from '@prisma/client'
-
 // function to turn 2D array into a simple array
 export const flatten = (arr: any) =>
 	arr.reduce(
@@ -9,7 +7,10 @@ export const flatten = (arr: any) =>
 	)
 
 // function to sort array of classes by name
-export function classesSort(a: Class, b: Class) {
+export function classesSort(
+	a: { id: number; name: string; grade: number; teacherId: number },
+	b: { id: number; name: string; grade: number; teacherId: number }
+) {
 	if (a.grade < b.grade) {
 		return -1
 	} else if (a.grade > b.grade) {

@@ -133,7 +133,7 @@ const BindingsChecking: NextPage = () => {
 				)
 
 			const classTeacherTeaching = flatten(classTeachers).includes(
-				cl.teacher_id
+				cl.teacherId
 			)
 
 			return {

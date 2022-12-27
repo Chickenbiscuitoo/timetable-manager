@@ -61,7 +61,7 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 		const teacherId = formData.teacherId
 
 		if (name && teacherId) {
-			updateClass(id, name, teacherId)
+			updateClass(id, name, grade, teacherId)
 			setFormData({
 				name,
 				teacherId,

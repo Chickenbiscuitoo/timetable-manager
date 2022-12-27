@@ -3,14 +3,13 @@ import type { NextPage } from 'next'
 import useTimetableStore from '../store'
 
 const TeachersTable: NextPage = () => {
-	const { teachers, subjects, classes, rawTableData } =
-		useTimetableStore()
+	const { teachers, subjects, classes, bindings } = useTimetableStore()
 
 	const teachersStats = teachers.map((teacher) => {
 		const teacherToClass = classes.map((cl) =>
-			rawTableData
-				.filter((lesson) => lesson.class === cl.id)
-				.map((lesson) => lesson.teachers?.map((tch) => tch.id))
+			bindings
+				.filter((binding) => binding.cl.id === cl.id)
+				.map((binding) => binding.teachers?.map((tch) => tch.id))
 				.filter((tch) => tch?.includes(teacher.id))
 		)
 

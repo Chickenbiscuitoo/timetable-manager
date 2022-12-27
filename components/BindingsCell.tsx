@@ -37,7 +37,7 @@ const BindingsCell: NextPage<Props> = ({
 	const {
 		addBinding,
 		deleteBinding,
-		updateBinding,
+		addTeacherToBinding,
 		updateBindingLessonCount,
 		deleteTeacherFromBinding,
 		subjects,
@@ -47,21 +47,14 @@ const BindingsCell: NextPage<Props> = ({
 	const [hovered, setHovered] = useState(false)
 
 	const handleDrop = () => {
-		const { id, name, shortname, email } = itemProps
+		const { teacherId } = itemProps
 
 		if (bindingId === undefined) {
-			addBinding(
-				[{ id, name, shortname, email, lessons: 1 }],
-				subject,
-				cl
-			)
+			const subjectId = subject.id
+			const classId = cl.id
+			addBinding(teacherId, subjectId, classId)
 		} else {
-			updateBinding(
-				bindingId,
-				[...teachers, { id, name, shortname, email, lessons: 1 }],
-				subject,
-				cl
-			)
+			addTeacherToBinding(bindingId, teacherId)
 		}
 	}
 

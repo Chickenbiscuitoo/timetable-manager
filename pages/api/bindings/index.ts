@@ -8,15 +8,9 @@ import { z } from 'zod'
 import cookie from 'cookie'
 
 const schemaPUT = z.object({
-	teachers: z.array(z.number().int().positive()),
+	teacherId: z.number().int().positive(),
 	classId: z.number().int().positive(),
 	subjectId: z.number().int().positive(),
-	bindingTeacherLessons: z.array(
-		z.object({
-			teacherId: z.number().int().positive(),
-			lessons: z.number().int().positive(),
-		})
-	),
 })
 
 const schemaDELETE = z.object({
@@ -125,7 +119,7 @@ export default async function handler(
 				const updatedBinding = {
 					...binding,
 					teachers: updatedTeachers,
-					class: excludeFromClass(binding.class, [
+					cl: excludeFromClass(binding.class, [
 						'ownerId',
 						'organizationId',
 					]),
@@ -160,18 +154,20 @@ export default async function handler(
 					classId: data.classId,
 					subjectId: data.subjectId,
 					teachers: {
-						connect: data.teachers.map((id) => ({ id })),
+						connect: {
+							id: data.teacherId,
+						},
 					},
 					ownerId: userSession.userId,
 				},
 			})
 
-			await prisma.bindingTeacherLessons.createMany({
-				data: data.bindingTeacherLessons.map((entry) => ({
-					lessons: entry.lessons,
-					teacherId: entry.teacherId,
+			await prisma.bindingTeacherLessons.create({
+				data: {
+					lessons: 1,
+					teacherId: data.teacherId,
 					bindingId: response.id,
-				})),
+				},
 			})
 
 			return res.status(200).json({ message: response })
