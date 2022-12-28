@@ -134,12 +134,7 @@ interface TimetableStore {
 	rawTableData:
 		| {
 				id: number
-				class: {
-					id: number
-					name: string
-					grade: number
-					teacherId: number
-				}
+				classId: number
 				day: number
 				period: number
 				subjects: {
@@ -148,12 +143,14 @@ interface TimetableStore {
 					shortname: string
 					commiteeId: number
 				}[]
-				teachers: {
-					id: number
-					name: string
-					shortname: string
-					email: string
-				}[]
+				teachers:
+					| {
+							id: number
+							name: string
+							shortname: string
+							email: string
+					  }[]
+					| []
 		  }[]
 		| []
 

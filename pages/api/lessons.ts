@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerAuthSession } from '../../server/common/get-server-auth-session'
 
-import { Lesson } from '@prisma/client'
+import { Lesson, Teacher, Subject } from '@prisma/client'
 import { prisma } from '../../server/client'
 import { z } from 'zod'
 
@@ -24,7 +24,14 @@ const schemaPATCH = z.object({
 	subjectId: z.number().int().positive().optional(),
 })
 
+interface PopulatedLesson extends Lesson {
+	subjects: Subject[]
+	teachers: Teacher[]
+}
+
 type UpdatedLesson = Omit<Lesson, 'ownerId' | 'organizationId'>
+type UpdatedTeacher = Omit<Teacher, 'ownerId' | 'organizationId'>
+type UpdatedSubject = Omit<Subject, 'ownerId' | 'organizationId'>
 
 // Exclude keys from lesson
 function excludeFromLesson<Lesson, Key extends keyof Lesson>(
@@ -35,6 +42,28 @@ function excludeFromLesson<Lesson, Key extends keyof Lesson>(
 		delete lesson[key]
 	}
 	return lesson
+}
+
+// Exclude keys from subject
+function excludeFromSubject<Subject, Key extends keyof Subject>(
+	subject: Subject,
+	keys: Key[]
+): Omit<Subject, Key> {
+	for (let key of keys) {
+		delete subject[key]
+	}
+	return subject
+}
+
+// Exclude keys from teacher
+function excludeFromTeacher<Teacher, Key extends keyof Teacher>(
+	teacher: Teacher,
+	keys: Key[]
+): Omit<Teacher, Key> {
+	for (let key of keys) {
+		delete teacher[key]
+	}
+	return teacher
 }
 
 export default async function handler(
@@ -69,15 +98,34 @@ export default async function handler(
 
 	if (method === 'GET') {
 		try {
-			const data = await prisma.lesson.findMany({
+			const data: PopulatedLesson[] = await prisma.lesson.findMany({
 				where: {
 					ownerId: userSession.userId,
 				},
+				include: {
+					subjects: true,
+					teachers: true,
+				},
 			})
 
-			const updatedLessons: UpdatedLesson[] = data.map((lesson) =>
-				excludeFromLesson(lesson, ['ownerId', 'organizationId'])
-			)
+			const updatedLessons: UpdatedLesson[] = data.map((lesson) => ({
+				...excludeFromLesson(lesson, [
+					'ownerId',
+					'organizationId',
+				]),
+				subjects: lesson.subjects.map((subject) =>
+					excludeFromSubject(subject, [
+						'ownerId',
+						'organizationId',
+					])
+				),
+				teachers: lesson.teachers.map((teacher) =>
+					excludeFromTeacher(teacher, [
+						'ownerId',
+						'organizationId',
+					])
+				),
+			}))
 
 			return res.status(200).json(updatedLessons)
 		} catch (error) {
