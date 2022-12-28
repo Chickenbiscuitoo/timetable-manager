@@ -24,6 +24,19 @@ const schemaPATCH = z.object({
 	subjectId: z.number().int().positive().optional(),
 })
 
+type UpdatedLesson = Omit<Lesson, 'ownerId' | 'organizationId'>
+
+// Exclude keys from lesson
+function excludeFromLesson<Lesson, Key extends keyof Lesson>(
+	lesson: Lesson,
+	keys: Key[]
+): Omit<Lesson, Key> {
+	for (let key of keys) {
+		delete lesson[key]
+	}
+	return lesson
+}
+
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
@@ -62,7 +75,11 @@ export default async function handler(
 				},
 			})
 
-			return res.status(200).json(data)
+			const updatedLessons: UpdatedLesson[] = data.map((lesson) =>
+				excludeFromLesson(lesson, ['ownerId', 'organizationId'])
+			)
+
+			return res.status(200).json(updatedLessons)
 		} catch (error) {
 			let message = 'Unknown Error'
 
