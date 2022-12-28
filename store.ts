@@ -203,37 +203,6 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	addBinding: async (teacherId, subjectId, classId) => {
-		const teacherData = get().teachers.find(
-			(teacher) => teacher.id === teacherId
-		)
-
-		const subjectData = get().subjects.find(
-			(subject) => subject.id === subjectId
-		)
-
-		const classData = get().classes.find((cl) => cl.id === classId)
-
-		if (!teacherData || !subjectData || !classData) {
-			console.log('Error: No data found')
-			return
-		}
-
-		const newBinding = {
-			id: Math.floor(Math.random() * Date.now()),
-			teachers: [
-				{
-					...teacherData,
-					lessons: 1,
-				},
-			],
-			subject: subjectData,
-			cl: classData,
-		}
-
-		set((state) => ({
-			bindings: [...state.bindings, newBinding],
-		}))
-
 		const response = await axios.put(
 			'http://localhost:3000/api/bindings',
 			{
@@ -242,15 +211,11 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				classId,
 			}
 		)
+
+		get().fetchBindings()
 	},
 
 	deleteBinding: async (id) => {
-		set((state) => ({
-			bindings: [
-				...state.bindings.filter((binding) => binding.id !== id),
-			],
-		}))
-
 		const response = await axios.delete(
 			'http://localhost:3000/api/bindings',
 			{
@@ -259,52 +224,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				},
 			}
 		)
+
+		get().fetchBindings()
 	},
 
-	deleteTeacherFromBinding: (bindingId, teacherId) => {
-		const oldBinding = get().bindings.find(
-			(binding) => binding.id === bindingId
-		)
-		if (!oldBinding) {
-			console.log('Binding not found')
-			return
-		}
-
-		const oldTeacher = oldBinding.teachers.find(
-			(teacher) => teacher.id === teacherId
-		)
-		if (!oldTeacher) {
-			console.log('Teacher not found')
-			return
-		}
-
-		const newTeachersArr = oldBinding.teachers.filter(
-			(tch) => tch.id !== teacherId
-		)
-
-		if (newTeachersArr.length === 0) {
-			set((state) => ({
-				bindings: [
-					...state.bindings.filter(
-						(binding) => binding.id !== bindingId
-					),
-				],
-			}))
-		} else {
-			set((state) => ({
-				bindings: [
-					...state.bindings.filter(
-						(binding) => binding.id !== bindingId
-					),
-					{
-						...oldBinding,
-						teachers: newTeachersArr,
-					},
-				],
-			}))
-		}
-
-		const response = axios.delete(
+	deleteTeacherFromBinding: async (bindingId, teacherId) => {
+		const response = await axios.delete(
 			'http://localhost:3000/api/bindings/teachers',
 			{
 				data: {
@@ -313,58 +238,29 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				},
 			}
 		)
+
+		get().fetchBindings()
 	},
 
-	addTeacherToBinding: (bindingId, teacherId) => {
-		const teacherData = get().teachers.find(
-			(teacher) => teacher.id === teacherId
-		)
-
-		const oldBinding = get().bindings.find(
-			(binding) => binding.id === bindingId
-		)
-
-		if (!teacherData || !oldBinding) {
-			console.log('Error: No data found')
-			return
-		}
-
-		set((state) => ({
-			bindings: [
-				...state.bindings.filter(
-					(binding) => binding.id !== bindingId
-				),
-				{
-					id: oldBinding.id,
-					teachers: [
-						...oldBinding.teachers,
-						{
-							...teacherData,
-							lessons: 1,
-						},
-					],
-					subject: oldBinding.subject,
-					cl: oldBinding.cl,
-				},
-			],
-		}))
-
-		const response = axios.patch(
+	addTeacherToBinding: async (bindingId, teacherId) => {
+		const response = await axios.patch(
 			'http://localhost:3000/api/bindings/teachers',
 			{
 				bindingId,
 				teacherId,
 			}
 		)
+
+		get().fetchBindings()
 	},
 
-	updateBindingLessonCount: (bindingId, teacherId, operation) => {
+	updateBindingLessonCount: async (bindingId, teacherId, operation) => {
 		if (operation !== 'increment' && operation !== 'decrement') {
 			console.log('Operation not found')
 			return
 		}
 
-		const response = axios.patch(
+		const response = await axios.patch(
 			'http://localhost:3000/api/bindings/lessonsCount',
 			{
 				bindingId,
@@ -373,56 +269,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			}
 		)
 
-		const oldBinding = get().bindings.find(
-			(binding) => binding.id === bindingId
-		)
-		if (!oldBinding) {
-			console.log('Binding not found')
-			return
-		}
-
-		const oldTeacher = oldBinding.teachers.find(
-			(teacher) => teacher.id === teacherId
-		)
-		if (!oldTeacher) {
-			console.log('Teacher not found')
-			return
-		}
-
-		if (oldTeacher.lessons === 1 && operation === 'decrement') {
-			return
-		} else if (
-			operation !== 'decrement' &&
-			operation !== 'increment'
-		) {
-			console.log('Invalid operation')
-			return
-		}
-
-		set((state) => ({
-			bindings: [
-				...state.bindings.filter(
-					(binding) => binding.id !== bindingId
-				),
-				{
-					id: bindingId,
-					teachers: [
-						...oldBinding.teachers.filter(
-							(teacher) => teacher.id !== teacherId
-						),
-						{
-							...oldTeacher,
-							lessons:
-								operation === 'increment'
-									? oldTeacher.lessons + 1
-									: oldTeacher.lessons - 1,
-						},
-					],
-					subject: oldBinding.subject,
-					cl: oldBinding.cl,
-				},
-			],
-		}))
+		get().fetchBindings()
 	},
 
 	// rawTableData: [],
@@ -483,21 +330,21 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	// 	}))
 	// },
 
-	addTeacher: (name, shortname, email) => {
-		const response = axios.put('http://localhost:3000/api/teachers', {
-			name,
-			shortname,
-			email,
-		})
+	addTeacher: async (name, shortname, email) => {
+		const response = await axios.put(
+			'http://localhost:3000/api/teachers',
+			{
+				name,
+				shortname,
+				email,
+			}
+		)
 
-		const id = Date.now() + Math.random()
-		set((state) => ({
-			teachers: [...state.teachers, { id, name, shortname, email }],
-		}))
+		get().fetchTeachers()
 	},
 
-	removeTeacher: (id) => {
-		const response = axios.delete(
+	removeTeacher: async (id) => {
+		const response = await axios.delete(
 			'http://localhost:3000/api/teachers',
 			{
 				data: {
@@ -506,15 +353,11 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			}
 		)
 
-		set((state) => ({
-			teachers: state.teachers.filter(
-				(teacher) => teacher.id !== id
-			),
-		}))
+		get().fetchTeachers()
 	},
 
-	updateTeacher: (id, name, shortname, email) => {
-		const response = axios.patch(
+	updateTeacher: async (id, name, shortname, email) => {
+		const response = await axios.patch(
 			'http://localhost:3000/api/teachers',
 			{
 				id,
@@ -524,24 +367,24 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			}
 		)
 
-		set((state) => ({
-			teachers: [
-				...state.teachers.filter((teacher) => teacher.id !== id),
-				{ id, name, shortname, email },
-			],
-		}))
+		get().fetchTeachers()
 	},
 
-	addClass: (name, grade, teacherId) => {
-		const response = axios.put('http://localhost:3000/api/classes', {
-			name,
-			grade,
-			teacherId,
-		})
+	addClass: async (name, grade, teacherId) => {
+		const response = await axios.put(
+			'http://localhost:3000/api/classes',
+			{
+				name,
+				grade,
+				teacherId,
+			}
+		)
+
+		get().fetchClasses()
 	},
 
-	removeClass: (id) => {
-		const response = axios.delete(
+	removeClass: async (id) => {
+		const response = await axios.delete(
 			'http://localhost:3000/api/classes',
 			{
 				data: {
@@ -549,27 +392,39 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				},
 			}
 		)
+
+		get().fetchClasses()
 	},
 
-	updateClass: (id, name, grade, teacherId) => {
-		const response = axios.patch('http://localhost:3000/api/classes', {
-			id,
-			name,
-			grade,
-			teacherId,
-		})
+	updateClass: async (id, name, grade, teacherId) => {
+		const response = await axios.patch(
+			'http://localhost:3000/api/classes',
+			{
+				id,
+				name,
+				grade,
+				teacherId,
+			}
+		)
+
+		get().fetchClasses()
 	},
 
-	addSubject: (name, shortname, commiteeId) => {
-		const response = axios.put('http://localhost:3000/api/subjects', {
-			name,
-			shortname,
-			commiteeId,
-		})
+	addSubject: async (name, shortname, commiteeId) => {
+		const response = await axios.put(
+			'http://localhost:3000/api/subjects',
+			{
+				name,
+				shortname,
+				commiteeId,
+			}
+		)
+
+		get().fetchSubjects()
 	},
 
-	updateSubject: (id, name, shortname, commiteeId) => {
-		const response = axios.patch(
+	updateSubject: async (id, name, shortname, commiteeId) => {
+		const response = await axios.patch(
 			'http://localhost:3000/api/subjects',
 			{
 				id,
@@ -578,10 +433,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				commiteeId,
 			}
 		)
+
+		get().fetchSubjects()
 	},
 
-	removeSubject: (id) => {
-		const response = axios.delete(
+	removeSubject: async (id) => {
+		const response = await axios.delete(
 			'http://localhost:3000/api/subjects',
 			{
 				data: {
@@ -589,6 +446,8 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				},
 			}
 		)
+
+		get().fetchSubjects()
 	},
 
 	selectedClass: 1,
