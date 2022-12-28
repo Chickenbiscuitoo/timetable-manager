@@ -131,6 +131,49 @@ interface TimetableStore {
 		commiteeId: number
 	) => void
 
+	rawTableData:
+		| {
+				id: number
+				class: {
+					id: number
+					name: string
+					grade: number
+					teacherId: number
+				}
+				day: number
+				period: number
+				subjects: {
+					id: number
+					name: string
+					shortname: string
+					commiteeId: number
+				}[]
+				teachers: {
+					id: number
+					name: string
+					shortname: string
+					email: string
+				}[]
+		  }[]
+		| []
+
+	fetchLessons: () => void
+
+	addLesson: (
+		classId: number,
+		subjectId: number,
+		day: number,
+		period: number
+	) => void
+
+	removeLesson: (id: number) => void
+
+	updateLesson: (
+		id: number,
+		teacherId?: number,
+		subjectId?: number
+	) => void
+
 	selectedClass: number
 	setSelectedClass: (classId: number) => void
 
@@ -139,6 +182,7 @@ interface TimetableStore {
 }
 
 // TODO: Copy bindings func
+// TODO: Copy lessons func
 
 const useTimetableStore = create<TimetableStore>((set, get) => ({
 	schoolYear: '2020/2021',
@@ -272,64 +316,6 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		get().fetchBindings()
 	},
 
-	// rawTableData: [],
-	// addLesson: (class_id, position, subject, teacher) =>
-	// 	set((state) => ({
-	// 		rawTableData: [
-	// 			...state.rawTableData,
-	// 			{
-	// 				class: class_id,
-	// 				day: getDayFromPosition(position),
-	// 				period: getPeriodFromPosition(position),
-	// 				teachers: teacher,
-	// 				subjects: subject,
-	// 			},
-	// 		],
-	// 	})),
-	// updateLesson: (class_id, position, subject, teacher) =>
-	// 	set((state) => ({
-	// 		rawTableData: [
-	// 			...state.rawTableData.filter(
-	// 				(lesson) =>
-	// 					`${lesson.class}${lesson.day}${lesson.period}` !==
-	// 					`${class_id}${getDayFromPosition(
-	// 						position
-	// 					)}${getPeriodFromPosition(position)}`
-	// 			),
-	// 			{
-	// 				class: class_id,
-	// 				day: getDayFromPosition(position),
-	// 				period: getPeriodFromPosition(position),
-	// 				teachers: teacher,
-	// 				subjects: subject,
-	// 			},
-	// 		],
-	// 	})),
-	// deleteLesson: (class_id, position) =>
-	// 	set((state) => ({
-	// 		rawTableData: [
-	// 			...state.rawTableData.filter(
-	// 				(lesson) =>
-	// 					`${lesson.class}${lesson.day}${lesson.period}` !==
-	// 					`${class_id}${getDayFromPosition(
-	// 						position
-	// 					)}${getPeriodFromPosition(position)}`
-	// 			),
-	// 		],
-	// 	})),
-	// copyLessons: (from, to) => {
-	// 	const srcLessons = get().rawTableData.filter(
-	// 		(lesson) => lesson.class === from
-	// 	)
-	// 	const destLessons = srcLessons.map((lesson) => ({
-	// 		...lesson,
-	// 		class: to,
-	// 	}))
-	// 	set((state) => ({
-	// 		rawTableData: [...state.rawTableData, ...destLessons],
-	// 	}))
-	// },
-
 	addTeacher: async (name, shortname, email) => {
 		const response = await axios.put(
 			'http://localhost:3000/api/teachers',
@@ -450,6 +436,81 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		get().fetchSubjects()
 	},
 
+	rawTableData: [],
+
+	fetchLessons: async () => {
+		const response = await axios.get(
+			'http://localhost:3000/api/lessons'
+		)
+
+		set(() => ({ rawTableData: response.data }))
+	},
+
+	addLesson: async (classId, subjectId, day, period) => {
+		const response = await axios.put(
+			'http://localhost:3000/api/lessons',
+			{
+				classId,
+				subjectId,
+				day,
+				period,
+			}
+		)
+
+		get().fetchLessons()
+	},
+
+	removeLesson: async (id) => {
+		const response = await axios.delete(
+			'http://localhost:3000/api/lessons',
+			{
+				data: {
+					id,
+				},
+			}
+		)
+
+		get().fetchLessons()
+	},
+
+	updateLesson: async (id, subjectId, teacherId) => {
+		if (subjectId && teacherId) {
+			const response = await axios.patch(
+				'http://localhost:3000/api/lessons',
+				{
+					id,
+					subjectId,
+					teacherId,
+				}
+			)
+
+			get().fetchLessons()
+		} else if (subjectId && !teacherId) {
+			const response = await axios.patch(
+				'http://localhost:3000/api/lessons',
+				{
+					id,
+					subjectId,
+				}
+			)
+
+			get().fetchLessons()
+		} else if (!subjectId && teacherId) {
+			const response = await axios.patch(
+				'http://localhost:3000/api/lessons',
+				{
+					id,
+					teacherId,
+				}
+			)
+
+			get().fetchLessons()
+		} else {
+			console.log('No data to update')
+			return
+		}
+	},
+
 	selectedClass: 1,
 	setSelectedClass: (classId) => set(() => ({ selectedClass: classId })),
 
@@ -462,5 +523,6 @@ useTimetableStore.getState().fetchTeachers()
 useTimetableStore.getState().fetchSubjects()
 useTimetableStore.getState().fetchClasses()
 useTimetableStore.getState().fetchBindings()
+useTimetableStore.getState().fetchLessons()
 
 export default useTimetableStore

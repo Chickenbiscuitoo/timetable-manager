@@ -19,7 +19,7 @@ const MenuItem: NextPage<Props> = ({
 }) => {
 	const [{ isDragging }, drag] = useDrag(() => ({
 		type: isTeacher ? 'TeacherMenuItem' : 'SubjectMenuItem',
-		item: { id, name, shortname, commitee_id },
+		item: { id },
 		collect: (monitor) => ({
 			isDragging: monitor.isDragging(),
 		}),

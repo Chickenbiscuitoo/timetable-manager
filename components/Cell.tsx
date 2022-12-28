@@ -10,42 +10,27 @@ import SplitCell from './SplitCell'
 import { MdDeleteForever } from 'react-icons/md'
 
 interface Props {
-	position: number
+	id: number
+	day: number
+	period: number
 	subject: Subject[]
 	teacher?: Teacher[]
 }
 
-const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
-	const { addLesson, updateLesson, deleteLesson, selectedClass } =
+const Cell: NextPage<Props> = ({ id, subject, day, period, teacher }) => {
+	const { addLesson, updateLesson, removeLesson, selectedClass } =
 		useTimetableStore()
 
 	const [hovered, setHovered] = useState(false)
 
 	const handleDrop = () => {
 		if (itemType === 'TeacherMenuItem') {
-			if (!teacher) {
-				updateLesson(selectedClass, position, subject, [itemProps])
-			} else if (!!teacher) {
-				updateLesson(selectedClass, position, subject, [
-					...teacher,
-					itemProps,
-				])
-			}
+			updateLesson(id, itemProps)
 		} else if (itemType === 'SubjectMenuItem') {
-			if (!subject && !teacher) {
-				addLesson(selectedClass, position, [itemProps])
-			} else if (!!subject && !teacher) {
-				updateLesson(selectedClass, position, [
-					...subject,
-					itemProps,
-				])
-			} else if (!!subject && !!teacher) {
-				updateLesson(
-					selectedClass,
-					position,
-					[...subject, itemProps],
-					teacher
-				)
+			if (id) {
+				updateLesson(id, undefined, itemProps)
+			} else {
+				addLesson(selectedClass, itemProps.id, day, period)
 			}
 		}
 	}
@@ -77,7 +62,7 @@ const Cell: NextPage<Props> = ({ subject, position, teacher }) => {
 	}
 
 	const handleRemove = () => {
-		return deleteLesson(selectedClass, position)
+		return removeLesson(id)
 	}
 
 	const [{ isOver, canDrop, itemType, itemProps }, drop]: any = useDrop({

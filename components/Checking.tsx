@@ -34,10 +34,10 @@ const Checking: NextPage = () => {
 	const classTeacherTeaching = () => {
 		const classTeacher = classes
 			.filter((cl) => cl.id === selectedClass)
-			.map((cl) => cl.teacher_id)[0]
+			.map((cl) => cl.teacherId)[0]
 
 		const classLessons = rawTableData.filter(
-			(lesson) => lesson.class === selectedClass
+			(lesson) => lesson.class.id === selectedClass
 		)
 
 		// list of all teachers that are teaching some lessons
@@ -62,7 +62,7 @@ const Checking: NextPage = () => {
 
 	const classLessonsNumInvalid = () => {
 		const classLessons = rawTableData.filter(
-			(lesson) => lesson.class === selectedClass
+			(lesson) => lesson.class.id === selectedClass
 		)
 
 		if (classLessons.length > 30) {
@@ -152,7 +152,7 @@ const Checking: NextPage = () => {
 
 	const lessonsWithoutTeacher = () => {
 		const classLessons = rawTableData.filter(
-			(lesson) => lesson.class === selectedClass
+			(lesson) => lesson.class.id === selectedClass
 		)
 
 		const noTeacherLessons = classLessons.filter(

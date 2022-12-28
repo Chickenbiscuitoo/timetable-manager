@@ -10,7 +10,7 @@ const Timetable: NextComponentType = () => {
 	const { rawTableData, selectedClass } = useTimetableStore()
 
 	const selectedClassTableData = rawTableData.filter(
-		(lesson) => lesson.class === selectedClass
+		(lesson) => lesson.class.id === selectedClass
 	)
 
 	// Fuction to make nested array from an array of objects
@@ -71,11 +71,12 @@ const Timetable: NextComponentType = () => {
 										return (
 											<Cell
 												key={getPosition(i, ci)}
+												id={cell?.id}
 												subject={cell?.subjects}
-												position={getPosition(
-													i,
-													ci
-												)}
+												day={cell?.day || ci + 1}
+												period={
+													cell?.period || i + 1
+												}
 												teacher={cell?.teachers}
 											/>
 										)
