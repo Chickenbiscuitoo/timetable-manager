@@ -15,7 +15,17 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
 
 const Home: NextPage = () => {
-	const { schoolYear } = useTimetableStore()
+	const { schoolYear, subjects, classes } = useTimetableStore()
+
+	const warning = () => {
+		if (subjects.length === 0 && classes.length === 0) {
+			return 'You have no subjects and classes, please add some'
+		} else if (subjects.length === 0) {
+			return 'You have no subjects, please add some'
+		} else if (classes.length === 0) {
+			return 'You have no classes, please add some'
+		}
+	}
 
 	return (
 		<div>
@@ -27,14 +37,29 @@ const Home: NextPage = () => {
 			<DndProvider backend={HTML5Backend}>
 				<main className="min-h-screen flex flex-row">
 					<Sidebar />
-					<div>
+					<div className="w-full p-5">
 						<div className="flex flex-row items-end mx-5">
 							<BindingsTabsMenu />
 							<h1 className="font-semibold btn btn-sm">
 								{schoolYear}
 							</h1>
 						</div>
-						<BindingsTable />
+						{subjects.length > 0 && classes.length > 0 ? (
+							<BindingsTable />
+						) : (
+							// Display number of subjects and classes and if they are 0, display a message to add them
+							<div className="flex flex-col items-center justify-center h-screen">
+								<h1 className="text-2xl font-semibold">
+									Subjects: {subjects.length}
+								</h1>
+								<h1 className="text-2xl font-semibold">
+									Classes: {classes.length}
+								</h1>
+								<p className="text-lg text-primary">
+									{warning()}
+								</p>
+							</div>
+						)}
 					</div>
 					<BindingsSideWorkspace />
 				</main>

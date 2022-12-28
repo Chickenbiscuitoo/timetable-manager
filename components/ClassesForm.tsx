@@ -7,7 +7,7 @@ const ClassesForm: NextPage = () => {
 
 	const [formData, setFormData] = useState({
 		name: '',
-		grade: -1,
+		grade: 0,
 		teacherId: -1,
 	})
 
@@ -27,7 +27,7 @@ const ClassesForm: NextPage = () => {
 			addClass(name, grade, teacherId)
 			setFormData({
 				name: '',
-				grade: -1,
+				grade: 0,
 				teacherId: -1,
 			})
 		}
@@ -57,7 +57,7 @@ const ClassesForm: NextPage = () => {
 					<span>Grade</span>
 					<input
 						type="text"
-						placeholder="1"
+						placeholder="0"
 						className="input input-bordered"
 						name="grade"
 						value={formData.grade}
