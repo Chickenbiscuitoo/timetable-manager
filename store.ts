@@ -470,7 +470,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		get().fetchLessons()
 	},
 
-	updateLesson: async (id, subjectId, teacherId) => {
+	updateLesson: async (id, teacherId, subjectId) => {
 		if (subjectId && teacherId) {
 			const response = await axios.patch(
 				'http://localhost:3000/api/lessons',

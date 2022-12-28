@@ -25,10 +25,10 @@ const Cell: NextPage<Props> = ({ id, subject, day, period, teacher }) => {
 
 	const handleDrop = () => {
 		if (itemType === 'TeacherMenuItem') {
-			updateLesson(id, itemProps)
+			updateLesson(id, itemProps.id, undefined)
 		} else if (itemType === 'SubjectMenuItem') {
 			if (id) {
-				updateLesson(id, undefined, itemProps)
+				updateLesson(id, undefined, itemProps.id)
 			} else {
 				addLesson(selectedClass, itemProps.id, day, period)
 			}
@@ -183,7 +183,7 @@ const Cell: NextPage<Props> = ({ id, subject, day, period, teacher }) => {
 							onMouseEnter={() => setHovered(true)}
 							onMouseLeave={() => setHovered(false)}
 						>
-							{`${subject[0].name} | ${teacher[0].name}`}
+							{`${subject[0]?.name} | ${teacher[0]?.name}`}
 							{hovered && (
 								<span
 									onClick={handleRemove}
@@ -260,9 +260,9 @@ const Cell: NextPage<Props> = ({ id, subject, day, period, teacher }) => {
 						onMouseEnter={() => setHovered(true)}
 						onMouseLeave={() => setHovered(false)}
 					>
-						<h4 className="inline">{teacher[0].shortname}</h4>
+						<h4 className="inline">{teacher[0]?.shortname}</h4>
 						<h4 className="text-primary inline ml-2">
-							{subject[0].shortname}
+							{subject[0]?.shortname}
 						</h4>
 						{hovered && (
 							<span
@@ -285,7 +285,7 @@ const Cell: NextPage<Props> = ({ id, subject, day, period, teacher }) => {
 						onMouseLeave={() => setHovered(false)}
 					>
 						<h4 className="text-primary inline ml-2">
-							{subject[0].shortname}
+							{subject[0]?.shortname}
 						</h4>
 						{hovered && (
 							<span
