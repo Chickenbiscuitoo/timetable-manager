@@ -14,7 +14,7 @@ const SubjectsTable: NextPage = () => {
 				.filter((binding) => binding.subject.id === subject.id)
 				.map((bd) => bd.teachers?.map((tch) => tch.lessons))
 
-			if (clLessons.length === 0) {
+			if (flatten(clLessons).length === 0) {
 				return 0
 			} else {
 				return flatten(clLessons).reduce(

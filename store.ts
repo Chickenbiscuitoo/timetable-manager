@@ -562,11 +562,9 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	addSubject: (name, shortname, commiteeId) => {
 		const response = axios.put('http://localhost:3000/api/subjects', {
-			data: {
-				name,
-				shortname,
-				commiteeId,
-			},
+			name,
+			shortname,
+			commiteeId,
 		})
 	},
 
@@ -574,12 +572,10 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		const response = axios.patch(
 			'http://localhost:3000/api/subjects',
 			{
-				data: {
-					id,
-					name,
-					shortname,
-					commiteeId,
-				},
+				id,
+				name,
+				shortname,
+				commiteeId,
 			}
 		)
 	},
