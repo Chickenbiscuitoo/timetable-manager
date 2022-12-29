@@ -233,7 +233,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	inviteMemberToOrganization: async (recipientEmail, orgId) => {
-		const response = await axios.patch(
+		const response = await axios.post(
 			'http://localhost:3000/api/invites/new',
 			{
 				recipientEmail,

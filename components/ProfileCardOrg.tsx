@@ -4,7 +4,11 @@ import { useState } from 'react'
 import useTimetableStore from '../store'
 
 const ProfileCardOrg: NextPage = () => {
-	const { organization, createOrganization } = useTimetableStore()
+	const {
+		organization,
+		createOrganization,
+		inviteMemberToOrganization,
+	} = useTimetableStore()
 
 	const [inviteEmail, setInviteEmail] = useState('')
 	const [organizationName, setOrganizationName] = useState('')
@@ -12,6 +16,12 @@ const ProfileCardOrg: NextPage = () => {
 	const handleCreate = () => {
 		if (organizationName.length > 3) {
 			createOrganization(organizationName)
+		}
+	}
+
+	const handleInvite = () => {
+		if (inviteEmail.length > 3 && organization) {
+			inviteMemberToOrganization(inviteEmail, organization.id)
 		}
 	}
 
@@ -76,7 +86,10 @@ const ProfileCardOrg: NextPage = () => {
 						onChange={(e) => setInviteEmail(e.target.value)}
 						className="input input-bordered input-primary w-8/12 max-w-xs mr-2"
 					/>
-					<button className="btn btn-outline btn-success w-3/12 min-h-full">
+					<button
+						onClick={handleInvite}
+						className="btn btn-outline btn-success w-3/12 min-h-full"
+					>
 						Invite
 					</button>
 				</div>
