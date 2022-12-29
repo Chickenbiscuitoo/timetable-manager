@@ -100,6 +100,8 @@ interface TimetableStore {
 		operation: string
 	) => void
 
+	copyBindings: (srcClassId: number, destClassId: number) => void
+
 	addTeacher: (name: string, shortname: string, email: string) => void
 	removeTeacher: (id: number) => void
 	updateTeacher: (
@@ -311,6 +313,17 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		)
 
 		get().fetchBindings()
+	},
+
+	copyBindings: async (srcClassId, destClassId) => {
+		// const response = await axios.patch(
+		// 	'http://localhost:3000/api/bindings/copy',
+		// 	{
+		// 		srcClassId,
+		// 		destClassId,
+		// 	}
+		// )
+		// get().fetchBindings()
 	},
 
 	addTeacher: async (name, shortname, email) => {

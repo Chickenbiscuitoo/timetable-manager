@@ -51,10 +51,14 @@ export default async function handler(
 	try {
 		const data = schemaPATCH.parse(req.body)
 
-		const srcClassBindings: Binding[] = await prisma.binding.findMany({
+		const srcClassBindings = await prisma.binding.findMany({
 			where: {
 				classId: data.srcClassId,
 				ownerId: userSession.userId,
+			},
+			include: {
+				teachers: true,
+				BindingTeacherLessons: true,
 			},
 		})
 
@@ -62,15 +66,40 @@ export default async function handler(
 			return res.status(404).json({ message: 'No bindings found' })
 		}
 
-		const response = await prisma.binding.createMany({
-			data: srcClassBindings.map((binding) => ({
-				...binding,
-				classId: data.destClassId,
-			})),
-			skipDuplicates: true,
+		// WARNING: Bad implementation, but it works
+
+		const responses = srcClassBindings.forEach(async (binding) => {
+			const response = await prisma.binding.create({
+				data: {
+					classId: data.destClassId,
+					subjectId: binding.subjectId,
+					teachers: {
+						connect: binding.teachers.map((teacher) => ({
+							id: teacher.id,
+						})),
+					},
+					ownerId: userSession.userId,
+				},
+			})
+
+			const bindingTeacherLessonsResponse =
+				binding.BindingTeacherLessons.forEach(async (record) => {
+					await prisma.bindingTeacherLessons.create({
+						data: {
+							bindingId: response.id,
+							teacherId: record.teacherId,
+							lessons: record.lessons,
+						},
+					})
+				})
+
+			return {
+				binding: response,
+				bindingTeacherLessons: bindingTeacherLessonsResponse,
+			}
 		})
 
-		return res.status(200).json(response)
+		return res.status(200).json(responses)
 	} catch (error) {
 		let message = 'Unknown Error'
 

@@ -31,7 +31,7 @@ type FormatedSubject = Omit<Subject, 'ownerId' | 'organizationId'>
 interface FormatedBinding {
 	id: number
 	teachers: TeacherWithoutOwnerId[]
-	class: FormatedClass
+	cl: FormatedClass
 	subject: FormatedSubject
 }
 
@@ -132,6 +132,7 @@ export default async function handler(
 					classId: undefined,
 					ownerId: undefined,
 					organizationId: undefined,
+					class: undefined,
 				}
 
 				return updatedBinding

@@ -76,6 +76,9 @@ export default async function handler(
 						},
 					},
 				},
+				include: {
+					teachers: true,
+				},
 			})
 
 			const responseBindingTeacherLessons =
@@ -88,9 +91,17 @@ export default async function handler(
 					},
 				})
 
+			if (responseTeacher.teachers.length === 0) {
+				await prisma.binding.delete({
+					where: {
+						id: data.bindingId,
+					},
+				})
+			}
+
 			return res.status(200).json({
 				message: 'Teacher removed from binding',
-				teacher: responseTeacher,
+				binding: responseTeacher,
 				bindingTeacherLessons: responseBindingTeacherLessons,
 			})
 		} catch (error) {
