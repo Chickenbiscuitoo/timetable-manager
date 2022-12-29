@@ -7,8 +7,9 @@ import { z } from 'zod'
 
 import axios from 'axios'
 
+import cookie from 'cookie'
+
 const schemaPOST = z.object({
-	senderEmail: z.string().email(),
 	recipientEmail: z.string().email(),
 	orgId: z.number().int().positive(),
 })
@@ -20,7 +21,33 @@ export default async function handler(
 	const session = await getServerAuthSession({ req, res })
 
 	if (!session) {
-		res.send({
+		return res.status(403).send({
+			error: 'You must be signed in to view the protected content on this page.',
+		})
+	}
+
+	if (!session.user) {
+		return res.status(403).json({
+			message: 'You must be signed in to invite',
+		})
+	} else if (!session.user.email) {
+		return res.status(403).json({
+			message: 'You must have an email to invite',
+		})
+	}
+
+	const cookies = cookie.parse(req.headers.cookie || '')
+	const token =
+		process.env.NODE_ENV == 'development'
+			? cookies['next-auth.session-token']
+			: cookies['__Secure-next-auth.session-token']
+
+	const userSession = await prisma.session.findUnique({
+		where: { sessionToken: token },
+	})
+
+	if (!userSession) {
+		return res.status(403).send({
 			error: 'You must be signed in to view the protected content on this page.',
 		})
 	}
@@ -38,7 +65,7 @@ export default async function handler(
 
 		const senderData = await prisma.user.findUnique({
 			where: {
-				email: data.senderEmail,
+				email: session.user.email,
 			},
 		})
 
@@ -82,7 +109,7 @@ export default async function handler(
 
 		const response = await prisma.invite.create({
 			data: {
-				senderEmail: data.senderEmail,
+				senderEmail: session.user.email,
 				recipientEmail: data.recipientEmail,
 				organizationId: data.orgId,
 				expires: addDays(new Date(), 2),

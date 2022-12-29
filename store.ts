@@ -29,7 +29,10 @@ interface TimetableStore {
 
 	createOrganization: (name: string) => void
 	deleteOrganization: (id: number) => void
-	addMemberToOrganization: (orgId: number, userId: number) => void
+	inviteMemberToOrganization: (
+		recipientEmail: string,
+		orgId: number
+	) => void
 
 	teachers:
 		| {
@@ -229,12 +232,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		get().fetchOrganization()
 	},
 
-	addMemberToOrganization: async (orgId, userEmail) => {
+	inviteMemberToOrganization: async (recipientEmail, orgId) => {
 		const response = await axios.patch(
-			'http://localhost:3000/api/organizations',
+			'http://localhost:3000/api/invites/new',
 			{
+				recipientEmail,
 				orgId,
-				userEmail,
 			}
 		)
 
