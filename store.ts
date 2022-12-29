@@ -27,6 +27,10 @@ interface TimetableStore {
 	} | null
 	fetchOrganization: () => void
 
+	createOrganization: (name: string) => void
+	deleteOrganization: (id: number) => void
+	addMemberToOrganization: (orgId: number, userId: number) => void
+
 	teachers:
 		| {
 				id: number
@@ -199,6 +203,42 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		set({
 			organization: response.data,
 		})
+	},
+
+	createOrganization: async (name) => {
+		const response = await axios.post(
+			'http://localhost:3000/api/organizations',
+			{
+				name,
+			}
+		)
+
+		get().fetchOrganization()
+	},
+
+	deleteOrganization: async (id) => {
+		const response = await axios.delete(
+			'http://localhost:3000/api/organizations',
+			{
+				data: {
+					id,
+				},
+			}
+		)
+
+		get().fetchOrganization()
+	},
+
+	addMemberToOrganization: async (orgId, userEmail) => {
+		const response = await axios.patch(
+			'http://localhost:3000/api/organizations',
+			{
+				orgId,
+				userEmail,
+			}
+		)
+
+		get().fetchOrganization()
 	},
 
 	teachers: [],

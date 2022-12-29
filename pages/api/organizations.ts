@@ -18,7 +18,7 @@ const schemaDELETE = z.object({
 
 const schemaPATCH = z.object({
 	orgId: z.number().int().positive(),
-	userId: z.string().min(3),
+	userEmail: z.string().email(),
 })
 
 export default async function handler(
@@ -120,13 +120,22 @@ export default async function handler(
 	} else if (method === 'PATCH') {
 		try {
 			const data = schemaPATCH.parse(req.body)
+
+			const user = await prisma.user.findUnique({
+				where: { email: data.userEmail },
+			})
+
+			if (!user) {
+				return res.status(200).json({ message: 'User not found' })
+			}
+
 			const response = await prisma.organization.update({
 				where: {
 					id: data.orgId,
 				},
 				data: {
 					members: {
-						connect: { id: data.userId },
+						connect: { id: user.id },
 					},
 				},
 			})
