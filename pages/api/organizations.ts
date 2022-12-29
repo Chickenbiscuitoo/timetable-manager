@@ -67,9 +67,28 @@ export default async function handler(
 
 			const data = await prisma.organization.findUnique({
 				where: { id: userData.organizationId },
+				include: {
+					_count: {
+						select: {
+							members: true,
+						},
+					},
+				},
 			})
 
-			return res.status(200).json(data)
+			if (!data) {
+				return res
+					.status(200)
+					.json({ message: 'Organization not found' })
+			}
+
+			const formatedData = {
+				id: data.id,
+				name: data.name,
+				members: data._count.members,
+			}
+
+			return res.status(200).json(formatedData)
 		} catch (error) {
 			let message = 'Unknown Error'
 
