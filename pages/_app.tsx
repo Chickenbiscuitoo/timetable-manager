@@ -1,10 +1,12 @@
 import { SessionProvider } from 'next-auth/react'
+import dynamic from 'next/dynamic'
+
 import '../styles/globals.css'
 
 import type { AppProps } from 'next/app'
 import type { Session } from 'next-auth'
 
-export default function App({
+function App({
 	Component,
 	pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session }>) {
@@ -14,3 +16,7 @@ export default function App({
 		</SessionProvider>
 	)
 }
+
+export default dynamic(() => Promise.resolve(App), {
+	ssr: false,
+})
