@@ -124,6 +124,7 @@ export default async function handler(
 				user_id: process.env.EMAILJS_USER_ID,
 				accessToken: process.env.EMAILJS_ACCESS_TOKEN,
 				template_params: {
+					recipient_email: recipientData.email,
 					recipient_name: recipientData.name,
 					sender_name: senderData.name,
 					organization_name: organizationData.name,
