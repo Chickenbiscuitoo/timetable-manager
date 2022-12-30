@@ -260,8 +260,14 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	subjects: [],
 	fetchSubjects: async () => {
+		const mode = get().mode
 		const response = await axios.get(
-			'http://localhost:3000/api/subjects'
+			'http://localhost:3000/api/subjects',
+			{
+				params: {
+					mode,
+				},
+			}
 		)
 
 		set({
@@ -461,12 +467,14 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	addSubject: async (name, shortname, commiteeId) => {
+		const mode = get().mode
 		const response = await axios.put(
 			'http://localhost:3000/api/subjects',
 			{
 				name,
 				shortname,
 				commiteeId,
+				mode,
 			}
 		)
 
