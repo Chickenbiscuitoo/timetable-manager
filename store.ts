@@ -300,8 +300,14 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	bindings: [],
 	fetchBindings: async () => {
+		const mode = get().mode
 		const response = await axios.get(
-			'http://localhost:3000/api/bindings'
+			'http://localhost:3000/api/bindings',
+			{
+				params: {
+					mode,
+				},
+			}
 		)
 
 		set({
@@ -310,12 +316,14 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	addBinding: async (teacherId, subjectId, classId) => {
+		const mode = get().mode
 		const response = await axios.put(
 			'http://localhost:3000/api/bindings',
 			{
 				teacherId,
 				subjectId,
 				classId,
+				mode,
 			}
 		)
 

@@ -111,7 +111,7 @@ export default async function handler(
 
 	if (method === 'GET') {
 		try {
-			const reqData = schemaGET.parse(req.body)
+			const reqData = schemaGET.parse(req.query)
 
 			if (reqData.mode === 'personal') {
 				const data = await prisma.binding.findMany({
