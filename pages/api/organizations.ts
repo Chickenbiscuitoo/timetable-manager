@@ -13,7 +13,7 @@ const schemaPOST = z.object({
 })
 
 const schemaDELETE = z.object({
-	id: z.number().int().positive(),
+	id: z.string().cuid(),
 })
 
 export default async function handler(

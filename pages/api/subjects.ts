@@ -97,7 +97,7 @@ export default async function handler(
 				const data: Subject[] = await prisma.subject.findMany({
 					where: {
 						ownerId: userSession.userId,
-						organizationId: null,
+						organizationId: userSession.userId,
 					},
 				})
 
@@ -153,6 +153,7 @@ export default async function handler(
 						shortname: data.shortname,
 						commiteeId: data.commiteeId,
 						ownerId: userSession.userId,
+						organizationId: userSession.userId,
 					},
 				})
 

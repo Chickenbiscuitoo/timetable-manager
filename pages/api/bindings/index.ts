@@ -117,7 +117,7 @@ export default async function handler(
 				const data = await prisma.binding.findMany({
 					where: {
 						ownerId: userSession.userId,
-						organizationId: null,
+						organizationId: userSession.userId,
 					},
 					include: {
 						teachers: true,
@@ -258,6 +258,7 @@ export default async function handler(
 							},
 						},
 						ownerId: userSession.userId,
+						organizationId: userSession.userId,
 					},
 				})
 

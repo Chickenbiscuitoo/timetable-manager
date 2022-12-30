@@ -127,7 +127,7 @@ export default async function handler(
 					await prisma.lesson.findMany({
 						where: {
 							ownerId: userSession.userId,
-							organizationId: null,
+							organizationId: userSession.userId,
 						},
 						include: {
 							subjects: true,
@@ -215,6 +215,7 @@ export default async function handler(
 				const response = await prisma.lesson.create({
 					data: {
 						ownerId: userSession.userId,
+						organizationId: userSession.userId,
 						classId: data.classId,
 						subjects: {
 							connect: {

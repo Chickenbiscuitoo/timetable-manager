@@ -113,7 +113,7 @@ export default async function handler(
 					{
 						where: {
 							ownerId: userSession.userId,
-							organizationId: null,
+							organizationId: userSession.userId,
 						},
 						include: {
 							teacher: true,
@@ -188,6 +188,7 @@ export default async function handler(
 						grade: data.grade,
 						teacherId: data.teacherId,
 						ownerId: userSession.userId,
+						organizationId: userSession.userId,
 					},
 				})
 
