@@ -7,6 +7,17 @@ import { z } from 'zod'
 
 import cookie from 'cookie'
 
+const schemaGET = z.object({
+	mode: z.string().refine(
+		(value) => {
+			return value === 'personal' || value === 'organization'
+		},
+		{
+			message: 'Mode must be either "personal" or "organization"',
+		}
+	),
+})
+
 const schemaPUT = z.object({
 	name: z.string().min(3).max(128),
 	grade: z.number().int().positive(),
@@ -72,6 +83,9 @@ export default async function handler(
 
 	const userSession = await prisma.session.findUnique({
 		where: { sessionToken: token },
+		include: {
+			user: true,
+		},
 	})
 
 	if (!userSession) {
@@ -84,29 +98,64 @@ export default async function handler(
 
 	if (method === 'GET') {
 		try {
-			const data: PopulatedClass[] = await prisma.class.findMany({
-				where: {
-					ownerId: userSession.userId,
-				},
-				include: {
-					teacher: true,
-				},
-			})
+			const reqData = schemaGET.parse(req.query)
 
-			// Excluded TeacherId field from teacher
-			const updatedClasses: UpdatedClass[] = data.map((cl) => ({
-				...excludeFromClass(cl, [
-					'teacherId',
-					'organizationId',
-					'ownerId',
-				]),
-				teacher: excludeFromTeacher(cl.teacher, [
-					'organizationId',
-					'ownerId',
-				]),
-			}))
+			if (reqData.mode === 'personal') {
+				const data: PopulatedClass[] = await prisma.class.findMany(
+					{
+						where: {
+							ownerId: userSession.userId,
+							organizationId: null,
+						},
+						include: {
+							teacher: true,
+						},
+					}
+				)
 
-			return res.status(200).json(updatedClasses)
+				// Excluded TeacherId field from teacher
+				const updatedClasses: UpdatedClass[] = data.map((cl) => ({
+					...excludeFromClass(cl, [
+						'teacherId',
+						'organizationId',
+						'ownerId',
+					]),
+					teacher: excludeFromTeacher(cl.teacher, [
+						'organizationId',
+						'ownerId',
+					]),
+				}))
+
+				return res.status(200).json(updatedClasses)
+			} else if (reqData.mode === 'organization') {
+				const data: PopulatedClass[] = await prisma.class.findMany(
+					{
+						where: {
+							ownerId: userSession.userId,
+							organizationId:
+								userSession.user.organizationId,
+						},
+						include: {
+							teacher: true,
+						},
+					}
+				)
+
+				// Excluded TeacherId field from teacher
+				const updatedClasses: UpdatedClass[] = data.map((cl) => ({
+					...excludeFromClass(cl, [
+						'teacherId',
+						'organizationId',
+						'ownerId',
+					]),
+					teacher: excludeFromTeacher(cl.teacher, [
+						'organizationId',
+						'ownerId',
+					]),
+				}))
+
+				return res.status(200).json(updatedClasses)
+			}
 		} catch (error) {
 			let message = 'Unknown Error'
 
