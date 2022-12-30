@@ -22,7 +22,7 @@ model Teacher {
   bindings              Binding[]
   BindingTeacherLessons BindingTeacherLessons[]
 
-  ownerId String @default("clc3kje0800007r511s00ipmi")
+  ownerId String
   owner   User?  @relation(fields: [ownerId], references: [id])
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
@@ -45,7 +45,7 @@ model Subject {
   commitee Committee @relation(fields: [commiteeId], references: [id])
   Binding  Binding[]
 
-  ownerId String @default("clc3kje0800007r511s00ipmi")
+  ownerId String
   owner   User?  @relation(fields: [ownerId], references: [id])
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
@@ -64,7 +64,7 @@ model Committee {
   chairmanId Int       @unique
   subjects   Subject[]
 
-  ownerId String @default("clc3kje0800007r511s00ipmi")
+  ownerId String
   owner   User?  @relation(fields: [ownerId], references: [id])
 
   chairman Teacher @relation(fields: [chairmanId], references: [id])
@@ -84,7 +84,7 @@ model Class {
   teacherId Int      @unique
   lessons   Lesson[]
 
-  ownerId String @default("clc3kje0800007r511s00ipmi")
+  ownerId String
   owner   User?  @relation(fields: [ownerId], references: [id])
 
   teacher Teacher   @relation(fields: [teacherId], references: [id])
@@ -108,7 +108,7 @@ model Lesson {
 
   class Class @relation(fields: [classId], references: [id])
 
-  ownerId String @default("clc3kje0800007r511s00ipmi")
+  ownerId String
   owner   User?  @relation(fields: [ownerId], references: [id])
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
@@ -130,7 +130,7 @@ model Binding {
   subject               Subject                 @relation(fields: [subjectId], references: [id])
   BindingTeacherLessons BindingTeacherLessons[]
 
-  ownerId String @default("clc3kje0800007r511s00ipmi")
+  ownerId String
   owner   User?  @relation(fields: [ownerId], references: [id])
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
@@ -151,7 +151,7 @@ model BindingTeacherLessons {
   binding Binding @relation(fields: [bindingId], references: [id], onDelete: Cascade)
   teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
 
-  ownerId String @default("clc3kje0800007r511s00ipmi")
+  ownerId String
   owner   User?  @relation(fields: [ownerId], references: [id])
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
