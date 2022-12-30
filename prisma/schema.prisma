@@ -40,8 +40,8 @@ model Teacher {
 
 model Subject {
   id         Int      @id @default(autoincrement())
-  name       String   @unique @db.VarChar(255)
-  shortname  String   @unique @db.VarChar(8)
+  name       String   @db.VarChar(255)
+  shortname  String   @db.VarChar(8)
   commiteeId Int
   lessons    Lesson[]
 
