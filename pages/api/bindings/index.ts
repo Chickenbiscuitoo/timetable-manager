@@ -7,10 +7,29 @@ import { z } from 'zod'
 
 import cookie from 'cookie'
 
+const schemaGET = z.object({
+	mode: z.string().refine(
+		(value) => {
+			return value === 'personal' || value === 'organization'
+		},
+		{
+			message: 'Mode must be either "personal" or "organization"',
+		}
+	),
+})
+
 const schemaPUT = z.object({
 	teacherId: z.number().int().positive(),
 	classId: z.number().int().positive(),
 	subjectId: z.number().int().positive(),
+	mode: z.string().refine(
+		(value) => {
+			return value === 'personal' || value === 'organization'
+		},
+		{
+			message: 'Mode must be either "personal" or "organization"',
+		}
+	),
 })
 
 const schemaDELETE = z.object({
@@ -77,6 +96,9 @@ export default async function handler(
 
 	const userSession = await prisma.session.findUnique({
 		where: { sessionToken: token },
+		include: {
+			user: true,
+		},
 	})
 
 	if (!userSession) {
@@ -89,56 +111,131 @@ export default async function handler(
 
 	if (method === 'GET') {
 		try {
-			const data = await prisma.binding.findMany({
-				where: {
-					ownerId: userSession.userId,
-				},
-				include: {
-					teachers: true,
-					class: true,
-					subject: true,
-					BindingTeacherLessons: true,
-				},
-			})
+			const reqData = schemaGET.parse(req.body)
 
-			// map each binding from data and insert number of lessons each teacher teaches from BindingTeacherLessons into teachers object
-			const updatedData: FormatedBinding[] = data.map((binding) => {
-				const updatedTeachers = binding.teachers.map((teacher) => {
-					const records = binding.BindingTeacherLessons.find(
-						(entry) => entry.teacherId === teacher.id
-					)
-
-					return {
-						...teacher,
-						ownerId: undefined,
-						organizationId: undefined,
-						lessons: records ? records.lessons : 0,
-					}
+			if (reqData.mode === 'personal') {
+				const data = await prisma.binding.findMany({
+					where: {
+						ownerId: userSession.userId,
+						organizationId: null,
+					},
+					include: {
+						teachers: true,
+						class: true,
+						subject: true,
+						BindingTeacherLessons: true,
+					},
 				})
 
-				const updatedBinding = {
-					...binding,
-					teachers: updatedTeachers,
-					cl: excludeFromClass(binding.class, [
-						'ownerId',
-						'organizationId',
-					]),
-					subject: excludeFromSubject(binding.subject, [
-						'ownerId',
-						'organizationId',
-					]),
-					BindingTeacherLessons: undefined,
-					subjectId: undefined,
-					classId: undefined,
-					ownerId: undefined,
-					organizationId: undefined,
-					class: undefined,
+				// map each binding from data and insert number of lessons each teacher teaches from BindingTeacherLessons into teachers object
+				const updatedData: FormatedBinding[] = data.map(
+					(binding) => {
+						const updatedTeachers = binding.teachers.map(
+							(teacher) => {
+								const records =
+									binding.BindingTeacherLessons.find(
+										(entry) =>
+											entry.teacherId === teacher.id
+									)
+
+								return {
+									...teacher,
+									ownerId: undefined,
+									organizationId: undefined,
+									lessons: records ? records.lessons : 0,
+								}
+							}
+						)
+
+						const updatedBinding = {
+							...binding,
+							teachers: updatedTeachers,
+							cl: excludeFromClass(binding.class, [
+								'ownerId',
+								'organizationId',
+							]),
+							subject: excludeFromSubject(binding.subject, [
+								'ownerId',
+								'organizationId',
+							]),
+							BindingTeacherLessons: undefined,
+							subjectId: undefined,
+							classId: undefined,
+							ownerId: undefined,
+							organizationId: undefined,
+							class: undefined,
+						}
+
+						return updatedBinding
+					}
+				)
+
+				return res.status(200).json(updatedData)
+			} else if (reqData.mode === 'organization') {
+				if (!userSession.user.organizationId) {
+					return res.status(400).json({
+						message: 'User is not part of any organization',
+					})
 				}
 
-				return updatedBinding
-			})
+				const data = await prisma.binding.findMany({
+					where: {
+						ownerId: userSession.userId,
+						organizationId: userSession.user.organizationId,
+					},
+					include: {
+						teachers: true,
+						class: true,
+						subject: true,
+						BindingTeacherLessons: true,
+					},
+				})
 
-			return res.status(200).json(updatedData)
+				// map each binding from data and insert number of lessons each teacher teaches from BindingTeacherLessons into teachers object
+				const updatedData: FormatedBinding[] = data.map(
+					(binding) => {
+						const updatedTeachers = binding.teachers.map(
+							(teacher) => {
+								const records =
+									binding.BindingTeacherLessons.find(
+										(entry) =>
+											entry.teacherId === teacher.id
+									)
+
+								return {
+									...teacher,
+									ownerId: undefined,
+									organizationId: undefined,
+									lessons: records ? records.lessons : 0,
+								}
+							}
+						)
+
+						const updatedBinding = {
+							...binding,
+							teachers: updatedTeachers,
+							cl: excludeFromClass(binding.class, [
+								'ownerId',
+								'organizationId',
+							]),
+							subject: excludeFromSubject(binding.subject, [
+								'ownerId',
+								'organizationId',
+							]),
+							BindingTeacherLessons: undefined,
+							subjectId: undefined,
+							classId: undefined,
+							ownerId: undefined,
+							organizationId: undefined,
+							class: undefined,
+						}
+
+						return updatedBinding
+					}
+				)
+
+				return res.status(200).json(updatedData)
+			}
 		} catch (error) {
 			let message = 'Unknown Error'
 
@@ -150,28 +247,61 @@ export default async function handler(
 	} else if (method === 'PUT') {
 		try {
 			const data = schemaPUT.parse(req.body)
-			const response = await prisma.binding.create({
-				data: {
-					classId: data.classId,
-					subjectId: data.subjectId,
-					teachers: {
-						connect: {
-							id: data.teacherId,
+
+			if (data.mode === 'personal') {
+				const response = await prisma.binding.create({
+					data: {
+						classId: data.classId,
+						subjectId: data.subjectId,
+						teachers: {
+							connect: {
+								id: data.teacherId,
+							},
 						},
+						ownerId: userSession.userId,
 					},
-					ownerId: userSession.userId,
-				},
-			})
+				})
 
-			await prisma.bindingTeacherLessons.create({
-				data: {
-					lessons: 1,
-					teacherId: data.teacherId,
-					bindingId: response.id,
-				},
-			})
+				await prisma.bindingTeacherLessons.create({
+					data: {
+						lessons: 1,
+						teacherId: data.teacherId,
+						bindingId: response.id,
+					},
+				})
 
-			return res.status(200).json({ message: response })
+				return res.status(200).json({ message: response })
+			} else if (data.mode === 'organization') {
+				if (!userSession.user.organizationId) {
+					return res.status(400).json({
+						message: 'User is not part of any organization',
+					})
+				}
+
+				const response = await prisma.binding.create({
+					data: {
+						classId: data.classId,
+						subjectId: data.subjectId,
+						teachers: {
+							connect: {
+								id: data.teacherId,
+							},
+						},
+						ownerId: userSession.userId,
+						organizationId: userSession.user.organizationId,
+					},
+				})
+
+				await prisma.bindingTeacherLessons.create({
+					data: {
+						lessons: 1,
+						teacherId: data.teacherId,
+						bindingId: response.id,
+					},
+				})
+
+				return res.status(200).json({ message: response })
+			}
 		} catch (error) {
 			let message = 'Unknown Error'
 
