@@ -185,8 +185,6 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			mode,
 		})
 
-		console.log(get().mode)
-
 		get().fetchOrganization()
 		get().fetchTeachers()
 		get().fetchSubjects()
@@ -421,12 +419,14 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	addClass: async (name, grade, teacherId) => {
+		const mode = get().mode
 		const response = await axios.put(
 			'http://localhost:3000/api/classes',
 			{
 				name,
 				grade,
 				teacherId,
+				mode,
 			}
 		)
 
