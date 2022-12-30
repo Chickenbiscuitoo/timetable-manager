@@ -3,6 +3,9 @@ import axios from 'axios'
 import create from 'zustand'
 
 interface TimetableStore {
+	mode: string
+	setMode: (mode: string) => void
+
 	schoolYear: string
 
 	organization: {
@@ -176,6 +179,9 @@ interface TimetableStore {
 // TODO: Copy lessons func
 
 const useTimetableStore = create<TimetableStore>((set, get) => ({
+	mode: 'personal',
+	setMode: (mode: string) => set({ mode }),
+
 	schoolYear: '2020/2021',
 
 	organization: null,
