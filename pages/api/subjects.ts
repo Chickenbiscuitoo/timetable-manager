@@ -7,6 +7,17 @@ import { z } from 'zod'
 
 import cookie from 'cookie'
 
+const schemaGET = z.object({
+	mode: z.string().refine(
+		(value) => {
+			return value === 'personal' || value === 'organization'
+		},
+		{
+			message: 'Mode must be either "personal" or "organization"',
+		}
+	),
+})
+
 const schemaPUT = z.object({
 	name: z.string().min(3).max(255),
 	shortname: z.string().min(2).max(8),
@@ -57,6 +68,9 @@ export default async function handler(
 
 	const userSession = await prisma.session.findUnique({
 		where: { sessionToken: token },
+		include: {
+			user: true,
+		},
 	})
 
 	if (!userSession) {
@@ -69,17 +83,50 @@ export default async function handler(
 
 	if (method === 'GET') {
 		try {
-			const data: Subject[] = await prisma.subject.findMany({
-				where: {
-					ownerId: userSession.userId,
-				},
-			})
+			const reqData = schemaGET.parse(req.query)
 
-			const updatedSubjects: UpdatedSubject[] = data.map((subject) =>
-				excludeFromSubject(subject, ['organizationId', 'ownerId'])
-			)
+			if (reqData.mode === 'personal') {
+				const data: Subject[] = await prisma.subject.findMany({
+					where: {
+						ownerId: userSession.userId,
+						organizationId: null,
+					},
+				})
 
-			return res.status(200).json(updatedSubjects)
+				const updatedSubjects: UpdatedSubject[] = data.map(
+					(subject) =>
+						excludeFromSubject(subject, [
+							'organizationId',
+							'ownerId',
+						])
+				)
+
+				return res.status(200).json(updatedSubjects)
+			} else if (reqData.mode === 'organization') {
+				if (!userSession.user.organizationId) {
+					return res.status(403).json({
+						message:
+							'You must be a member of an organization to view its subjects.',
+					})
+				}
+
+				const data: Subject[] = await prisma.subject.findMany({
+					where: {
+						ownerId: userSession.userId,
+						organizationId: userSession.user.organizationId,
+					},
+				})
+
+				const updatedSubjects: UpdatedSubject[] = data.map(
+					(subject) =>
+						excludeFromSubject(subject, [
+							'organizationId',
+							'ownerId',
+						])
+				)
+
+				return res.status(200).json(updatedSubjects)
+			}
 		} catch (error) {
 			let message = 'Unknown Error'
 
