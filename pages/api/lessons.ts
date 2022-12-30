@@ -7,11 +7,30 @@ import { z } from 'zod'
 
 import cookie from 'cookie'
 
+const schemaGET = z.object({
+	mode: z.string().refine(
+		(value) => {
+			return value === 'personal' || value === 'organization'
+		},
+		{
+			message: 'Mode must be either "personal" or "organization"',
+		}
+	),
+})
+
 const schemaPUT = z.object({
 	classId: z.number().int().positive(),
 	subjectId: z.number().int().positive(),
 	day: z.number().int().positive(),
 	period: z.number().int().positive(),
+	mode: z.string().refine(
+		(value) => {
+			return value === 'personal' || value === 'organization'
+		},
+		{
+			message: 'Mode must be either "personal" or "organization"',
+		}
+	),
 })
 
 const schemaDELETE = z.object({
@@ -86,6 +105,9 @@ export default async function handler(
 
 	const userSession = await prisma.session.findUnique({
 		where: { sessionToken: token },
+		include: {
+			user: true,
+		},
 	})
 
 	if (!userSession) {
@@ -98,36 +120,86 @@ export default async function handler(
 
 	if (method === 'GET') {
 		try {
-			const data: PopulatedLesson[] = await prisma.lesson.findMany({
-				where: {
-					ownerId: userSession.userId,
-				},
-				include: {
-					subjects: true,
-					teachers: true,
-				},
-			})
+			const reqData = schemaGET.parse(req.query)
 
-			const updatedLessons: UpdatedLesson[] = data.map((lesson) => ({
-				...excludeFromLesson(lesson, [
-					'ownerId',
-					'organizationId',
-				]),
-				subjects: lesson.subjects.map((subject) =>
-					excludeFromSubject(subject, [
-						'ownerId',
-						'organizationId',
-					])
-				),
-				teachers: lesson.teachers.map((teacher) =>
-					excludeFromTeacher(teacher, [
-						'ownerId',
-						'organizationId',
-					])
-				),
-			}))
+			if (reqData.mode === 'personal') {
+				const data: PopulatedLesson[] =
+					await prisma.lesson.findMany({
+						where: {
+							ownerId: userSession.userId,
+							organizationId: null,
+						},
+						include: {
+							subjects: true,
+							teachers: true,
+						},
+					})
 
-			return res.status(200).json(updatedLessons)
+				const updatedLessons: UpdatedLesson[] = data.map(
+					(lesson) => ({
+						...excludeFromLesson(lesson, [
+							'ownerId',
+							'organizationId',
+						]),
+						subjects: lesson.subjects.map((subject) =>
+							excludeFromSubject(subject, [
+								'ownerId',
+								'organizationId',
+							])
+						),
+						teachers: lesson.teachers.map((teacher) =>
+							excludeFromTeacher(teacher, [
+								'ownerId',
+								'organizationId',
+							])
+						),
+					})
+				)
+
+				return res.status(200).json(updatedLessons)
+			} else if (reqData.mode === 'organization') {
+				if (!userSession.user.organizationId) {
+					return res.status(400).json({
+						message: 'You are not a part of an organization',
+					})
+				}
+
+				const data: PopulatedLesson[] =
+					await prisma.lesson.findMany({
+						where: {
+							ownerId: userSession.userId,
+							organizationId:
+								userSession.user.organizationId,
+						},
+						include: {
+							subjects: true,
+							teachers: true,
+						},
+					})
+
+				const updatedLessons: UpdatedLesson[] = data.map(
+					(lesson) => ({
+						...excludeFromLesson(lesson, [
+							'ownerId',
+							'organizationId',
+						]),
+						subjects: lesson.subjects.map((subject) =>
+							excludeFromSubject(subject, [
+								'ownerId',
+								'organizationId',
+							])
+						),
+						teachers: lesson.teachers.map((teacher) =>
+							excludeFromTeacher(teacher, [
+								'ownerId',
+								'organizationId',
+							])
+						),
+					})
+				)
+
+				return res.status(200).json(updatedLessons)
+			}
 		} catch (error) {
 			let message = 'Unknown Error'
 
@@ -139,21 +211,47 @@ export default async function handler(
 	} else if (method === 'PUT') {
 		try {
 			const data = schemaPUT.parse(req.body)
-			const response = await prisma.lesson.create({
-				data: {
-					ownerId: userSession.userId,
-					classId: data.classId,
-					subjects: {
-						connect: {
-							id: data.subjectId,
-						},
-					},
-					day: data.day,
-					period: data.period,
-				},
-			})
 
-			return res.status(200).json({ message: response })
+			if (data.mode === 'personal') {
+				const response = await prisma.lesson.create({
+					data: {
+						ownerId: userSession.userId,
+						classId: data.classId,
+						subjects: {
+							connect: {
+								id: data.subjectId,
+							},
+						},
+						day: data.day,
+						period: data.period,
+					},
+				})
+
+				return res.status(200).json({ message: response })
+			} else if (data.mode === 'organization') {
+				if (!userSession.user.organizationId) {
+					return res.status(400).json({
+						message: 'You are not a part of an organization',
+					})
+				}
+
+				const response = await prisma.lesson.create({
+					data: {
+						ownerId: userSession.userId,
+						organizationId: userSession.user.organizationId,
+						classId: data.classId,
+						subjects: {
+							connect: {
+								id: data.subjectId,
+							},
+						},
+						day: data.day,
+						period: data.period,
+					},
+				})
+
+				return res.status(200).json({ message: response })
+			}
 		} catch (error) {
 			let message = 'Unknown Error'
 
