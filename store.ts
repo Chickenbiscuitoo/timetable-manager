@@ -185,6 +185,10 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		)
 
 		if (response.data.message === 'No organization') {
+			set({
+				organization: null,
+			})
+
 			return
 		}
 
@@ -208,6 +212,8 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		const response = await axios.patch(
 			'http://localhost:3000/api/organizations'
 		)
+
+		console.log(response)
 
 		get().fetchOrganization()
 	},

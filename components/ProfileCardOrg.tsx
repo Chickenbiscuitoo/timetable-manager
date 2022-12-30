@@ -8,6 +8,7 @@ const ProfileCardOrg: NextPage = () => {
 		organization,
 		createOrganization,
 		inviteMemberToOrganization,
+		leaveOrganization,
 	} = useTimetableStore()
 
 	const [inviteEmail, setInviteEmail] = useState('')
@@ -22,6 +23,12 @@ const ProfileCardOrg: NextPage = () => {
 	const handleInvite = () => {
 		if (inviteEmail.length > 3 && organization) {
 			inviteMemberToOrganization(inviteEmail, organization.id)
+		}
+	}
+
+	const handleLeave = () => {
+		if (organization) {
+			leaveOrganization()
 		}
 	}
 
@@ -77,7 +84,10 @@ const ProfileCardOrg: NextPage = () => {
 					<h2 className="whitespace-nowrap">
 						{organization.members} members
 					</h2>
-					<button className="btn btn-xs btn-error btn-outline table m-auto mt-2">
+					<button
+						onClick={handleLeave}
+						className="btn btn-xs btn-error btn-outline table m-auto mt-2"
+					>
 						Leave
 					</button>
 				</div>
