@@ -180,7 +180,20 @@ interface TimetableStore {
 
 const useTimetableStore = create<TimetableStore>((set, get) => ({
 	mode: 'personal',
-	setMode: (mode: string) => set({ mode }),
+	setMode: (mode: string) => {
+		set({
+			mode,
+		})
+
+		console.log(get().mode)
+
+		get().fetchOrganization()
+		get().fetchTeachers()
+		get().fetchSubjects()
+		get().fetchClasses()
+		get().fetchBindings()
+		get().fetchLessons()
+	},
 
 	schoolYear: '2020/2021',
 
@@ -260,8 +273,14 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	classes: [],
 	fetchClasses: async () => {
+		const mode = get().mode
 		const response = await axios.get(
-			'http://localhost:3000/api/classes'
+			'http://localhost:3000/api/classes',
+			{
+				params: {
+					mode,
+				},
+			}
 		)
 
 		set({

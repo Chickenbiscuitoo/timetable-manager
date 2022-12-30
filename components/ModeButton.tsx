@@ -13,7 +13,7 @@ const ProfileCard: NextPage = () => {
 	const handleChange = () => {
 		setChecked(!checked)
 
-		if (checked) {
+		if (!checked) {
 			setMode('organization')
 		} else {
 			setMode('personal')

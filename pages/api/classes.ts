@@ -128,6 +128,13 @@ export default async function handler(
 
 				return res.status(200).json(updatedClasses)
 			} else if (reqData.mode === 'organization') {
+				if (!userSession.user.organizationId) {
+					return res.status(400).json({
+						message:
+							'You are not a member of any organization',
+					})
+				}
+
 				const data: PopulatedClass[] = await prisma.class.findMany(
 					{
 						where: {
