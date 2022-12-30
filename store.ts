@@ -249,8 +249,14 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	teachers: [],
 	fetchTeachers: async () => {
+		const mode = get().mode
 		const response = await axios.get(
-			'http://localhost:3000/api/teachers'
+			'http://localhost:3000/api/teachers',
+			{
+				params: {
+					mode,
+				},
+			}
 		)
 
 		set({
@@ -385,12 +391,14 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	addTeacher: async (name, shortname, email) => {
+		const mode = get().mode
 		const response = await axios.put(
 			'http://localhost:3000/api/teachers',
 			{
 				name,
 				shortname,
 				email,
+				mode,
 			}
 		)
 

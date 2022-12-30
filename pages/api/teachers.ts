@@ -7,10 +7,29 @@ import { z } from 'zod'
 
 import cookie from 'cookie'
 
+const schemaGET = z.object({
+	mode: z.string().refine(
+		(value) => {
+			return value === 'personal' || value === 'organization'
+		},
+		{
+			message: 'Mode must be either "personal" or "organization"',
+		}
+	),
+})
+
 const schemaPUT = z.object({
 	name: z.string().min(3).max(128),
 	shortname: z.string().min(2).max(8),
 	email: z.string().email(),
+	mode: z.string().refine(
+		(value) => {
+			return value === 'personal' || value === 'organization'
+		},
+		{
+			message: 'Mode must be either "personal" or "organization"',
+		}
+	),
 })
 
 const schemaDELETE = z.object({
@@ -57,6 +76,9 @@ export default async function handler(
 
 	const userSession = await prisma.session.findUnique({
 		where: { sessionToken: token },
+		include: {
+			user: true,
+		},
 	})
 
 	if (!userSession) {
@@ -69,17 +91,49 @@ export default async function handler(
 
 	if (method === 'GET') {
 		try {
-			const data: Teacher[] = await prisma.teacher.findMany({
-				where: {
-					ownerId: userSession.userId,
-				},
-			})
+			const reqData = schemaGET.parse(req.query)
 
-			const updatedTeachers: UpdatedTeacher[] = data.map((teacher) =>
-				excludeFromTeacher(teacher, ['ownerId', 'organizationId'])
-			)
+			if (reqData.mode === 'personal') {
+				const data: Teacher[] = await prisma.teacher.findMany({
+					where: {
+						ownerId: userSession.userId,
+						organizationId: null,
+					},
+				})
 
-			return res.status(200).json(updatedTeachers)
+				const updatedTeachers: UpdatedTeacher[] = data.map(
+					(teacher) =>
+						excludeFromTeacher(teacher, [
+							'ownerId',
+							'organizationId',
+						])
+				)
+
+				return res.status(200).json(updatedTeachers)
+			} else if (reqData.mode === 'organization') {
+				if (!userSession.user.organizationId) {
+					return res.status(403).json({
+						message: 'You must be a member of an organization',
+					})
+				}
+
+				const data: Teacher[] = await prisma.teacher.findMany({
+					where: {
+						ownerId: userSession.userId,
+						organizationId: userSession.user.organizationId,
+					},
+				})
+
+				const updatedTeachers: UpdatedTeacher[] = data.map(
+					(teacher) =>
+						excludeFromTeacher(teacher, [
+							'ownerId',
+							'organizationId',
+						])
+				)
+
+				return res.status(200).json(updatedTeachers)
+			}
 		} catch (error) {
 			let message = 'Unknown Error'
 
@@ -91,16 +145,37 @@ export default async function handler(
 	} else if (method === 'PUT') {
 		try {
 			const data = schemaPUT.parse(req.body)
-			const response = await prisma.teacher.create({
-				data: {
-					name: data.name,
-					shortname: data.shortname,
-					email: data.email,
-					ownerId: userSession.userId,
-				},
-			})
 
-			return res.status(200).json({ message: response })
+			if (data.mode === 'personal') {
+				const response = await prisma.teacher.create({
+					data: {
+						name: data.name,
+						shortname: data.shortname,
+						email: data.email,
+						ownerId: userSession.userId,
+					},
+				})
+
+				return res.status(200).json({ message: response })
+			} else if (data.mode === 'organization') {
+				if (!userSession.user.organizationId) {
+					return res.status(403).json({
+						message: 'You must be a member of an organization',
+					})
+				}
+
+				const response = await prisma.teacher.create({
+					data: {
+						name: data.name,
+						shortname: data.shortname,
+						email: data.email,
+						ownerId: userSession.userId,
+						organizationId: userSession.user.organizationId,
+					},
+				})
+
+				return res.status(200).json({ message: response })
+			}
 		} catch (error) {
 			let message = 'Unknown Error'
 
