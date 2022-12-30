@@ -77,7 +77,11 @@ const ProfileCardOrg: NextPage = () => {
 					<h2 className="whitespace-nowrap">
 						{organization.members} members
 					</h2>
+					<button className="btn btn-xs btn-error btn-outline table m-auto mt-2">
+						Leave
+					</button>
 				</div>
+
 				<div className="table m-auto text-center mt-5">
 					<input
 						type="text"
