@@ -9,7 +9,7 @@ interface TimetableStore {
 	schoolYear: string
 
 	organization: {
-		id: number
+		id: string
 		name: string
 		members: number
 	} | null
@@ -19,7 +19,7 @@ interface TimetableStore {
 	leaveOrganization: () => void
 	inviteMemberToOrganization: (
 		recipientEmail: string,
-		orgId: number
+		orgId: string
 	) => void
 
 	teachers:
