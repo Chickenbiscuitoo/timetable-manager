@@ -6,7 +6,7 @@ import useTimetableStore from '../store'
 import { FaRegBuilding, FaRegUser } from 'react-icons/fa'
 
 const ProfileCard: NextPage = () => {
-	const { mode, setMode } = useTimetableStore()
+	const { setMode } = useTimetableStore()
 
 	const [checked, setChecked] = useState(false)
 
