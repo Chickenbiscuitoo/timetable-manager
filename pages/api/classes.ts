@@ -22,6 +22,14 @@ const schemaPUT = z.object({
 	name: z.string().min(3).max(128),
 	grade: z.number().int().positive(),
 	teacherId: z.number().int().positive(),
+	mode: z.string().refine(
+		(value) => {
+			return value === 'personal' || value === 'organization'
+		},
+		{
+			message: 'Mode must be either "personal" or "organization"',
+		}
+	),
 })
 
 const schemaDELETE = z.object({
@@ -174,16 +182,37 @@ export default async function handler(
 	} else if (method === 'PUT') {
 		try {
 			const data = schemaPUT.parse(req.body)
-			const response = await prisma.class.create({
-				data: {
-					name: data.name,
-					grade: data.grade,
-					teacherId: data.teacherId,
-					ownerId: userSession.userId,
-				},
-			})
+			if (data.mode === 'personal') {
+				const response = await prisma.class.create({
+					data: {
+						name: data.name,
+						grade: data.grade,
+						teacherId: data.teacherId,
+						ownerId: userSession.userId,
+					},
+				})
 
-			return res.status(200).json({ message: response })
+				return res.status(200).json({ message: response })
+			} else if (data.mode === 'organization') {
+				if (!userSession.user.organizationId) {
+					return res.status(400).json({
+						message:
+							'You are not a member of any organization',
+					})
+				}
+
+				const response = await prisma.class.create({
+					data: {
+						name: data.name,
+						grade: data.grade,
+						teacherId: data.teacherId,
+						ownerId: userSession.userId,
+						organizationId: userSession.user.organizationId,
+					},
+				})
+
+				return res.status(200).json({ message: response })
+			}
 		} catch (error) {
 			let message = 'Unknown Error'
 
