@@ -16,11 +16,6 @@ const schemaDELETE = z.object({
 	id: z.number().int().positive(),
 })
 
-const schemaPATCH = z.object({
-	orgId: z.number().int().positive(),
-	userEmail: z.string().email(),
-})
-
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
@@ -138,26 +133,43 @@ export default async function handler(
 		}
 	} else if (method === 'PATCH') {
 		try {
-			const data = schemaPATCH.parse(req.body)
-
-			const user = await prisma.user.findUnique({
-				where: { email: data.userEmail },
+			const userData = await prisma.user.findUnique({
+				where: { id: userSession.userId },
 			})
 
-			if (!user) {
+			if (!userData) {
 				return res.status(200).json({ message: 'User not found' })
+			}
+
+			if (!userData.organizationId) {
+				return res.status(200).json({ message: 'No organization' })
 			}
 
 			const response = await prisma.organization.update({
 				where: {
-					id: data.orgId,
+					id: userData.organizationId,
 				},
 				data: {
 					members: {
-						connect: { id: user.id },
+						disconnect: { id: userSession.userId },
+					},
+				},
+				include: {
+					_count: {
+						select: {
+							members: true,
+						},
 					},
 				},
 			})
+
+			if (response._count.members == 0) {
+				await prisma.organization.delete({
+					where: {
+						id: response.id,
+					},
+				})
+			}
 
 			return res.status(200).json({ message: response })
 		} catch (error) {

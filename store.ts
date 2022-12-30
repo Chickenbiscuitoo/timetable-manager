@@ -28,7 +28,7 @@ interface TimetableStore {
 	fetchOrganization: () => void
 
 	createOrganization: (name: string) => void
-	deleteOrganization: (id: number) => void
+	leaveOrganization: () => void
 	inviteMemberToOrganization: (
 		recipientEmail: string,
 		orgId: number
@@ -219,14 +219,9 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		get().fetchOrganization()
 	},
 
-	deleteOrganization: async (id) => {
-		const response = await axios.delete(
-			'http://localhost:3000/api/organizations',
-			{
-				data: {
-					id,
-				},
-			}
+	leaveOrganization: async () => {
+		const response = await axios.patch(
+			'http://localhost:3000/api/organizations'
 		)
 
 		get().fetchOrganization()
