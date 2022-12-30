@@ -54,8 +54,10 @@ model Subject {
   organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId Int?
 
-  @@unique([ownerId, name])
-  @@unique([ownerId, shortname])
+  @@unique([ownerId, organizationId, name])
+  @@unique([ownerId, organizationId, shortname])
+  @@unique([organizationId, name])
+  @@unique([organizationId, shortname])
   @@index([ownerId])
   @@index([commiteeId])
   @@index([organizationId])
@@ -75,7 +77,8 @@ model Committee {
   organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId Int?
 
-  @@unique([ownerId, name])
+  @@unique([ownerId, organizationId, name])
+  @@unique([organizationId, name])
   @@index([ownerId])
   @@index([organizationId])
 }
@@ -96,7 +99,8 @@ model Class {
   organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId Int?
 
-  @@unique([ownerId, name])
+  @@unique([ownerId, organizationId, name])
+  @@unique([organizationId, name])
   @@index([ownerId])
   @@index([organizationId])
 }
@@ -117,7 +121,8 @@ model Lesson {
   organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId Int?
 
-  @@unique([ownerId, day, period, classId])
+  @@unique([ownerId, organizationId, day, period, classId])
+  @@unique([organizationId, day, period, classId])
   @@index([classId])
   @@index([ownerId])
   @@index([organizationId])
@@ -139,7 +144,8 @@ model Binding {
   organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId Int?
 
-  @@unique([ownerId, subjectId, classId])
+  @@unique([ownerId, organizationId, subjectId, classId])
+  @@unique([organizationId, subjectId, classId])
   @@index([ownerId])
   @@index([subjectId])
   @@index([classId])
