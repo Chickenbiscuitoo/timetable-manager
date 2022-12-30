@@ -527,14 +527,21 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	rawTableData: [],
 
 	fetchLessons: async () => {
+		const mode = get().mode
 		const response = await axios.get(
-			'http://localhost:3000/api/lessons'
+			'http://localhost:3000/api/lessons',
+			{
+				params: {
+					mode,
+				},
+			}
 		)
 
 		set(() => ({ rawTableData: response.data }))
 	},
 
 	addLesson: async (classId, subjectId, day, period) => {
+		const mode = get().mode
 		const response = await axios.put(
 			'http://localhost:3000/api/lessons',
 			{
@@ -542,6 +549,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				subjectId,
 				day,
 				period,
+				mode,
 			}
 		)
 
