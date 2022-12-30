@@ -1,14 +1,22 @@
 import { NextPage } from 'next'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useTimetableStore from '../store'
 
 import { FaRegBuilding, FaRegUser } from 'react-icons/fa'
 
 const ProfileCard: NextPage = () => {
-	const { setMode } = useTimetableStore()
+	const { mode, setMode } = useTimetableStore()
 
 	const [checked, setChecked] = useState(false)
+
+	useEffect(() => {
+		if (mode === 'organization') {
+			setChecked(true)
+		} else {
+			setChecked(false)
+		}
+	}, [mode])
 
 	const handleChange = () => {
 		setChecked(!checked)
@@ -24,9 +32,11 @@ const ProfileCard: NextPage = () => {
 		<label className="btn btn-circle swap swap-rotate">
 			<input type="checkbox" onChange={handleChange} />
 
-			<FaRegUser className="swap-off fill-current" />
-
-			<FaRegBuilding className="swap-on fill-current" />
+			{mode === 'personal' ? (
+				<FaRegUser className="fill-current" />
+			) : (
+				<FaRegBuilding className="fill-current" />
+			)}
 		</label>
 	)
 }

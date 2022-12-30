@@ -7,6 +7,7 @@ import CopyButton from '../components/CopyButton'
 import Sidebar from '../components/Sidebar'
 import TabsMenu from '../components/TabsMenu'
 import SideWorkspace from '../components/SideWorkspace'
+import ModeButton from '../components/ModeButton'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -25,7 +26,12 @@ const TimetableManager: NextPage = () => {
 					<div>
 						<div className="flex flex-row items-end mx-5">
 							<TabsMenu />
-							<CopyButton />
+							<div className="mr-3 ml-1">
+								<CopyButton />
+							</div>
+							<div className="mt-3">
+								<ModeButton />
+							</div>
 						</div>
 						<Timetable />
 					</div>
