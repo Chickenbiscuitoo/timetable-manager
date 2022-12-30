@@ -180,7 +180,6 @@ export default async function handler(
 
 				const data = await prisma.binding.findMany({
 					where: {
-						ownerId: userSession.userId,
 						organizationId: userSession.user.organizationId,
 					},
 					include: {

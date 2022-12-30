@@ -120,7 +120,6 @@ export default async function handler(
 
 				const data: Subject[] = await prisma.subject.findMany({
 					where: {
-						ownerId: userSession.userId,
 						organizationId: userSession.user.organizationId,
 					},
 				})

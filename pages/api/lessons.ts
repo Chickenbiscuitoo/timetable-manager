@@ -167,7 +167,6 @@ export default async function handler(
 				const data: PopulatedLesson[] =
 					await prisma.lesson.findMany({
 						where: {
-							ownerId: userSession.userId,
 							organizationId:
 								userSession.user.organizationId,
 						},
