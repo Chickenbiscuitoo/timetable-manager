@@ -11,7 +11,7 @@ import cookie from 'cookie'
 
 const schemaPOST = z.object({
 	recipientEmail: z.string().email(),
-	orgId: z.number().int().positive(),
+	orgId: z.string().cuid(),
 })
 
 export default async function handler(

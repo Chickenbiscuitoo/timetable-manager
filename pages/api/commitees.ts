@@ -7,9 +7,28 @@ import { z } from 'zod'
 
 import cookie from 'cookie'
 
+const schemaGET = z.object({
+	mode: z.string().refine(
+		(value) => {
+			return value === 'personal' || value === 'organization'
+		},
+		{
+			message: 'Mode must be either "personal" or "organization"',
+		}
+	),
+})
+
 const schemaPUT = z.object({
 	name: z.string().min(3).max(128),
 	chairmanId: z.number().int().positive(),
+	mode: z.string().refine(
+		(value) => {
+			return value === 'personal' || value === 'organization'
+		},
+		{
+			message: 'Mode must be either "personal" or "organization"',
+		}
+	),
 })
 
 const schemaDELETE = z.object({
@@ -36,6 +55,9 @@ export default async function handler(
 
 	const userSession = await prisma.session.findUnique({
 		where: { sessionToken: token },
+		include: {
+			user: true,
+		},
 	})
 
 	if (!userSession) {
@@ -48,13 +70,33 @@ export default async function handler(
 
 	if (method === 'GET') {
 		try {
-			const data = await prisma.committee.findMany({
-				where: {
-					ownerId: userSession.userId,
-				},
-			})
+			const reqData = schemaGET.parse(req.query)
 
-			return res.status(200).json(data)
+			if (reqData.mode === 'personal') {
+				const data = await prisma.committee.findMany({
+					where: {
+						ownerId: userSession.userId,
+						organizationId: userSession.userId,
+					},
+				})
+
+				return res.status(200).json(data)
+			} else if (reqData.mode === 'organization') {
+				if (!userSession.user.organizationId) {
+					return res.status(400).json({
+						message: 'User is not part of an organization',
+					})
+				}
+
+				const data = await prisma.committee.findMany({
+					where: {
+						ownerId: userSession.userId,
+						organizationId: userSession.user.organizationId,
+					},
+				})
+
+				return res.status(200).json(data)
+			}
 		} catch (error) {
 			let message = 'Unknown Error'
 
@@ -66,15 +108,36 @@ export default async function handler(
 	} else if (method === 'PUT') {
 		try {
 			const data = schemaPUT.parse(req.body)
-			const response = await prisma.committee.create({
-				data: {
-					name: data.name,
-					chairmanId: data.chairmanId,
-					ownerId: userSession.userId,
-				},
-			})
 
-			return res.status(200).json({ message: response })
+			if (data.mode === 'personal') {
+				const response = await prisma.committee.create({
+					data: {
+						name: data.name,
+						chairmanId: data.chairmanId,
+						ownerId: userSession.userId,
+						organizationId: userSession.userId,
+					},
+				})
+
+				return res.status(200).json({ message: response })
+			} else if (data.mode === 'organization') {
+				if (!userSession.user.organizationId) {
+					return res.status(400).json({
+						message: 'User is not part of an organization',
+					})
+				}
+
+				const response = await prisma.committee.create({
+					data: {
+						name: data.name,
+						chairmanId: data.chairmanId,
+						ownerId: userSession.userId,
+						organizationId: userSession.user.organizationId,
+					},
+				})
+
+				return res.status(200).json({ message: response })
+			}
 		} catch (error) {
 			let message = 'Unknown Error'
 
