@@ -10,6 +10,7 @@ import CopyButton from '../components/CopyButton'
 import Sidebar from '../components/Sidebar'
 import BindingsTabsMenu from '../components/BindingsTabsMenu'
 import BindingsSideWorkspace from '../components/BindingsSideWorkspace'
+import ModeButton from '../components/ModeButton'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -40,14 +41,16 @@ const Home: NextPage = () => {
 					<div className="w-full p-5">
 						<div className="flex flex-row items-end mx-5">
 							<BindingsTabsMenu />
-							<h1 className="font-semibold btn btn-sm">
+
+							<h1 className="font-semibold btn btn-sm mr-5">
 								{schoolYear}
 							</h1>
+
+							<ModeButton />
 						</div>
 						{subjects.length > 0 && classes.length > 0 ? (
 							<BindingsTable />
 						) : (
-							// Display number of subjects and classes and if they are 0, display a message to add them
 							<div className="flex flex-col items-center justify-center h-screen">
 								<h1 className="text-2xl font-semibold">
 									Subjects: {subjects.length}
