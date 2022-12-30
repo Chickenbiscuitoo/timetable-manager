@@ -1,21 +1,6 @@
-import {
-	Class,
-	Subject,
-	Teacher,
-	Committee,
-	Binding,
-} from '@prisma/client'
-
 import axios from 'axios'
 
-import {
-	getDayFromPosition,
-	getPeriodFromPosition,
-} from './utils/getPosition'
-
 import create from 'zustand'
-
-import { v4 as uuidv4 } from 'uuid'
 
 interface TimetableStore {
 	schoolYear: string
