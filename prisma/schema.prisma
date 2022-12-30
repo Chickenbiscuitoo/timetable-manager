@@ -26,7 +26,7 @@ model Teacher {
   owner   User?  @relation(fields: [ownerId], references: [id])
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
-  organizationId String?
+  organizationId String
 
   @@unique([ownerId, organizationId, email])
   @@unique([ownerId, organizationId, name])
@@ -52,7 +52,7 @@ model Subject {
   owner   User?  @relation(fields: [ownerId], references: [id])
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
-  organizationId String?
+  organizationId String
 
   @@unique([ownerId, organizationId, name])
   @@unique([ownerId, organizationId, shortname])
@@ -75,7 +75,7 @@ model Committee {
   chairman Teacher @relation(fields: [chairmanId], references: [id])
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
-  organizationId String?
+  organizationId String
 
   @@unique([ownerId, organizationId, name])
   @@unique([organizationId, name])
@@ -97,7 +97,7 @@ model Class {
   Binding Binding[]
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
-  organizationId String?
+  organizationId String
 
   @@unique([ownerId, organizationId, name])
   @@unique([organizationId, name])
@@ -119,7 +119,7 @@ model Lesson {
   owner   User?  @relation(fields: [ownerId], references: [id])
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
-  organizationId String?
+  organizationId String
 
   @@unique([ownerId, organizationId, day, period, classId])
   @@unique([organizationId, day, period, classId])
@@ -142,7 +142,7 @@ model Binding {
   owner   User?  @relation(fields: [ownerId], references: [id])
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
-  organizationId String?
+  organizationId String
 
   @@unique([ownerId, organizationId, subjectId, classId])
   @@unique([organizationId, subjectId, classId])
