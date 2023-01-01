@@ -1,5 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+
+import useTimetableStore from '../store'
+
 import { AiFillGithub } from 'react-icons/ai'
 
 import Timetable from '../components/Timetable'
@@ -9,11 +12,14 @@ import TabsMenu from '../components/TabsMenu'
 import SideWorkspace from '../components/SideWorkspace'
 import ModeButton from '../components/ModeButton'
 import SchoolYearButton from '../components/SchoolYearButton'
+import ErrorMessageCard from '../components/ErrorMessageCard'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
 
 const TimetableManager: NextPage = () => {
+	const { errorMessage } = useTimetableStore()
+
 	return (
 		<div>
 			<Head>
@@ -22,7 +28,7 @@ const TimetableManager: NextPage = () => {
 			</Head>
 
 			<DndProvider backend={HTML5Backend}>
-				<main className="min-h-screen flex flex-row">
+				<main className="min-h-screen flex flex-row relative">
 					<Sidebar />
 					<div>
 						<div className="flex flex-row items-end mx-5">
@@ -54,6 +60,9 @@ const TimetableManager: NextPage = () => {
 					</span>
 				</a>
 			</footer>
+			{errorMessage && (
+				<ErrorMessageCard errorMessage={errorMessage} />
+			)}
 		</div>
 	)
 }

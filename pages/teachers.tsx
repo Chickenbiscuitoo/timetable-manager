@@ -10,9 +10,10 @@ import TeachersTable from '../components/TeachersTable'
 import TeachersBarChart from '../components/TeachersBarChart'
 import TeacherForm from '../components/TeacherForm'
 import TeachersManager from '../components/TeachersManager'
+import ErrorMessageCard from '../components/ErrorMessageCard'
 
 const Teachers: NextPage = () => {
-	const { teachers } = useTimetableStore()
+	const { teachers, errorMessage } = useTimetableStore()
 
 	return (
 		<div>
@@ -21,7 +22,7 @@ const Teachers: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<main className="min-h-screen flex flex-row">
+			<main className="min-h-screen flex flex-row relative">
 				<Sidebar />
 				{teachers.length > 0 ? (
 					<div className="flex flex-col p-3">
@@ -64,6 +65,9 @@ const Teachers: NextPage = () => {
 					</span>
 				</a>
 			</footer>
+			{errorMessage && (
+				<ErrorMessageCard errorMessage={errorMessage} />
+			)}
 		</div>
 	)
 }

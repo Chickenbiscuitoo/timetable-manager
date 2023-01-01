@@ -10,9 +10,10 @@ import SubjectsTable from '../components/SubjectsTable'
 import SubjectsBarChart from '../components/SubjectsBarChart'
 import SubjectsForm from '../components/SubjectsForm'
 import SubjectsManager from '../components/SubjectsManager'
+import ErrorMessageCard from '../components/ErrorMessageCard'
 
 const Subjects: NextPage = () => {
-	const { subjects } = useTimetableStore()
+	const { subjects, errorMessage } = useTimetableStore()
 
 	return (
 		<div>
@@ -20,7 +21,7 @@ const Subjects: NextPage = () => {
 				<title>Timetable Manager</title>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<main className="min-h-screen flex flex-row">
+			<main className="min-h-screen flex flex-row relative">
 				<Sidebar />
 				{subjects.length > 0 ? (
 					<div className="flex flex-col p-3">
@@ -63,6 +64,9 @@ const Subjects: NextPage = () => {
 					</span>
 				</a>
 			</footer>
+			{errorMessage && (
+				<ErrorMessageCard errorMessage={errorMessage} />
+			)}
 		</div>
 	)
 }

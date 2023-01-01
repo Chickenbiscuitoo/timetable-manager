@@ -12,12 +12,13 @@ import BindingsTabsMenu from '../components/BindingsTabsMenu'
 import BindingsSideWorkspace from '../components/BindingsSideWorkspace'
 import ModeButton from '../components/ModeButton'
 import SchoolYearButton from '../components/SchoolYearButton'
+import ErrorMessageCard from '../components/ErrorMessageCard'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
 
 const Home: NextPage = () => {
-	const { schoolYear, subjects, classes } = useTimetableStore()
+	const { errorMessage, subjects, classes } = useTimetableStore()
 
 	const warning = () => {
 		if (subjects.length === 0 && classes.length === 0) {
@@ -37,7 +38,7 @@ const Home: NextPage = () => {
 			</Head>
 
 			<DndProvider backend={HTML5Backend}>
-				<main className="min-h-screen flex flex-row">
+				<main className="min-h-screen flex flex-row relative">
 					<Sidebar />
 					<div className="w-full p-5">
 						<div className="flex flex-row items-end mx-5">
@@ -80,6 +81,9 @@ const Home: NextPage = () => {
 					</span>
 				</a>
 			</footer>
+			{errorMessage && (
+				<ErrorMessageCard errorMessage={errorMessage} />
+			)}
 		</div>
 	)
 }
