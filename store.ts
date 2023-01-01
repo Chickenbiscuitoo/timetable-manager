@@ -177,6 +177,7 @@ interface TimetableStore {
 	setSelectedGrade: (grade: number) => void
 
 	errorMessage: string
+	resetErrorMessage: () => void
 }
 
 // TODO: Copy bindings func
@@ -761,6 +762,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	setSelectedGrade: (grade) => set(() => ({ selectedGrade: grade })),
 
 	errorMessage: '',
+	resetErrorMessage: () => set(() => ({ errorMessage: '' })),
 }))
 
 useTimetableStore.getState().fetchOrganization()

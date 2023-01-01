@@ -1,5 +1,6 @@
 import { NextPage } from 'next'
 
+import useTimetableStore from '../store'
 import { useEffect, useState } from 'react'
 
 interface ErrorMessageProps {
@@ -9,11 +10,14 @@ interface ErrorMessageProps {
 const ErrorMessageCard: NextPage<ErrorMessageProps> = ({
 	errorMessage,
 }) => {
+	const { resetErrorMessage } = useTimetableStore()
+
 	const [show, setShow] = useState(true)
 
 	useEffect(() => {
 		const timeId = setTimeout(() => {
 			setShow(false)
+			resetErrorMessage()
 		}, 3000)
 
 		return () => {
