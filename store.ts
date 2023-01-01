@@ -186,6 +186,15 @@ interface TimetableStore {
 const useTimetableStore = create<TimetableStore>((set, get) => ({
 	mode: 'personal',
 	setMode: (mode: string) => {
+		const organization = get().organization
+
+		if (mode === 'organization' && !organization) {
+			set({
+				errorMessage: 'You are not a member of any organization.',
+			})
+			return
+		}
+
 		set({
 			mode,
 		})
