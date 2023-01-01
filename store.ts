@@ -263,6 +263,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 					name,
 				}
 			)
+			get().fetchOrganization()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
 				if (
@@ -283,8 +284,6 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				console.log(err)
 			}
 		}
-
-		get().fetchOrganization()
 	},
 
 	leaveOrganization: async () => {
@@ -304,6 +303,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 					orgId,
 				}
 			)
+			get().fetchOrganization()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
 				console.log(err.response?.data.message)
@@ -314,8 +314,6 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				console.log(err)
 			}
 		}
-
-		get().fetchOrganization()
 	},
 
 	teachers: [],
@@ -559,6 +557,8 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			)
 
 			get().fetchTeachers()
+			get().fetchBindings()
+			get().fetchLessons()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
 				if (
@@ -666,6 +666,8 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			)
 
 			get().fetchClasses()
+			get().fetchBindings()
+			get().fetchLessons()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
 				if (
@@ -737,6 +739,8 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			)
 
 			get().fetchSubjects()
+			get().fetchBindings()
+			get().fetchLessons()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
 				if (
