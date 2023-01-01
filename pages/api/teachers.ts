@@ -64,7 +64,8 @@ export default async function handler(
 
 	if (!session) {
 		return res.status(403).send({
-			error: 'You must be signed in to view the protected content on this page.',
+			message:
+				'You must be signed in to view the protected content on this page.',
 		})
 	}
 
@@ -83,7 +84,8 @@ export default async function handler(
 
 	if (!userSession) {
 		return res.status(403).send({
-			error: 'You must be signed in to view the protected content on this page.',
+			message:
+				'You must be signed in to view the protected content on this page.',
 		})
 	}
 
@@ -113,7 +115,7 @@ export default async function handler(
 			} else if (reqData.mode === 'organization') {
 				if (!userSession.user.organizationId) {
 					return res.status(403).json({
-						message: 'You must be a member of an organization',
+						message: 'You are not a member of an organization',
 					})
 				}
 
@@ -160,7 +162,7 @@ export default async function handler(
 			} else if (data.mode === 'organization') {
 				if (!userSession.user.organizationId) {
 					return res.status(403).json({
-						message: 'You must be a member of an organization',
+						message: 'You are not a member of an organization',
 					})
 				}
 

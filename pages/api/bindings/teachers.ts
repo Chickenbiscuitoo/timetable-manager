@@ -16,7 +16,8 @@ export default async function handler(
 
 	if (!session) {
 		res.send({
-			error: 'You must be signed in to view the protected content on this page.',
+			message:
+				'You must be signed in to view the protected content on this page.',
 		})
 	}
 

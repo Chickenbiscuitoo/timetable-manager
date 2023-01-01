@@ -22,7 +22,8 @@ export default async function handler(
 
 	if (!session) {
 		return res.status(403).send({
-			error: 'You must be signed in to view the protected content on this page.',
+			message:
+				'You must be signed in to view the protected content on this page.',
 		})
 	}
 
@@ -32,7 +33,7 @@ export default async function handler(
 		})
 	} else if (!session.user.email) {
 		return res.status(403).json({
-			message: 'You must have an email to invite',
+			message: 'You must have an email address to invite',
 		})
 	}
 
@@ -48,7 +49,8 @@ export default async function handler(
 
 	if (!userSession) {
 		return res.status(403).send({
-			error: 'You must be signed in to view the protected content on this page.',
+			message:
+				'You must be signed in to view the protected content on this page.',
 		})
 	}
 
