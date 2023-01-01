@@ -209,12 +209,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			schoolYear,
 		})
 
-		// get().fetchOrganization()
-		// get().fetchTeachers()
-		// get().fetchSubjects()
-		// get().fetchClasses()
-		// get().fetchBindings()
-		// get().fetchLessons()
+		get().fetchOrganization()
+		get().fetchTeachers()
+		get().fetchSubjects()
+		get().fetchClasses()
+		get().fetchBindings()
+		get().fetchLessons()
 	},
 
 	organization: null,
@@ -323,11 +323,13 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	bindings: [],
 	fetchBindings: async () => {
 		const mode = get().mode
+		const schoolYear = get().schoolYear
 		const response = await axios.get(
 			'http://localhost:3000/api/bindings',
 			{
 				params: {
 					mode,
+					schoolYear,
 				},
 			}
 		)
@@ -339,6 +341,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	addBinding: async (teacherId, subjectId, classId) => {
 		const mode = get().mode
+		const schoolYear = get().schoolYear
 		const response = await axios.put(
 			'http://localhost:3000/api/bindings',
 			{
@@ -346,6 +349,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				subjectId,
 				classId,
 				mode,
+				schoolYear,
 			}
 		)
 
