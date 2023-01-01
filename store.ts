@@ -554,11 +554,13 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	fetchLessons: async () => {
 		const mode = get().mode
+		const schoolYear = get().schoolYear
 		const response = await axios.get(
 			'http://localhost:3000/api/lessons',
 			{
 				params: {
 					mode,
+					schoolYear,
 				},
 			}
 		)
@@ -568,6 +570,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	addLesson: async (classId, subjectId, day, period) => {
 		const mode = get().mode
+		const schoolYear = get().schoolYear
 		const response = await axios.put(
 			'http://localhost:3000/api/lessons',
 			{
@@ -576,6 +579,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				day,
 				period,
 				mode,
+				schoolYear,
 			}
 		)
 

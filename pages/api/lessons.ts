@@ -16,6 +16,7 @@ const schemaGET = z.object({
 			message: 'Mode must be either "personal" or "organization"',
 		}
 	),
+	schoolYear: z.string().min(9).max(16),
 })
 
 const schemaPUT = z.object({
@@ -31,6 +32,7 @@ const schemaPUT = z.object({
 			message: 'Mode must be either "personal" or "organization"',
 		}
 	),
+	schoolYear: z.string().min(9).max(16),
 })
 
 const schemaDELETE = z.object({
@@ -128,6 +130,7 @@ export default async function handler(
 						where: {
 							ownerId: userSession.userId,
 							organizationId: userSession.userId,
+							schoolYear: reqData.schoolYear,
 						},
 						include: {
 							subjects: true,
@@ -169,6 +172,7 @@ export default async function handler(
 						where: {
 							organizationId:
 								userSession.user.organizationId,
+							schoolYear: reqData.schoolYear,
 						},
 						include: {
 							subjects: true,
@@ -224,6 +228,7 @@ export default async function handler(
 						},
 						day: data.day,
 						period: data.period,
+						schoolYear: data.schoolYear,
 					},
 				})
 
@@ -247,6 +252,7 @@ export default async function handler(
 						},
 						day: data.day,
 						period: data.period,
+						schoolYear: data.schoolYear,
 					},
 				})
 
