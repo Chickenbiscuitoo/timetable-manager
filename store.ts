@@ -209,10 +209,6 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			schoolYear,
 		})
 
-		get().fetchOrganization()
-		get().fetchTeachers()
-		get().fetchSubjects()
-		get().fetchClasses()
 		get().fetchBindings()
 		get().fetchLessons()
 	},
