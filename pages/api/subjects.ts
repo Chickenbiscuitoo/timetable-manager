@@ -114,7 +114,7 @@ export default async function handler(
 				if (!userSession.user.organizationId) {
 					return res.status(403).json({
 						message:
-							'You must be a member of an organization to view its subjects.',
+							'You are not a member of any organization',
 					})
 				}
 
@@ -162,7 +162,7 @@ export default async function handler(
 				if (!userSession.user.organizationId) {
 					return res.status(403).json({
 						message:
-							'You are not a member of an organization.',
+							'You are not a member of any organization',
 					})
 				}
 

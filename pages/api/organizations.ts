@@ -131,7 +131,12 @@ export default async function handler(
 	} else if (method === 'PATCH') {
 		try {
 			if (!userSession.user.organizationId) {
-				return res.status(200).json({ message: 'No organization' })
+				return res
+					.status(200)
+					.json({
+						message:
+							'You are not a member of any organization',
+					})
 			}
 
 			const response = await prisma.organization.update({

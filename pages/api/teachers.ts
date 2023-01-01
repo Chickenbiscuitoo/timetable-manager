@@ -162,7 +162,8 @@ export default async function handler(
 			} else if (data.mode === 'organization') {
 				if (!userSession.user.organizationId) {
 					return res.status(403).json({
-						message: 'You are not a member of an organization',
+						message:
+							'You are not a member of any organization',
 					})
 				}
 

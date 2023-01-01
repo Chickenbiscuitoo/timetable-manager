@@ -84,7 +84,8 @@ export default async function handler(
 			} else if (reqData.mode === 'organization') {
 				if (!userSession.user.organizationId) {
 					return res.status(400).json({
-						message: 'You are not a member of an organization',
+						message:
+							'You are not a member of any organization',
 					})
 				}
 
@@ -123,7 +124,8 @@ export default async function handler(
 			} else if (data.mode === 'organization') {
 				if (!userSession.user.organizationId) {
 					return res.status(400).json({
-						message: 'You are not a member of an organization',
+						message:
+							'You are not a member of any organization',
 					})
 				}
 
