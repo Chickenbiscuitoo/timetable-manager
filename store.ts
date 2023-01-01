@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
 import create from 'zustand'
 
@@ -175,6 +175,11 @@ interface TimetableStore {
 
 	selectedGrade: number
 	setSelectedGrade: (grade: number) => void
+
+	organizationErrorMessage: string
+	teachersErrorMessage: string
+	subjectsErrorMessage: string
+	classesErrorMessage: string
 }
 
 // TODO: Copy bindings func
@@ -233,12 +238,23 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	createOrganization: async (name) => {
-		const response = await axios.post(
-			'http://localhost:3000/api/organizations',
-			{
-				name,
+		try {
+			const response = await axios.post(
+				'http://localhost:3000/api/organizations',
+				{
+					name,
+				}
+			)
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					organizationErrorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
 			}
-		)
+		}
 
 		get().fetchOrganization()
 	},
@@ -248,19 +264,28 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			'http://localhost:3000/api/organizations'
 		)
 
-		console.log(response)
-
 		get().fetchOrganization()
 	},
 
 	inviteMemberToOrganization: async (recipientEmail, orgId) => {
-		const response = await axios.post(
-			'http://localhost:3000/api/invites/new',
-			{
-				recipientEmail,
-				orgId,
+		try {
+			const response = await axios.post(
+				'http://localhost:3000/api/invites/new',
+				{
+					recipientEmail,
+					orgId,
+				}
+			)
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					organizationErrorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
 			}
-		)
+		}
 
 		get().fetchOrganization()
 	},
@@ -421,129 +446,228 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	addTeacher: async (name, shortname, email) => {
-		const mode = get().mode
-		const response = await axios.put(
-			'http://localhost:3000/api/teachers',
-			{
-				name,
-				shortname,
-				email,
-				mode,
-			}
-		)
+		try {
+			const mode = get().mode
+			const response = await axios.put(
+				'http://localhost:3000/api/teachers',
+				{
+					name,
+					shortname,
+					email,
+					mode,
+				}
+			)
 
-		get().fetchTeachers()
+			get().fetchTeachers()
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					teachersErrorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
+		}
 	},
 
 	removeTeacher: async (id) => {
-		const response = await axios.delete(
-			'http://localhost:3000/api/teachers',
-			{
-				data: {
-					id,
-				},
-			}
-		)
+		try {
+			const response = await axios.delete(
+				'http://localhost:3000/api/teachers',
+				{
+					data: {
+						id,
+					},
+				}
+			)
 
-		get().fetchTeachers()
+			get().fetchTeachers()
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					teachersErrorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
+		}
 	},
 
 	updateTeacher: async (id, name, shortname, email) => {
-		const response = await axios.patch(
-			'http://localhost:3000/api/teachers',
-			{
-				id,
-				name,
-				shortname,
-				email,
-			}
-		)
+		try {
+			const response = await axios.patch(
+				'http://localhost:3000/api/teachers',
+				{
+					id,
+					name,
+					shortname,
+					email,
+				}
+			)
 
-		get().fetchTeachers()
+			get().fetchTeachers()
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					teachersErrorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
+		}
 	},
 
 	addClass: async (name, grade, teacherId) => {
-		const mode = get().mode
-		const response = await axios.put(
-			'http://localhost:3000/api/classes',
-			{
-				name,
-				grade,
-				teacherId,
-				mode,
-			}
-		)
+		try {
+			const mode = get().mode
+			const response = await axios.put(
+				'http://localhost:3000/api/classes',
+				{
+					name,
+					grade,
+					teacherId,
+					mode,
+				}
+			)
 
-		get().fetchClasses()
+			get().fetchClasses()
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					classesErrorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
+		}
 	},
 
 	removeClass: async (id) => {
-		const response = await axios.delete(
-			'http://localhost:3000/api/classes',
-			{
-				data: {
-					id,
-				},
-			}
-		)
+		try {
+			const response = await axios.delete(
+				'http://localhost:3000/api/classes',
+				{
+					data: {
+						id,
+					},
+				}
+			)
 
-		get().fetchClasses()
+			get().fetchClasses()
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					classesErrorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
+		}
 	},
 
 	updateClass: async (id, name, grade, teacherId) => {
-		const response = await axios.patch(
-			'http://localhost:3000/api/classes',
-			{
-				id,
-				name,
-				grade,
-				teacherId,
-			}
-		)
+		try {
+			const response = await axios.patch(
+				'http://localhost:3000/api/classes',
+				{
+					id,
+					name,
+					grade,
+					teacherId,
+				}
+			)
 
-		get().fetchClasses()
+			get().fetchClasses()
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					classesErrorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
+		}
 	},
 
 	addSubject: async (name, shortname, commiteeId) => {
-		const mode = get().mode
-		const response = await axios.put(
-			'http://localhost:3000/api/subjects',
-			{
-				name,
-				shortname,
-				commiteeId,
-				mode,
-			}
-		)
+		try {
+			const mode = get().mode
+			const response = await axios.put(
+				'http://localhost:3000/api/subjects',
+				{
+					name,
+					shortname,
+					commiteeId,
+					mode,
+				}
+			)
 
-		get().fetchSubjects()
+			get().fetchSubjects()
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					subjectsErrorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
+		}
 	},
 
 	updateSubject: async (id, name, shortname, commiteeId) => {
-		const response = await axios.patch(
-			'http://localhost:3000/api/subjects',
-			{
-				id,
-				name,
-				shortname,
-				commiteeId,
-			}
-		)
+		try {
+			const response = await axios.patch(
+				'http://localhost:3000/api/subjects',
+				{
+					id,
+					name,
+					shortname,
+					commiteeId,
+				}
+			)
 
-		get().fetchSubjects()
+			get().fetchSubjects()
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					subjectsErrorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
+		}
 	},
 
 	removeSubject: async (id) => {
-		const response = await axios.delete(
-			'http://localhost:3000/api/subjects',
-			{
-				data: {
-					id,
-				},
-			}
-		)
+		try {
+			const response = await axios.delete(
+				'http://localhost:3000/api/subjects',
+				{
+					data: {
+						id,
+					},
+				}
+			)
 
-		get().fetchSubjects()
+			get().fetchSubjects()
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					subjectsErrorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
+		}
 	},
 
 	rawTableData: [],
@@ -638,6 +762,11 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	selectedGrade: 1,
 	setSelectedGrade: (grade) => set(() => ({ selectedGrade: grade })),
+
+	organizationErrorMessage: '',
+	teachersErrorMessage: '',
+	subjectsErrorMessage: '',
+	classesErrorMessage: '',
 }))
 
 useTimetableStore.getState().fetchOrganization()

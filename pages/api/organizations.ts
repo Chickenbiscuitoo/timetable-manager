@@ -24,7 +24,8 @@ export default async function handler(
 
 	if (!session) {
 		return res.status(403).send({
-			error: 'You must be signed in to view the protected content on this page.',
+			message:
+				'You must be signed in to view the protected content on this page.',
 		})
 	}
 
@@ -36,11 +37,15 @@ export default async function handler(
 
 	const userSession = await prisma.session.findUnique({
 		where: { sessionToken: token },
+		include: {
+			user: true,
+		},
 	})
 
 	if (!userSession) {
 		return res.status(403).send({
-			error: 'You must be signed in to view the protected content on this page.',
+			message:
+				'You must be signed in to view the protected content on this page.',
 		})
 	}
 
@@ -48,20 +53,12 @@ export default async function handler(
 
 	if (method === 'GET') {
 		try {
-			const userData = await prisma.user.findUnique({
-				where: { id: userSession.userId },
-			})
-
-			if (!userData) {
-				return res.status(200).json({ message: 'User not found' })
-			}
-
-			if (!userData.organizationId) {
+			if (!userSession.user.organizationId) {
 				return res.status(200).json({ message: 'No organization' })
 			}
 
 			const data = await prisma.organization.findUnique({
-				where: { id: userData.organizationId },
+				where: { id: userSession.user.organizationId },
 				include: {
 					_count: {
 						select: {
@@ -133,21 +130,13 @@ export default async function handler(
 		}
 	} else if (method === 'PATCH') {
 		try {
-			const userData = await prisma.user.findUnique({
-				where: { id: userSession.userId },
-			})
-
-			if (!userData) {
-				return res.status(200).json({ message: 'User not found' })
-			}
-
-			if (!userData.organizationId) {
+			if (!userSession.user.organizationId) {
 				return res.status(200).json({ message: 'No organization' })
 			}
 
 			const response = await prisma.organization.update({
 				where: {
-					id: userData.organizationId,
+					id: userSession.user.organizationId,
 				},
 				data: {
 					members: {
