@@ -176,10 +176,7 @@ interface TimetableStore {
 	selectedGrade: number
 	setSelectedGrade: (grade: number) => void
 
-	organizationErrorMessage: string
-	teachersErrorMessage: string
-	subjectsErrorMessage: string
-	classesErrorMessage: string
+	errorMessage: string
 }
 
 // TODO: Copy bindings func
@@ -249,7 +246,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			if (axios.isAxiosError(err)) {
 				console.log(err.response?.data.message)
 				set({
-					organizationErrorMessage: err.response?.data.message,
+					errorMessage: err.response?.data.message,
 				})
 			} else {
 				console.log(err)
@@ -280,7 +277,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			if (axios.isAxiosError(err)) {
 				console.log(err.response?.data.message)
 				set({
-					organizationErrorMessage: err.response?.data.message,
+					errorMessage: err.response?.data.message,
 				})
 			} else {
 				console.log(err)
@@ -463,7 +460,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			if (axios.isAxiosError(err)) {
 				console.log(err.response?.data.message)
 				set({
-					teachersErrorMessage: err.response?.data.message,
+					errorMessage: err.response?.data.message,
 				})
 			} else {
 				console.log(err)
@@ -487,7 +484,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			if (axios.isAxiosError(err)) {
 				console.log(err.response?.data.message)
 				set({
-					teachersErrorMessage: err.response?.data.message,
+					errorMessage: err.response?.data.message,
 				})
 			} else {
 				console.log(err)
@@ -512,7 +509,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			if (axios.isAxiosError(err)) {
 				console.log(err.response?.data.message)
 				set({
-					teachersErrorMessage: err.response?.data.message,
+					errorMessage: err.response?.data.message,
 				})
 			} else {
 				console.log(err)
@@ -538,7 +535,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			if (axios.isAxiosError(err)) {
 				console.log(err.response?.data.message)
 				set({
-					classesErrorMessage: err.response?.data.message,
+					errorMessage: err.response?.data.message,
 				})
 			} else {
 				console.log(err)
@@ -562,7 +559,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			if (axios.isAxiosError(err)) {
 				console.log(err.response?.data.message)
 				set({
-					classesErrorMessage: err.response?.data.message,
+					errorMessage: err.response?.data.message,
 				})
 			} else {
 				console.log(err)
@@ -587,7 +584,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			if (axios.isAxiosError(err)) {
 				console.log(err.response?.data.message)
 				set({
-					classesErrorMessage: err.response?.data.message,
+					errorMessage: err.response?.data.message,
 				})
 			} else {
 				console.log(err)
@@ -613,7 +610,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			if (axios.isAxiosError(err)) {
 				console.log(err.response?.data.message)
 				set({
-					subjectsErrorMessage: err.response?.data.message,
+					errorMessage: err.response?.data.message,
 				})
 			} else {
 				console.log(err)
@@ -638,7 +635,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			if (axios.isAxiosError(err)) {
 				console.log(err.response?.data.message)
 				set({
-					subjectsErrorMessage: err.response?.data.message,
+					errorMessage: err.response?.data.message,
 				})
 			} else {
 				console.log(err)
@@ -662,7 +659,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			if (axios.isAxiosError(err)) {
 				console.log(err.response?.data.message)
 				set({
-					subjectsErrorMessage: err.response?.data.message,
+					errorMessage: err.response?.data.message,
 				})
 			} else {
 				console.log(err)
@@ -763,10 +760,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	selectedGrade: 1,
 	setSelectedGrade: (grade) => set(() => ({ selectedGrade: grade })),
 
-	organizationErrorMessage: '',
-	teachersErrorMessage: '',
-	subjectsErrorMessage: '',
-	classesErrorMessage: '',
+	errorMessage: '',
 }))
 
 useTimetableStore.getState().fetchOrganization()
