@@ -11,6 +11,7 @@ import Sidebar from '../components/Sidebar'
 import BindingsTabsMenu from '../components/BindingsTabsMenu'
 import BindingsSideWorkspace from '../components/BindingsSideWorkspace'
 import ModeButton from '../components/ModeButton'
+import SchoolYearButton from '../components/SchoolYearButton'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -42,9 +43,7 @@ const Home: NextPage = () => {
 						<div className="flex flex-row items-end mx-5">
 							<BindingsTabsMenu />
 
-							<h1 className="font-semibold btn btn-sm mr-5">
-								{schoolYear}
-							</h1>
+							<SchoolYearButton />
 
 							<ModeButton />
 						</div>
