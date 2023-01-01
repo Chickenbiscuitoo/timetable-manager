@@ -7,6 +7,8 @@ interface TimetableStore {
 	setMode: (mode: string) => void
 
 	schoolYear: string
+	schoolYearOptions: string[]
+	setSchoolYear: (schoolYear: string) => void
 
 	organization: {
 		id: string
@@ -194,6 +196,26 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	schoolYear: '2020/2021',
+	schoolYearOptions: [
+		'2020/2021',
+		'2021/2022',
+		'2022/2023',
+		'2023/2024',
+		'2024/2025',
+		'2025/2026',
+	],
+	setSchoolYear: (schoolYear: string) => {
+		set({
+			schoolYear,
+		})
+
+		// get().fetchOrganization()
+		// get().fetchTeachers()
+		// get().fetchSubjects()
+		// get().fetchClasses()
+		// get().fetchBindings()
+		// get().fetchLessons()
+	},
 
 	organization: null,
 	fetchOrganization: async () => {
