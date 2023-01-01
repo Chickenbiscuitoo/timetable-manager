@@ -218,21 +218,32 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	organization: null,
 	fetchOrganization: async () => {
-		const response = await axios.get(
-			'http://localhost:3000/api/organizations'
-		)
+		try {
+			const response = await axios.get(
+				'http://localhost:3000/api/organizations'
+			)
 
-		if (response.data.message === 'No organization') {
+			if (response.data.message === 'No organization') {
+				set({
+					organization: null,
+				})
+
+				return
+			}
+
 			set({
-				organization: null,
+				organization: response.data,
 			})
-
-			return
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					errorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
 		}
-
-		set({
-			organization: response.data,
-		})
 	},
 
 	createOrganization: async (name) => {
@@ -290,72 +301,116 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	teachers: [],
 	fetchTeachers: async () => {
-		const mode = get().mode
-		const response = await axios.get(
-			'http://localhost:3000/api/teachers',
-			{
-				params: {
-					mode,
-				},
-			}
-		)
+		try {
+			const mode = get().mode
+			const response = await axios.get(
+				'http://localhost:3000/api/teachers',
+				{
+					params: {
+						mode,
+					},
+				}
+			)
 
-		set({
-			teachers: response.data,
-		})
+			set({
+				teachers: response.data,
+			})
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					errorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
+		}
 	},
 
 	subjects: [],
 	fetchSubjects: async () => {
-		const mode = get().mode
-		const response = await axios.get(
-			'http://localhost:3000/api/subjects',
-			{
-				params: {
-					mode,
-				},
-			}
-		)
+		try {
+			const mode = get().mode
+			const response = await axios.get(
+				'http://localhost:3000/api/subjects',
+				{
+					params: {
+						mode,
+					},
+				}
+			)
 
-		set({
-			subjects: response.data,
-		})
+			set({
+				subjects: response.data,
+			})
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					errorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
+		}
 	},
 
 	classes: [],
 	fetchClasses: async () => {
-		const mode = get().mode
-		const response = await axios.get(
-			'http://localhost:3000/api/classes',
-			{
-				params: {
-					mode,
-				},
-			}
-		)
+		try {
+			const mode = get().mode
+			const response = await axios.get(
+				'http://localhost:3000/api/classes',
+				{
+					params: {
+						mode,
+					},
+				}
+			)
 
-		set({
-			classes: response.data,
-		})
+			set({
+				classes: response.data,
+			})
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					errorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
+		}
 	},
 
 	bindings: [],
 	fetchBindings: async () => {
-		const mode = get().mode
-		const schoolYear = get().schoolYear
-		const response = await axios.get(
-			'http://localhost:3000/api/bindings',
-			{
-				params: {
-					mode,
-					schoolYear,
-				},
-			}
-		)
+		try {
+			const mode = get().mode
+			const schoolYear = get().schoolYear
+			const response = await axios.get(
+				'http://localhost:3000/api/bindings',
+				{
+					params: {
+						mode,
+						schoolYear,
+					},
+				}
+			)
 
-		set({
-			bindings: response.data,
-		})
+			set({
+				bindings: response.data,
+			})
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					errorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
+		}
 	},
 
 	addBinding: async (teacherId, subjectId, classId) => {
@@ -682,19 +737,30 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	rawTableData: [],
 
 	fetchLessons: async () => {
-		const mode = get().mode
-		const schoolYear = get().schoolYear
-		const response = await axios.get(
-			'http://localhost:3000/api/lessons',
-			{
-				params: {
-					mode,
-					schoolYear,
-				},
-			}
-		)
+		try {
+			const mode = get().mode
+			const schoolYear = get().schoolYear
+			const response = await axios.get(
+				'http://localhost:3000/api/lessons',
+				{
+					params: {
+						mode,
+						schoolYear,
+					},
+				}
+			)
 
-		set(() => ({ rawTableData: response.data }))
+			set(() => ({ rawTableData: response.data }))
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					errorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
+		}
 	},
 
 	addLesson: async (classId, subjectId, day, period) => {
