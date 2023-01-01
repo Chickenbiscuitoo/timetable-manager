@@ -16,6 +16,7 @@ const schemaGET = z.object({
 			message: 'Mode must be either "personal" or "organization"',
 		}
 	),
+	schoolYear: z.string().min(9).max(16),
 })
 
 const schemaPUT = z.object({
@@ -30,6 +31,7 @@ const schemaPUT = z.object({
 			message: 'Mode must be either "personal" or "organization"',
 		}
 	),
+	schoolYear: z.string().min(9).max(16),
 })
 
 const schemaDELETE = z.object({
@@ -118,6 +120,7 @@ export default async function handler(
 					where: {
 						ownerId: userSession.userId,
 						organizationId: userSession.userId,
+						schoolYear: reqData.schoolYear,
 					},
 					include: {
 						teachers: true,
@@ -181,6 +184,7 @@ export default async function handler(
 				const data = await prisma.binding.findMany({
 					where: {
 						organizationId: userSession.user.organizationId,
+						schoolYear: reqData.schoolYear,
 					},
 					include: {
 						teachers: true,
@@ -257,6 +261,7 @@ export default async function handler(
 								id: data.teacherId,
 							},
 						},
+						schoolYear: data.schoolYear,
 						ownerId: userSession.userId,
 						organizationId: userSession.userId,
 					},
@@ -287,6 +292,7 @@ export default async function handler(
 								id: data.teacherId,
 							},
 						},
+						schoolYear: data.schoolYear,
 						ownerId: userSession.userId,
 						organizationId: userSession.user.organizationId,
 					},

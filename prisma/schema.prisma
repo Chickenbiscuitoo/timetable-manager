@@ -129,10 +129,11 @@ model Lesson {
 }
 
 model Binding {
-  id        Int       @id @default(autoincrement())
-  teachers  Teacher[]
-  subjectId Int
-  classId   Int
+  id         Int       @id @default(autoincrement())
+  teachers   Teacher[]
+  subjectId  Int
+  classId    Int
+  schoolYear String    @default("2020/2021") @db.VarChar(16)
 
   class                 Class                   @relation(fields: [classId], references: [id])
   subject               Subject                 @relation(fields: [subjectId], references: [id])
@@ -144,8 +145,8 @@ model Binding {
   organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId String
 
-  @@unique([ownerId, organizationId, subjectId, classId])
-  @@unique([organizationId, subjectId, classId])
+  @@unique([ownerId, organizationId, subjectId, classId, schoolYear])
+  @@unique([organizationId, subjectId, classId, schoolYear])
   @@index([ownerId])
   @@index([subjectId])
   @@index([classId])
