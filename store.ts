@@ -265,10 +265,20 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			)
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
-				console.log(err.response?.data.message)
-				set({
-					errorMessage: err.response?.data.message,
-				})
+				if (
+					err.response?.data.message.includes(
+						'Invalid `prisma.organization.create()` invocation:'
+					)
+				) {
+					set({
+						errorMessage: 'Organization name is already taken',
+					})
+				} else {
+					console.log(err.response?.data.message)
+					set({
+						errorMessage: err.response?.data.message,
+					})
+				}
 			} else {
 				console.log(err)
 			}
@@ -310,30 +320,19 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	teachers: [],
 	fetchTeachers: async () => {
-		try {
-			const mode = get().mode
-			const response = await axios.get(
-				'http://localhost:3000/api/teachers',
-				{
-					params: {
-						mode,
-					},
-				}
-			)
-
-			set({
-				teachers: response.data,
-			})
-		} catch (err) {
-			if (axios.isAxiosError(err)) {
-				console.log(err.response?.data.message)
-				set({
-					errorMessage: err.response?.data.message,
-				})
-			} else {
-				console.log(err)
+		const mode = get().mode
+		const response = await axios.get(
+			'http://localhost:3000/api/teachers',
+			{
+				params: {
+					mode,
+				},
 			}
-		}
+		)
+
+		set({
+			teachers: response.data,
+		})
 	},
 
 	subjects: [],
@@ -490,6 +489,17 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			get().fetchTeachers()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
+				if (
+					err.response?.data.message.includes(
+						'Invalid `prisma.teacher.create()` invocation:'
+					)
+				) {
+					set({
+						errorMessage:
+							'Name, shortname or email already exists',
+					})
+					return
+				}
 				console.log(err.response?.data.message)
 				set({
 					errorMessage: err.response?.data.message,
@@ -512,12 +522,24 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			)
 
 			get().fetchTeachers()
+			get().fetchBindings()
+			get().fetchLessons()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
-				console.log(err.response?.data.message)
-				set({
-					errorMessage: err.response?.data.message,
-				})
+				if (
+					err.response?.data.message.includes(
+						'Invalid `prisma.teacher.delete()` invocation:'
+					)
+				) {
+					set({
+						errorMessage: 'Teacher is assigned to a class',
+					})
+				} else {
+					console.log(err.response?.data.message)
+					set({
+						errorMessage: err.response?.data.message,
+					})
+				}
 			} else {
 				console.log(err)
 			}
@@ -539,10 +561,21 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			get().fetchTeachers()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
-				console.log(err.response?.data.message)
-				set({
-					errorMessage: err.response?.data.message,
-				})
+				if (
+					err.response?.data.message.includes(
+						'Invalid `prisma.teacher.update()` invocation:'
+					)
+				) {
+					set({
+						errorMessage:
+							'Name, shortname or email already exists',
+					})
+				} else {
+					console.log(err.response?.data.message)
+					set({
+						errorMessage: err.response?.data.message,
+					})
+				}
 			} else {
 				console.log(err)
 			}
@@ -565,10 +598,20 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			get().fetchClasses()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
-				console.log(err.response?.data.message)
-				set({
-					errorMessage: err.response?.data.message,
-				})
+				if (
+					err.response?.data.message.includes(
+						'nvalid `prisma.class.create()` invocation:'
+					)
+				) {
+					set({
+						errorMessage: 'Name or class teacher is taken',
+					})
+				} else {
+					console.log(err.response?.data.message)
+					set({
+						errorMessage: err.response?.data.message,
+					})
+				}
 			} else {
 				console.log(err)
 			}
@@ -589,10 +632,21 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			get().fetchClasses()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
-				console.log(err.response?.data.message)
-				set({
-					errorMessage: err.response?.data.message,
-				})
+				if (
+					err.response?.data.message.includes(
+						'Invalid `prisma.class.delete()` invocation:'
+					)
+				) {
+					set({
+						errorMessage:
+							'Class has assigned bindings or lessons',
+					})
+				} else {
+					console.log(err.response?.data.message)
+					set({
+						errorMessage: err.response?.data.message,
+					})
+				}
 			} else {
 				console.log(err)
 			}
@@ -614,10 +668,20 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			get().fetchClasses()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
-				console.log(err.response?.data.message)
-				set({
-					errorMessage: err.response?.data.message,
-				})
+				if (
+					err.response?.data.message.includes(
+						'Invalid `prisma.class.update()` invocation:'
+					)
+				) {
+					set({
+						errorMessage: 'Name or class teacher is taken',
+					})
+				} else {
+					console.log(err.response?.data.message)
+					set({
+						errorMessage: err.response?.data.message,
+					})
+				}
 			} else {
 				console.log(err)
 			}
@@ -640,10 +704,20 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			get().fetchSubjects()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
-				console.log(err.response?.data.message)
-				set({
-					errorMessage: err.response?.data.message,
-				})
+				if (
+					err.response?.data.message.includes(
+						'Invalid `prisma.subject.create()` invocation:'
+					)
+				) {
+					set({
+						errorMessage: 'Name or shortname is already taken',
+					})
+				} else {
+					console.log(err.response?.data.message)
+					set({
+						errorMessage: err.response?.data.message,
+					})
+				}
 			} else {
 				console.log(err)
 			}
@@ -665,10 +739,20 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			get().fetchSubjects()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
-				console.log(err.response?.data.message)
-				set({
-					errorMessage: err.response?.data.message,
-				})
+				if (
+					err.response?.data.message.includes(
+						'Invalid `prisma.subject.update()` invocation:'
+					)
+				) {
+					set({
+						errorMessage: 'Name or shortname is already taken',
+					})
+				} else {
+					console.log(err.response?.data.message)
+					set({
+						errorMessage: err.response?.data.message,
+					})
+				}
 			} else {
 				console.log(err)
 			}
@@ -689,10 +773,21 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			get().fetchSubjects()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
-				console.log(err.response?.data.message)
-				set({
-					errorMessage: err.response?.data.message,
-				})
+				if (
+					err.response?.data.message.includes(
+						'Invalid `prisma.subject.delete()` invocation:'
+					)
+				) {
+					set({
+						errorMessage:
+							'Subject has active bindings or lessons',
+					})
+				} else {
+					console.log(err.response?.data.message)
+					set({
+						errorMessage: err.response?.data.message,
+					})
+				}
 			} else {
 				console.log(err)
 			}

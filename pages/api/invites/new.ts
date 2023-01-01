@@ -99,7 +99,7 @@ export default async function handler(
 
 		if (!organizationData || !senderData || !recipientData) {
 			return res.status(404).json({
-				message: 'Organization, sender, or recipient not found',
+				message: 'Recipient is not a user of this application',
 			})
 		}
 
