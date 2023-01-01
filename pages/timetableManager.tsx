@@ -8,6 +8,7 @@ import Sidebar from '../components/Sidebar'
 import TabsMenu from '../components/TabsMenu'
 import SideWorkspace from '../components/SideWorkspace'
 import ModeButton from '../components/ModeButton'
+import SchoolYearButton from '../components/SchoolYearButton'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -29,6 +30,7 @@ const TimetableManager: NextPage = () => {
 							<div className="mr-3 ml-1">
 								<CopyButton />
 							</div>
+							<SchoolYearButton />
 							<div className="mt-3">
 								<ModeButton />
 							</div>

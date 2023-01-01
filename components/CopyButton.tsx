@@ -27,7 +27,7 @@ const CopyButton: NextPage = () => {
 		<div className="dropdown">
 			<label
 				tabIndex={0}
-				className="btn btn-sm gap-2 m-1"
+				className="btn btn-sm gap-2"
 				onClick={() => setClicked((prevState) => !prevState)}
 			>
 				Copy
