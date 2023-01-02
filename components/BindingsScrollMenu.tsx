@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { TiDelete } from 'react-icons/ti'
 
 import BindingsMenuItem from '../components/BindingsMenuItem'
+import BindingCard from './BindingCard'
 
 interface Props {
 	data: any
@@ -11,11 +12,28 @@ interface Props {
 const BindingsScrollMenu: NextPage<Props> = ({ data }) => {
 	const [filter, setFilter] = useState('')
 
+	const [hovered, setHovered] = useState(-1)
+	const [hoverTimeout, setHoverTimeout] =
+		useState<NodeJS.Timeout | null>(null)
+
+	const handleMouseEnter = (id: number) => {
+		setHoverTimeout(
+			setTimeout(() => {
+				setHovered(id)
+			}, 1500)
+		)
+	}
+
+	const handleMouseLeave = () => {
+		setHovered(-1)
+		if (hoverTimeout) clearTimeout(hoverTimeout)
+	}
+
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
 		setFilter(e.target.value)
 
 	return (
-		<div className="h-full overflow-y-auto bg-neutral whitespace-nowrap flex flex-col items-center p-3 overflow-x-hidden gap-2">
+		<div className="h-full overflow-y-auto bg-neutral whitespace-nowrap flex flex-col items-center p-3 overflow-x-hidden gap-2 relative">
 			<div className="relative">
 				<input
 					type="text"
@@ -37,13 +55,20 @@ const BindingsScrollMenu: NextPage<Props> = ({ data }) => {
 					item.name.toLowerCase().includes(filter.toLowerCase())
 				)
 				.map((i: any) => (
-					<BindingsMenuItem
-						key={i.id}
-						id={i.id}
-						name={i.name}
-						shortname={i.shortname}
-						email={i.email}
-					/>
+					<div className="w-full">
+						<BindingsMenuItem
+							key={i.id}
+							id={i.id}
+							name={i.name}
+							shortname={i.shortname}
+							email={i.email}
+							handleMouseEnter={handleMouseEnter}
+							handleMouseLeave={handleMouseLeave}
+						/>
+						{hovered === i.id && (
+							<BindingCard teacherId={i.id} />
+						)}
+					</div>
 				))}
 		</div>
 	)

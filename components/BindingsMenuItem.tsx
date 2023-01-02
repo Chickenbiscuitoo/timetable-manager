@@ -1,5 +1,4 @@
 import type { NextPage } from 'next'
-
 import { useDrag } from 'react-dnd'
 
 interface Props {
@@ -7,6 +6,9 @@ interface Props {
 	shortname: string
 	id: number
 	email: string
+
+	handleMouseEnter: (id: number) => void
+	handleMouseLeave: () => void
 }
 
 const BindingsMenuItem: NextPage<Props> = ({
@@ -14,6 +16,9 @@ const BindingsMenuItem: NextPage<Props> = ({
 	shortname,
 	id,
 	email,
+
+	handleMouseEnter,
+	handleMouseLeave,
 }) => {
 	const [{ isDragging }, drag] = useDrag(() => ({
 		type: 'TeacherBindingsItem',
@@ -26,6 +31,8 @@ const BindingsMenuItem: NextPage<Props> = ({
 	return (
 		<a
 			ref={drag}
+			onMouseEnter={() => handleMouseEnter(id)}
+			onMouseLeave={handleMouseLeave}
 			className="gap-3 btn btn-outline btn-neutral btn-md rounded-xl w-full p-0 hover:cursor-grab"
 		>
 			<h5 className="inline">{name}</h5>

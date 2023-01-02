@@ -59,7 +59,6 @@ const BindingsCell: NextPage<Props> = ({
 	}
 
 	const teacherIds = teachers?.map((t) => t.id)
-	console.log(teacherIds)
 	const handleCanDrop = () => {
 		if (teacherIds.includes(itemProps?.teacherId)) {
 			return false
