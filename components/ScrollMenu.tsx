@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { TiDelete } from 'react-icons/ti'
 
 import MenuItem from '../components/MenuItem'
+import BindingCard from './BindingCard'
 
 interface Props {
 	data: any
@@ -11,6 +12,23 @@ interface Props {
 
 const ScrollMenu: NextPage<Props> = ({ data, isTeacher }) => {
 	const [filter, setFilter] = useState('')
+
+	const [hovered, setHovered] = useState(-1)
+	const [hoverTimeout, setHoverTimeout] =
+		useState<NodeJS.Timeout | null>(null)
+
+	const handleMouseEnter = (id: number) => {
+		setHoverTimeout(
+			setTimeout(() => {
+				setHovered(id)
+			}, 1500)
+		)
+	}
+
+	const handleMouseLeave = () => {
+		setHovered(-1)
+		if (hoverTimeout) clearTimeout(hoverTimeout)
+	}
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
 		setFilter(e.target.value)
@@ -38,14 +56,21 @@ const ScrollMenu: NextPage<Props> = ({ data, isTeacher }) => {
 					item.name.toLowerCase().includes(filter.toLowerCase())
 				)
 				.map((i: any) => (
-					<MenuItem
-						key={i.id}
-						id={i.id}
-						name={i.name}
-						shortname={i.shortname}
-						commitee_id={i.commitee_id}
-						isTeacher={isTeacher}
-					/>
+					<div className="w-full">
+						<MenuItem
+							key={i.id}
+							id={i.id}
+							name={i.name}
+							shortname={i.shortname}
+							commitee_id={i.commitee_id}
+							isTeacher={isTeacher}
+							handleMouseEnter={handleMouseEnter}
+							handleMouseLeave={handleMouseLeave}
+						/>
+						{hovered === i.id && (
+							<BindingCard teacherId={i.id} />
+						)}
+					</div>
 				))}
 		</div>
 	)
