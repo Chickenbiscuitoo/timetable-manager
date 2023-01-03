@@ -38,10 +38,10 @@ const TeachersManagerCell: NextPage<TeacherProps> = ({
 				...errorMessages,
 				nameError: 'Name must be at least 3 characters long',
 			})
-		} else if (name.trim().length > 128) {
+		} else if (name.trim().length > 64) {
 			setErrorMessages({
 				...errorMessages,
-				nameError: 'Name must be less than 128 characters long',
+				nameError: 'Name must be less than 64 characters long',
 			})
 		} else {
 			setErrorMessages({
