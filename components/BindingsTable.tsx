@@ -122,7 +122,9 @@ const BindingsTable: NextComponentType = () => {
 						.map((row, i) => (
 							<tr key={i}>
 								<td className="border border-slate-600 text-center">
-									<h3>{subjects[i]?.name}</h3>
+									<h3 className="truncate hover:text-clip hover:overflow-visible">
+										{subjects[i]?.name}
+									</h3>
 								</td>
 								{row
 									.filter((_, ci) => ci)
