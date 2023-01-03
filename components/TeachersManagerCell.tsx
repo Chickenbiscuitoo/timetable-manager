@@ -148,9 +148,9 @@ const TeachersManagerCell: NextPage<TeacherProps> = ({
 				emailError: '',
 			})
 			setFormData({
-				name: '',
-				shortname: '',
-				email: '',
+				name,
+				shortname,
+				email,
 			})
 		}
 	}
