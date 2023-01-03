@@ -213,19 +213,29 @@ const TeachersManagerCell: NextPage<TeacherProps> = ({
 								value={formData.name}
 								name="name"
 								onChange={handleChange}
-								className="input input-bordered max-w-xs focus:input-primary w-8/12"
+								className="block input input-bordered max-w-xs focus:input-primary mb-1"
 							/>
+							{errorMessages.nameError && (
+								<p className="text-error text-xs mb-2">
+									{errorMessages.nameError}
+								</p>
+							)}
 							<input
 								type="text"
 								placeholder={shortname}
 								value={formData.shortname}
 								name="shortname"
 								onChange={handleChange}
-								className="input input-bordered max-w-xs focus:input-primary w-4/12"
+								className="block input input-bordered max-w-xs focus:input-primary mb-1"
 							/>
+							{errorMessages.shortnameError && (
+								<p className="text-error text-xs">
+									{errorMessages.shortnameError}
+								</p>
+							)}
 						</div>
 					</td>
-					<td>
+					<td colSpan={2}>
 						<input
 							type="text"
 							placeholder={email}
@@ -234,8 +244,12 @@ const TeachersManagerCell: NextPage<TeacherProps> = ({
 							onChange={handleChange}
 							className="input input-bordered w-full max-w-xs focus:input-primary"
 						/>
+						{errorMessages.emailError && (
+							<p className="text-xs text-error">
+								{errorMessages.emailError}
+							</p>
+						)}
 					</td>
-					<td></td>
 					<td>
 						<button
 							onClick={handleSubmit}
@@ -253,35 +267,6 @@ const TeachersManagerCell: NextPage<TeacherProps> = ({
 					</td>
 				</tr>
 			)}
-			{clickedUpdate &&
-				(errorMessages.emailError ||
-					errorMessages.nameError ||
-					errorMessages.shortnameError) && (
-					<tr>
-						<td></td>
-						<td>
-							{errorMessages.nameError && (
-								<p className="text-error">
-									{errorMessages.nameError}
-								</p>
-							)}
-							{errorMessages.shortnameError && (
-								<p className="text-error">
-									{errorMessages.shortnameError}
-								</p>
-							)}
-						</td>
-						<td>
-							{errorMessages.emailError && (
-								<p className="text-error">
-									{errorMessages.emailError}
-								</p>
-							)}
-						</td>
-						<td></td>
-						<td></td>
-					</tr>
-				)}
 		</>
 	)
 }

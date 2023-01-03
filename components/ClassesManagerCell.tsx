@@ -143,7 +143,7 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 							className="input input-bordered max-w-xs focus:input-primary w-full"
 						/>
 						{errrorMessage && (
-							<p className="text-sm text-error">
+							<p className="text-xs text-error">
 								{errrorMessage}
 							</p>
 						)}

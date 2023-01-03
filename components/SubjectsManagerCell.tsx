@@ -174,16 +174,26 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 								value={formData.name}
 								name="name"
 								onChange={handleChange}
-								className="input input-bordered max-w-xs focus:input-primary w-8/12"
+								className="block mb-1 input input-bordered max-w-xs focus:input-primary"
 							/>
+							{errorMessages.nameError && (
+								<p className="text-xs text-error mb-2">
+									{errorMessages.nameError}
+								</p>
+							)}
 							<input
 								type="text"
 								placeholder={shortname}
 								value={formData.shortname}
 								name="shortname"
 								onChange={handleChange}
-								className="input input-bordered max-w-xs focus:input-primary w-4/12"
+								className="mb-1 block input input-bordered max-w-xs focus:input-primary"
 							/>
+							{errorMessages.shortnameError && (
+								<p className="text-xs text-error">
+									{errorMessages.shortnameError}
+								</p>
+							)}
 						</div>
 					</td>
 					<td>
@@ -246,27 +256,6 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 					</td>
 				</tr>
 			)}
-			{clickedUpdate &&
-				(errorMessages.nameError ||
-					errorMessages.shortnameError) && (
-					<tr>
-						<td colSpan={2}>
-							{errorMessages.nameError && (
-								<p className="text-error text-xs w-8/12 inline mr-5">
-									{errorMessages.nameError}
-								</p>
-							)}
-							{errorMessages.shortnameError && (
-								<p className="text-error text-xs w-4/12 inline">
-									{errorMessages.shortnameError}
-								</p>
-							)}
-						</td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-				)}
 		</>
 	)
 }
