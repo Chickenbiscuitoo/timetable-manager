@@ -30,6 +30,17 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 		name,
 		teacherId: teacher.id,
 	})
+	const [errrorMessage, setErrorMessage] = useState('')
+
+	const validateName = (name: string) => {
+		if (name.trim().length < 3) {
+			setErrorMessage('Name must be at least 3 characters long')
+		} else if (name.trim().length > 64) {
+			setErrorMessage('Name must be less than 64 characters long')
+		} else {
+			setErrorMessage('')
+		}
+	}
 
 	const { bindings, teachers, updateClass, removeClass } =
 		useTimetableStore()
@@ -58,13 +69,17 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 			...formData,
 			[e.target.name]: e.target.value,
 		})
+
+		if (e.target.name === 'name') {
+			validateName(e.target.value)
+		}
 	}
 
 	const handleSubmit = () => {
 		const name = formData.name.trim().toUpperCase()
 		const teacherId = formData.teacherId
 
-		if (name && teacherId) {
+		if (name && teacherId && !errrorMessage) {
 			updateClass(id, name, grade, teacherId)
 			setFormData({
 				name,
@@ -127,6 +142,11 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 							onChange={handleChange}
 							className="input input-bordered max-w-xs focus:input-primary w-full"
 						/>
+						{errrorMessage && (
+							<p className="text-sm text-error">
+								{errrorMessage}
+							</p>
+						)}
 					</td>
 					<td>
 						<div className="dropdown">
@@ -165,6 +185,7 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 					<td>
 						<button
 							onClick={handleSubmit}
+							disabled={errrorMessage ? true : false}
 							className="btn btn-xs btn-success w-full"
 						>
 							Submit
