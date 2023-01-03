@@ -254,7 +254,7 @@ model Invite {
   senderEmail    String
   recipientEmail String
   expires        DateTime
-  Organization   Organization @relation(fields: [organizationId], references: [id])
+  Organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
 
   @@unique([senderEmail, recipientEmail])
