@@ -25,7 +25,7 @@ const Classes: NextPage = () => {
 			<main className="min-h-screen flex flex-row relative">
 				<Sidebar />
 				{classes.length > 0 ? (
-					<div className="flex flex-col p-3">
+					<div className="flex flex-col p-3 place-content-center place-items-center w-full h-full">
 						<div className="flex flex-row max-h-fit h-fit">
 							<div className="grid bg-primary bg-opacity-30 rounded-xl p-4 m-2 h-fit">
 								<ClassesManager />
@@ -39,7 +39,7 @@ const Classes: NextPage = () => {
 								</div>
 							</div>
 						</div>
-						<div className="grid p-2 m-2 h-fit border-8 border-opacity-30 rounded-xl border-primary">
+						<div className="grid p-2 m-2 h-fit border-8 border-opacity-30 rounded-xl border-primary w-2/3">
 							<ClassesBarChart />
 						</div>
 					</div>
