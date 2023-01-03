@@ -26,6 +26,69 @@ const TeachersManagerCell: NextPage<TeacherProps> = ({
 		shortname,
 		email,
 	})
+	const [errorMessages, setErrorMessages] = useState({
+		nameError: '',
+		shortnameError: '',
+		emailError: '',
+	})
+
+	const validateName = (name: string) => {
+		if (name.trim().length < 3) {
+			setErrorMessages({
+				...errorMessages,
+				nameError: 'Name must be at least 3 characters long',
+			})
+		} else if (name.trim().length > 128) {
+			setErrorMessages({
+				...errorMessages,
+				nameError: 'Name must be less than 128 characters long',
+			})
+		} else {
+			setErrorMessages({
+				...errorMessages,
+				nameError: '',
+			})
+		}
+	}
+
+	const validateShortname = (shortname: string) => {
+		if (shortname.trim().length < 2) {
+			setErrorMessages({
+				...errorMessages,
+				shortnameError:
+					'Shortname must be at least 2 characters long',
+			})
+		} else if (shortname.trim().length > 8) {
+			setErrorMessages({
+				...errorMessages,
+				shortnameError:
+					'Shortname must be less than 8 characters long',
+			})
+		} else {
+			setErrorMessages({
+				...errorMessages,
+				shortnameError: '',
+			})
+		}
+	}
+
+	const validateEmail = (email: string) => {
+		const emailRegex = new RegExp(
+			'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'
+		)
+
+		if (!emailRegex.test(email.trim()) || email.trim().length < 3) {
+			setErrorMessages({
+				...errorMessages,
+				emailError: 'Please enter a valid email address',
+			})
+		} else {
+			setErrorMessages({
+				...errorMessages,
+				emailError: '',
+			})
+		}
+	}
 
 	const { bindings, updateTeacher, removeTeacher } = useTimetableStore()
 
@@ -49,6 +112,14 @@ const TeachersManagerCell: NextPage<TeacherProps> = ({
 			...formData,
 			[e.target.name]: e.target.value,
 		})
+
+		if (e.target.name === 'name') {
+			validateName(e.target.value)
+		} else if (e.target.name === 'shortname') {
+			validateShortname(e.target.value)
+		} else if (e.target.name === 'email') {
+			validateEmail(e.target.value)
+		}
 	}
 
 	const handleSubmit = () => {
@@ -56,7 +127,14 @@ const TeachersManagerCell: NextPage<TeacherProps> = ({
 		const shortname = formData.shortname.trim()
 		const email = formData.email.trim()
 
-		if (name && shortname && email) {
+		if (
+			name &&
+			shortname &&
+			email &&
+			!errorMessages.nameError &&
+			!errorMessages.shortnameError &&
+			!errorMessages.emailError
+		) {
 			updateTeacher(id, name, shortname, email)
 			setFormData({
 				name,
@@ -151,6 +229,13 @@ const TeachersManagerCell: NextPage<TeacherProps> = ({
 					<td>
 						<button
 							onClick={handleSubmit}
+							disabled={
+								errorMessages.emailError ||
+								errorMessages.nameError ||
+								errorMessages.shortnameError
+									? true
+									: false
+							}
 							className="btn btn-xs btn-success w-full"
 						>
 							Submit
@@ -158,6 +243,35 @@ const TeachersManagerCell: NextPage<TeacherProps> = ({
 					</td>
 				</tr>
 			)}
+			{clickedUpdate &&
+				(errorMessages.emailError ||
+					errorMessages.nameError ||
+					errorMessages.shortnameError) && (
+					<tr>
+						<td></td>
+						<td>
+							{errorMessages.nameError && (
+								<p className="text-error">
+									{errorMessages.nameError}
+								</p>
+							)}
+							{errorMessages.shortnameError && (
+								<p className="text-error">
+									{errorMessages.shortnameError}
+								</p>
+							)}
+						</td>
+						<td>
+							{errorMessages.emailError && (
+								<p className="text-error">
+									{errorMessages.emailError}
+								</p>
+							)}
+						</td>
+						<td></td>
+						<td></td>
+					</tr>
+				)}
 		</>
 	)
 }

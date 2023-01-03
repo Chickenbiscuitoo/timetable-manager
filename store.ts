@@ -578,6 +578,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 						errorMessage:
 							'Name, shortname or email already exists',
 					})
+				} else if (
+					err.response?.data.message.includes('invalid_string')
+				) {
+					set({
+						errorMessage: 'Invalid email, name or shortname',
+					})
 				} else {
 					console.log(err.response?.data.message)
 					set({
