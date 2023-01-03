@@ -8,8 +8,28 @@ export const flatten = (arr: any) =>
 
 // function to sort array of classes by name
 export function classesSort(
-	a: { id: number; name: string; grade: number; teacherId: number },
-	b: { id: number; name: string; grade: number; teacherId: number }
+	a: {
+		id: number
+		name: string
+		grade: number
+		teacher: {
+			id: number
+			name: string
+			shortname: string
+			email: string
+		}
+	},
+	b: {
+		id: number
+		name: string
+		grade: number
+		teacher: {
+			id: number
+			name: string
+			shortname: string
+			email: string
+		}
+	}
 ) {
 	if (a.grade < b.grade) {
 		return -1

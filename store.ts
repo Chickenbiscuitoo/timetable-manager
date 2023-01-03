@@ -49,7 +49,12 @@ interface TimetableStore {
 				id: number
 				name: string
 				grade: number
-				teacherId: number
+				teacher: {
+					id: number
+					name: string
+					shortname: string
+					email: string
+				}
 		  }[]
 		| []
 	fetchClasses: () => void
@@ -74,7 +79,12 @@ interface TimetableStore {
 					id: number
 					name: string
 					grade: number
-					teacherId: number
+					teacher: {
+						id: number
+						name: string
+						shortname: string
+						email: string
+					}
 				}
 		  }[]
 		| []

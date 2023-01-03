@@ -29,15 +29,18 @@ const ClassesManager: NextPage = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{classes.sort(classesSort).map((cl) => (
-							<ClassesManagerCell
-								key={cl.id}
-								id={cl.id}
-								name={cl.name}
-								teacherId={cl.teacherId}
-								grade={cl.grade}
-							/>
-						))}
+						{classes.sort(classesSort).map((cl) => {
+							console.log(cl)
+							return (
+								<ClassesManagerCell
+									key={cl.id}
+									id={cl.id}
+									name={cl.name}
+									teacher={cl.teacher}
+									grade={cl.grade}
+								/>
+							)
+						})}
 					</tbody>
 					<tfoot>
 						<tr>

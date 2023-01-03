@@ -10,26 +10,30 @@ import { useState } from 'react'
 interface TeacherProps {
 	id: number
 	name: string
-	teacherId: number
+	teacher: {
+		id: number
+		name: string
+		shortname: string
+		email: string
+	}
 	grade: number
 }
 
 const ClassesManagerCell: NextPage<TeacherProps> = ({
 	id,
 	name,
-	teacherId,
+	teacher,
 	grade,
 }) => {
 	const [clickedUpdate, setClickedUpdate] = useState(false)
 	const [formData, setFormData] = useState({
 		name,
-		teacherId,
+		teacherId: teacher.id,
 	})
 
 	const { bindings, teachers, updateClass, removeClass } =
 		useTimetableStore()
 
-	const classTeacher = teachers.find((tch) => tch.id === teacherId)
 	const selectedClassTeacher = teachers.find(
 		(tch) => tch.id === formData.teacherId
 	)
@@ -88,20 +92,10 @@ const ClassesManagerCell: NextPage<TeacherProps> = ({
 					</div>
 				</td>
 				<td>
-					{classTeacher ? (
-						<>
-							<div className="font-bold">
-								{classTeacher?.name}
-							</div>
-							<div className="text-sm opacity-50">
-								{classTeacher?.shortname}
-							</div>
-						</>
-					) : (
-						<div className="text-sm opacity-50">
-							No teacher assigned
-						</div>
-					)}
+					<div className="font-bold">{teacher.name}</div>
+					<div className="text-sm opacity-50">
+						{teacher.shortname}
+					</div>
 				</td>
 				<td>{classesTotalLessons()}</td>
 				<th>
