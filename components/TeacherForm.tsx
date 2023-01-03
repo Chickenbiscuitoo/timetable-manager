@@ -10,12 +10,83 @@ const TeacherForm: NextPage = () => {
 		shortname: '',
 		email: '',
 	})
+	const [errorMessages, setErrorMessages] = useState({
+		nameError: '',
+		shortnameError: '',
+		emailError: '',
+	})
+
+	const validateName = (name: string) => {
+		if (name.trim().length < 3) {
+			setErrorMessages({
+				...errorMessages,
+				nameError: 'Name must be at least 3 characters long',
+			})
+		} else if (name.trim().length > 128) {
+			setErrorMessages({
+				...errorMessages,
+				nameError: 'Name must be less than 128 characters long',
+			})
+		} else {
+			setErrorMessages({
+				...errorMessages,
+				nameError: '',
+			})
+		}
+	}
+
+	const validateShortname = (shortname: string) => {
+		if (shortname.trim().length < 2) {
+			setErrorMessages({
+				...errorMessages,
+				shortnameError:
+					'Shortname must be at least 2 characters long',
+			})
+		} else if (shortname.trim().length > 8) {
+			setErrorMessages({
+				...errorMessages,
+				shortnameError:
+					'Shortname must be less than 8 characters long',
+			})
+		} else {
+			setErrorMessages({
+				...errorMessages,
+				shortnameError: '',
+			})
+		}
+	}
+
+	const validateEmail = (email: string) => {
+		const emailRegex = new RegExp(
+			'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'
+		)
+
+		if (!emailRegex.test(email.trim()) || email.trim().length < 3) {
+			setErrorMessages({
+				...errorMessages,
+				emailError: 'Please enter a valid email address',
+			})
+		} else {
+			setErrorMessages({
+				...errorMessages,
+				emailError: '',
+			})
+		}
+	}
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFormData({
 			...formData,
 			[e.target.name]: e.target.value,
 		})
+
+		if (e.target.name === 'name') {
+			validateName(e.target.value)
+		} else if (e.target.name === 'shortname') {
+			validateShortname(e.target.value)
+		} else if (e.target.name === 'email') {
+			validateEmail(e.target.value)
+		}
 	}
 
 	const handleSubmit = () => {
@@ -23,7 +94,14 @@ const TeacherForm: NextPage = () => {
 		const shortname = formData.shortname.trim()
 		const email = formData.email.trim()
 
-		if (name && shortname && email) {
+		if (
+			name &&
+			shortname &&
+			email &&
+			!errorMessages.nameError &&
+			!errorMessages.shortnameError &&
+			!errorMessages.emailError
+		) {
 			addTeacher(name, shortname, email)
 			setFormData({
 				name: '',
@@ -47,6 +125,11 @@ const TeacherForm: NextPage = () => {
 						onChange={handleChange}
 					/>
 				</label>
+				{errorMessages.nameError && (
+					<p className="text-error text-xs">
+						{errorMessages.nameError}
+					</p>
+				)}
 			</div>
 			<div className="form-control">
 				<label className="input-group input-group-vertical">
@@ -60,6 +143,11 @@ const TeacherForm: NextPage = () => {
 						onChange={handleChange}
 					/>
 				</label>
+				{errorMessages.shortnameError && (
+					<p className="text-error text-xs">
+						{errorMessages.shortnameError}
+					</p>
+				)}
 			</div>
 			<div className="form-control">
 				<label className="input-group input-group-vertical">
@@ -73,9 +161,21 @@ const TeacherForm: NextPage = () => {
 						onChange={handleChange}
 					/>
 				</label>
+				{errorMessages.emailError && (
+					<p className="text-error text-xs">
+						{errorMessages.emailError}
+					</p>
+				)}
 			</div>
 			<button
 				className="btn btn-outline btn-success w-full"
+				disabled={
+					errorMessages.nameError ||
+					errorMessages.shortnameError ||
+					errorMessages.emailError
+						? true
+						: false
+				}
 				onClick={handleSubmit}
 			>
 				Submit
@@ -83,12 +183,5 @@ const TeacherForm: NextPage = () => {
 		</div>
 	)
 }
-
-// {
-//     id: 1,
-//     name: 'John Doe',
-//     shortname: 'JD',
-//     email: 'john.doe@gmail.com',
-// },
 
 export default TeacherForm
