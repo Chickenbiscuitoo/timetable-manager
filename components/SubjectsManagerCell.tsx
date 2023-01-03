@@ -26,6 +26,50 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 		shortname,
 		commitee_id,
 	})
+	const [errorMessages, setErrorMessages] = useState({
+		nameError: '',
+		shortnameError: '',
+	})
+
+	const validateName = (name: string) => {
+		if (name.trim().length < 3) {
+			setErrorMessages({
+				...errorMessages,
+				nameError: 'Name must be at least 3 characters long',
+			})
+		} else if (name.trim().length > 128) {
+			setErrorMessages({
+				...errorMessages,
+				nameError: 'Name must be less than 128 characters long',
+			})
+		} else {
+			setErrorMessages({
+				...errorMessages,
+				nameError: '',
+			})
+		}
+	}
+
+	const validateShortname = (shortname: string) => {
+		if (shortname.trim().length < 2) {
+			setErrorMessages({
+				...errorMessages,
+				shortnameError:
+					'Shortname must be at least 2 characters long',
+			})
+		} else if (shortname.trim().length > 8) {
+			setErrorMessages({
+				...errorMessages,
+				shortnameError:
+					'Shortname must be less than 8 characters long',
+			})
+		} else {
+			setErrorMessages({
+				...errorMessages,
+				shortnameError: '',
+			})
+		}
+	}
 
 	const { bindings, updateSubject, removeSubject } = useTimetableStore()
 
@@ -49,6 +93,12 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 			...formData,
 			[e.target.name]: e.target.value,
 		})
+
+		if (e.target.name === 'name') {
+			validateName(e.target.value)
+		} else if (e.target.name === 'shortname') {
+			validateShortname(e.target.value)
+		}
 	}
 
 	const handleSubmit = () => {
@@ -56,7 +106,13 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 		const shortname = formData.shortname.trim().toUpperCase()
 		const commitee_id = formData.commitee_id
 
-		if (name && shortname && commitee_id) {
+		if (
+			name &&
+			shortname &&
+			commitee_id &&
+			!errorMessages.nameError &&
+			!errorMessages.shortnameError
+		) {
 			updateSubject(id, name, shortname, commitee_id)
 			setFormData({
 				name,
@@ -177,6 +233,12 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 					<td>
 						<button
 							onClick={handleSubmit}
+							disabled={
+								errorMessages.nameError ||
+								errorMessages.shortnameError
+									? true
+									: false
+							}
 							className="btn btn-xs btn-success w-full"
 						>
 							Submit
@@ -184,6 +246,27 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 					</td>
 				</tr>
 			)}
+			{clickedUpdate &&
+				(errorMessages.nameError ||
+					errorMessages.shortnameError) && (
+					<tr>
+						<td colSpan={2}>
+							{errorMessages.nameError && (
+								<p className="text-error text-xs w-8/12 inline mr-5">
+									{errorMessages.nameError}
+								</p>
+							)}
+							{errorMessages.shortnameError && (
+								<p className="text-error text-xs w-4/12 inline">
+									{errorMessages.shortnameError}
+								</p>
+							)}
+						</td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				)}
 		</>
 	)
 }

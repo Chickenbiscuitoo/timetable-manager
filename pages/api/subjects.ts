@@ -19,7 +19,7 @@ const schemaGET = z.object({
 })
 
 const schemaPUT = z.object({
-	name: z.string().min(3).max(255),
+	name: z.string().min(3).max(128),
 	shortname: z.string().min(2).max(8),
 	commiteeId: z.number().int().positive(),
 	mode: z.string().refine(
@@ -38,7 +38,7 @@ const schemaDELETE = z.object({
 
 const schemaPATCH = z.object({
 	id: z.number().int().positive(),
-	name: z.string().min(3).max(255),
+	name: z.string().min(3).max(128),
 	shortname: z.string().min(2).max(8),
 	commiteeId: z.number().int().positive(),
 })
