@@ -306,10 +306,18 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			get().fetchOrganization()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
-				console.log(err.response?.data.message)
-				set({
-					errorMessage: err.response?.data.message,
-				})
+				if (
+					err.response?.data.message.includes('invalid_string')
+				) {
+					set({
+						errorMessage: 'Invalid email address',
+					})
+				} else {
+					console.log(err.response?.data.message)
+					set({
+						errorMessage: err.response?.data.message,
+					})
+				}
 			} else {
 				console.log(err)
 			}

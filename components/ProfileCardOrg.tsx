@@ -13,16 +13,44 @@ const ProfileCardOrg: NextPage = () => {
 
 	const [inviteEmail, setInviteEmail] = useState('')
 	const [organizationName, setOrganizationName] = useState('')
+	const [errorMessage, setErrorMessage] = useState('')
+
+	const handleNameValidation = () => {
+		if (organizationName.length < 3) {
+			setErrorMessage(
+				'Organization name must be at least 3 characters'
+			)
+		} else if (organizationName.length > 64) {
+			setErrorMessage(
+				'Organization name must be less than 64 characters'
+			)
+		} else {
+			setErrorMessage('')
+		}
+	}
+
+	const handleEmailValidation = () => {
+		const emailRegex = new RegExp(
+			'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'
+		)
+		if (!emailRegex.test(inviteEmail) || inviteEmail.length < 3) {
+			setErrorMessage('Email must be valid')
+		} else {
+			setErrorMessage('')
+		}
+	}
 
 	const handleCreate = () => {
-		if (organizationName.length > 3) {
+		if (!errorMessage && organizationName) {
 			createOrganization(organizationName)
+			setOrganizationName('')
 		}
 	}
 
 	const handleInvite = () => {
-		if (inviteEmail.length > 3 && organization) {
+		if (!errorMessage && organization && inviteEmail) {
 			inviteMemberToOrganization(inviteEmail, organization.id)
+			setInviteEmail('')
 		}
 	}
 
@@ -54,17 +82,22 @@ const ProfileCardOrg: NextPage = () => {
 						type="text"
 						placeholder="Organization name"
 						value={organizationName}
-						onChange={(e) =>
-							setOrganizationName(e.target.value)
-						}
+						onChange={(e) => {
+							setOrganizationName(e.target.value.trim())
+							handleNameValidation()
+						}}
 						className="input input-bordered input-primary w-8/12 max-w-xs mr-2"
 					/>
 					<button
 						onClick={handleCreate}
+						disabled={errorMessage ? true : false}
 						className="btn btn-outline btn-success w-3/12 min-h-full"
 					>
 						Create
 					</button>
+					{errorMessage && (
+						<p className="text-error mt-3">{errorMessage}</p>
+					)}
 				</div>
 			</div>
 		)
@@ -97,15 +130,22 @@ const ProfileCardOrg: NextPage = () => {
 						type="text"
 						placeholder="email@gmail.com"
 						value={inviteEmail}
-						onChange={(e) => setInviteEmail(e.target.value)}
+						onChange={(e) => {
+							setInviteEmail(e.target.value.trim())
+							handleEmailValidation()
+						}}
 						className="input input-bordered input-primary w-8/12 max-w-xs mr-2"
 					/>
 					<button
 						onClick={handleInvite}
+						disabled={errorMessage ? true : false}
 						className="btn btn-outline btn-success w-3/12 min-h-full"
 					>
 						Invite
 					</button>
+					{errorMessage && (
+						<p className="text-error mt-3">{errorMessage}</p>
+					)}
 				</div>
 			</div>
 		</div>

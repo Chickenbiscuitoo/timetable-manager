@@ -9,7 +9,7 @@ import { z } from 'zod'
 import cookie from 'cookie'
 
 const schemaPOST = z.object({
-	name: z.string().min(3).max(255),
+	name: z.string().min(3).max(64),
 })
 
 const schemaDELETE = z.object({
@@ -131,12 +131,9 @@ export default async function handler(
 	} else if (method === 'PATCH') {
 		try {
 			if (!userSession.user.organizationId) {
-				return res
-					.status(200)
-					.json({
-						message:
-							'You are not a member of any organization',
-					})
+				return res.status(200).json({
+					message: 'You are not a member of any organization',
+				})
 			}
 
 			const response = await prisma.organization.update({
