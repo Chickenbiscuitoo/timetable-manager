@@ -142,6 +142,16 @@ const TeachersManagerCell: NextPage<TeacherProps> = ({
 				email,
 			})
 			setClickedUpdate(false)
+			setErrorMessages({
+				nameError: '',
+				shortnameError: '',
+				emailError: '',
+			})
+			setFormData({
+				name: '',
+				shortname: '',
+				email: '',
+			})
 		}
 	}
 
