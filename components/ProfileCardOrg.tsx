@@ -15,12 +15,12 @@ const ProfileCardOrg: NextPage = () => {
 	const [organizationName, setOrganizationName] = useState('')
 	const [errorMessage, setErrorMessage] = useState('')
 
-	const handleNameValidation = () => {
-		if (organizationName.length < 3) {
+	const handleNameValidation = (name: string) => {
+		if (name.trim().length < 3) {
 			setErrorMessage(
 				'Organization name must be at least 3 characters'
 			)
-		} else if (organizationName.length > 64) {
+		} else if (name.trim().length > 64) {
 			setErrorMessage(
 				'Organization name must be less than 64 characters'
 			)
@@ -29,11 +29,11 @@ const ProfileCardOrg: NextPage = () => {
 		}
 	}
 
-	const handleEmailValidation = () => {
+	const handleEmailValidation = (email: string) => {
 		const emailRegex = new RegExp(
 			'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'
 		)
-		if (!emailRegex.test(inviteEmail) || inviteEmail.length < 3) {
+		if (!emailRegex.test(email.trim()) || email.trim().length < 3) {
 			setErrorMessage('Email must be valid')
 		} else {
 			setErrorMessage('')
@@ -83,8 +83,8 @@ const ProfileCardOrg: NextPage = () => {
 						placeholder="Organization name"
 						value={organizationName}
 						onChange={(e) => {
-							setOrganizationName(e.target.value.trim())
-							handleNameValidation()
+							setOrganizationName(e.target.value)
+							handleNameValidation(e.target.value)
 						}}
 						className="input input-bordered input-primary w-8/12 max-w-xs mr-2"
 					/>
@@ -131,8 +131,8 @@ const ProfileCardOrg: NextPage = () => {
 						placeholder="email@gmail.com"
 						value={inviteEmail}
 						onChange={(e) => {
-							setInviteEmail(e.target.value.trim())
-							handleEmailValidation()
+							setInviteEmail(e.target.value)
+							handleEmailValidation(e.target.value)
 						}}
 						className="input input-bordered input-primary w-8/12 max-w-xs mr-2"
 					/>
