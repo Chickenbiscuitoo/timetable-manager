@@ -138,6 +138,21 @@ async function sendEmailToTeacher(
 	return emailData
 }
 
+// Temporary function to check if user is eligible to use the api endpoint
+function checkUserPermissions(userEmail: string) {
+	const userEmailDomain = userEmail.split('@')[1]
+	const allowedEmails = process.env.ALLOWED_EMAILS?.split(', ')
+
+	if (
+		userEmailDomain === 'spseke.sk' ||
+		allowedEmails?.includes(userEmail)
+	) {
+		return true
+	} else {
+		return false
+	}
+}
+
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
@@ -176,6 +191,12 @@ export default async function handler(
 	if (method !== 'POST') {
 		return res.status(400).json({
 			message: 'Only POST method allowed',
+		})
+	}
+
+	if (!checkUserPermissions(session.user?.email || '')) {
+		return res.status(403).json({
+			message: 'You do not have permission to use this feature',
 		})
 	}
 
