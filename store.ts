@@ -180,6 +180,8 @@ interface TimetableStore {
 		subjectId?: number
 	) => void
 
+	sendBindings: () => void
+
 	selectedClass: number
 	setSelectedClass: (classId: number) => void
 
@@ -906,6 +908,30 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		} else {
 			console.log('No data to update')
 			return
+		}
+	},
+
+	sendBindings: async () => {
+		try {
+			const mode = get().mode
+			const schoolYear = get().schoolYear
+
+			const response = await axios.post(
+				'http://localhost:3000/api/bindings/send',
+				{
+					mode,
+					schoolYear,
+				}
+			)
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				console.log(err.response?.data.message)
+				set({
+					errorMessage: err.response?.data.message,
+				})
+			} else {
+				console.log(err)
+			}
 		}
 	},
 
