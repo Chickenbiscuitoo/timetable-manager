@@ -36,7 +36,7 @@ const AlertMessageCard: NextPage = ({}) => {
 	}
 
 	return (
-		<div className="alert shadow-lg z-20 sticky bottom-5 w-1/2 m-auto text-center">
+		<div className="alert shadow-lg z-20 sticky bottom-5 w-1/3 m-auto text-center">
 			<div>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
