@@ -190,6 +190,16 @@ interface TimetableStore {
 
 	errorMessage: string
 	resetErrorMessage: () => void
+
+	alertMessage: {
+		message: string
+		status: 'confirmed' | 'denied' | undefined
+	}
+	setAlertMessage: (
+		message: string,
+		status: 'confirmed' | 'denied' | undefined
+	) => void
+	resetAlertMessage: () => void
 }
 
 // TODO: Copy bindings func
@@ -943,6 +953,20 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	errorMessage: '',
 	resetErrorMessage: () => set(() => ({ errorMessage: '' })),
+
+	alertMessage: {
+		message: 'Are you sure?',
+		status: undefined,
+	},
+	setAlertMessage: (message, status) =>
+		set(() => ({
+			alertMessage: {
+				message,
+				status,
+			},
+		})),
+	resetAlertMessage: () =>
+		set(() => ({ alertMessage: { message: '', status: undefined } })),
 }))
 
 useTimetableStore.getState().fetchOrganization()

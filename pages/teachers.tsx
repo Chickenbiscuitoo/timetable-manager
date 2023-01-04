@@ -12,9 +12,10 @@ import TeacherForm from '../components/TeacherForm'
 import TeachersManager from '../components/TeachersManager'
 import ErrorMessageCard from '../components/ErrorMessageCard'
 import SendBindingsButton from '../components/SendBindingsButton'
+import AlertMessageCard from '../components/AlertMessageCard'
 
 const Teachers: NextPage = () => {
-	const { teachers, errorMessage } = useTimetableStore()
+	const { teachers, errorMessage, alertMessage } = useTimetableStore()
 
 	return (
 		<div>
@@ -72,6 +73,7 @@ const Teachers: NextPage = () => {
 			{errorMessage && (
 				<ErrorMessageCard errorMessage={errorMessage} />
 			)}
+			{alertMessage.message && <AlertMessageCard />}
 		</div>
 	)
 }

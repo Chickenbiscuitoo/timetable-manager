@@ -30,7 +30,7 @@ const ErrorMessageCard: NextPage<ErrorMessageProps> = ({
 	}
 
 	return (
-		<div className="z-20 w-1/2 absolute bottom-5 left-0 right-0 m-auto text-center alert alert-warning shadow-lg">
+		<div className="alert alert-warning shadow-lg z-20 sticky bottom-5 w-1/2 m-auto text-center">
 			<div className="text-center m-auto">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
