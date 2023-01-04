@@ -74,9 +74,9 @@ function createTeacherHtmlCard(teacher: UpdatedTeacher) {
 	const style = `<style type="text/css">
     .tg  {border-collapse:collapse;border-color:#ccc;border-spacing:0;margin:0px auto;}
     .tg td{background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
-      font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+      font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:15px;word-break:normal;}
     .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
-      font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+      font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:15px;word-break:normal;}
     .tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
     .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
     </style>`
@@ -84,24 +84,24 @@ function createTeacherHtmlCard(teacher: UpdatedTeacher) {
 	const bindingCellsHtml = teacher.bindings
 		.map(
 			(binding) =>
-				`<td class="tg-c3ow">
-                    <h6>${binding.class.name}</h6>
-                    <h5>${binding.subject.shortname}</h5>
-                    <h6>${binding.teacher.lessons}h</h6>
+				`<td class="tg-c3ow" style="background-color:#fff; border-color:inherit; border-style:solid; border-width:1px; color:#333; font-family:Arial, sans-serif; font-size:14px; overflow:hidden; padding:15px; word-break:normal; text-align:center; vertical-align:top" bgcolor="#ffffff" align="center" valign="top">
+                    <h3>${binding.class.name}</h3>
+                    <h2>${binding.subject.shortname}</h2>
+                    <h3>${binding.teacher.lessons}h</h3>
                 </td>`
 		)
 		.join('')
 
 	const teacherCardHtml = `
         ${style}
-        <table class="tg">
+        <table style="border-collapse:collapse; border-color:#ccc; border-spacing:0; margin:0 auto">
             <tbody>
                 <tr>
-                    <td class="tg-c3ow">
-                        <h4>${teacher.shortname}</h4>
+                    <td class="tg-c3ow" style="background-color:#fff; border-color:inherit; border-style:solid; border-width:1px; color:#333; font-family:Arial, sans-serif; font-size:14px; overflow:hidden; padding:15px; word-break:normal; text-align:center; vertical-align:middle" bgcolor="#ffffff" align="center" valign="top">
+                        <h1>${teacher.shortname}</h1>
                     </td>
-                    <td class="tg-c3ow">
-                        <h4>${teacher.totalLessons}h</h4>
+                    <td class="tg-c3ow" style="background-color:#fff; border-color:inherit; border-style:solid; border-width:1px; color:#333; font-family:Arial, sans-serif; font-size:14px; overflow:hidden; padding:15px; word-break:normal; text-align:center; vertical-align:middle" bgcolor="#ffffff" align="center" valign="top">
+                        <h1>${teacher.totalLessons}h</h1>
                     </td>
                     ${bindingCellsHtml}
                 </tr>

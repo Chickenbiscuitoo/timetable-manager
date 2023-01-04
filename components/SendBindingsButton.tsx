@@ -20,9 +20,8 @@ const SendBindingsButton: NextPage = () => {
 	}
 
 	if (wantsToSend && alertMessage.status === 'confirmed') {
-		sendBindings()
 		setWantsToSend(false)
-		console.log('Sending bindings to teachers...')
+		sendBindings()
 	}
 
 	if (wantsToSend && alertMessage.status === 'denied') {
