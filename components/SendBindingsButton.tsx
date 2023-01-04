@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 
 import useTimetableStore from '../store'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { BiMailSend } from 'react-icons/bi'
 
