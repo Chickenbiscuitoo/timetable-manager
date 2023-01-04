@@ -11,6 +11,7 @@ import TeachersBarChart from '../components/TeachersBarChart'
 import TeacherForm from '../components/TeacherForm'
 import TeachersManager from '../components/TeachersManager'
 import ErrorMessageCard from '../components/ErrorMessageCard'
+import SendBindingsButton from '../components/SendBindingsButton'
 
 const Teachers: NextPage = () => {
 	const { teachers, errorMessage } = useTimetableStore()
@@ -29,6 +30,9 @@ const Teachers: NextPage = () => {
 						<div className="flex flex-row max-h-fit h-fit">
 							<div className="grid bg-primary bg-opacity-30 rounded-xl p-4 m-2 h-fit">
 								<TeachersManager />
+								<div className="mt-3">
+									<SendBindingsButton />
+								</div>
 							</div>
 							<div className="grid grid-cols-1 grid-rows-2 max-h-fit">
 								<div className="grid bg-primary bg-opacity-30 rounded-xl p-4 m-2 max-h-fit h-fit">
