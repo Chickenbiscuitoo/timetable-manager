@@ -5,18 +5,26 @@ import useTimetableStore from '../store'
 const TeachersTable: NextPage = () => {
 	const { teachers, subjects, classes, bindings } = useTimetableStore()
 
-	const teachersStats = teachers.map((teacher) => {
-		const teacherToClass = classes.map((cl) =>
+	const teacherClassLessonsCount = teachers.map((teacher) => {
+		const classBindings = classes.map((cl) =>
 			bindings
-				.filter((binding) => binding.cl.id === cl.id)
-				.map((binding) => binding.teachers?.map((tch) => tch.id))
-				.filter((tch) => tch?.includes(teacher.id))
+				.filter(
+					(bind) =>
+						bind.cl.id == cl.id &&
+						bind.teachers.some((tch) => tch.id == teacher.id)
+				)
+				.map(
+					(bind) =>
+						bind.teachers.find((tch) => tch.id == teacher.id)
+							?.lessons
+				)
+				.reduce((partialSum = 0, a = 0) => partialSum + a, 0)
 		)
 
 		return {
 			id: teacher.id,
 			name: teacher.name,
-			classesCount: teacherToClass,
+			classesCount: classBindings as number[],
 		}
 	})
 
@@ -34,14 +42,14 @@ const TeachersTable: NextPage = () => {
 					</tr>
 				</thead>
 				<tbody>
-					{teachersStats.map((tch) => {
+					{teacherClassLessonsCount.map((tch) => {
 						return (
 							<tr key={tch.id}>
 								<td className="font-bold text-md text-primary">
 									{tch.name}
 								</td>
-								{tch.classesCount.map((cl, i) => (
-									<td key={i}>{cl.length}</td>
+								{tch.classesCount.map((count, i) => (
+									<td key={i}>{count}</td>
 								))}
 							</tr>
 						)
