@@ -11,11 +11,9 @@ const SendBindingsButton: NextPage = () => {
 
 	const [wantsToSend, setWantsToSend] = useState(false)
 
-	const teachersCount = teachers.length
-
 	const handleClick = () => {
 		setAlertMessage(
-			`Are you sure you want to send email to ${teachersCount} teachers?`,
+			`Are you sure you want to send email to all teachers?`,
 			undefined
 		)
 		setWantsToSend(true)
