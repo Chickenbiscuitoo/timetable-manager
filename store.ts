@@ -955,7 +955,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	resetErrorMessage: () => set(() => ({ errorMessage: '' })),
 
 	alertMessage: {
-		message: 'Are you sure?',
+		message: '',
 		status: undefined,
 	},
 	setAlertMessage: (message, status) =>
