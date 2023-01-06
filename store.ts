@@ -252,7 +252,10 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	fetchOrganization: async () => {
 		try {
 			const response = await axios.get(
-				'http://localhost:3000/api/organizations'
+				'http://localhost:3000/api/organizations',
+				{
+					withCredentials: true,
+				}
 			)
 
 			if (response.data.message === 'No organization') {
@@ -354,6 +357,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			const response = await axios.get(
 				'http://localhost:3000/api/teachers',
 				{
+					withCredentials: true,
 					params: {
 						mode,
 					},
@@ -375,6 +379,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			const response = await axios.get(
 				'http://localhost:3000/api/subjects',
 				{
+					withCredentials: true,
 					params: {
 						mode,
 					},
@@ -396,6 +401,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			const response = await axios.get(
 				'http://localhost:3000/api/classes',
 				{
+					withCredentials: true,
 					params: {
 						mode,
 					},
@@ -418,6 +424,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			const response = await axios.get(
 				'http://localhost:3000/api/bindings',
 				{
+					withCredentials: true,
 					params: {
 						mode,
 						schoolYear,
@@ -865,6 +872,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			const response = await axios.get(
 				'http://localhost:3000/api/lessons',
 				{
+					withCredentials: true,
 					params: {
 						mode,
 						schoolYear,
