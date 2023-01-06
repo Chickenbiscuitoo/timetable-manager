@@ -32,8 +32,8 @@ const SchoolYearButton: NextPage = ({}) => {
 				className="dropdown-content menu p-2 shadow bg-base-100 rounded-box"
 			>
 				{clicked &&
-					schoolYearOptions.map((year) => (
-						<li>
+					schoolYearOptions.map((year, i) => (
+						<li key={i}>
 							<a onClick={handleSelect}>{year}</a>
 						</li>
 					))}

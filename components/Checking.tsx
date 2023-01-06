@@ -34,7 +34,7 @@ const Checking: NextPage = () => {
 	const classTeacherTeaching = () => {
 		const classTeacher = classes
 			.filter((cl) => cl.id === selectedClass)
-			.map((cl) => cl.teacherId)[0]
+			.map((cl) => cl.teacher.id)[0]
 
 		const classLessons = rawTableData.filter(
 			(lesson) => lesson.classId === selectedClass

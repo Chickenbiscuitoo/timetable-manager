@@ -108,6 +108,7 @@ interface TimetableStore {
 	) => void
 
 	copyBindings: (srcClassId: number, destClassId: number) => void
+	copyLessons: (srcClassId: number, destClassId: number) => void
 
 	addTeacher: (name: string, shortname: string, email: string) => void
 	removeTeacher: (id: number) => void
@@ -491,14 +492,19 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	copyBindings: async (srcClassId, destClassId) => {
-		// const response = await axios.patch(
-		// 	'http://localhost:3000/api/bindings/copy',
-		// 	{
-		// 		srcClassId,
-		// 		destClassId,
-		// 	}
-		// )
-		// get().fetchBindings()
+		// TODO
+
+		set({
+			errorMessage: 'This feature is not implemented yet',
+		})
+	},
+
+	copyLessons: async (srcClassId, destClassId) => {
+		// TODO
+
+		set({
+			errorMessage: 'This feature is not implemented yet',
+		})
 	},
 
 	addTeacher: async (name, shortname, email) => {
