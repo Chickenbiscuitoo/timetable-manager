@@ -56,7 +56,7 @@ const ScrollMenu: NextPage<Props> = ({ data, isTeacher }) => {
 					item.name.toLowerCase().includes(filter.toLowerCase())
 				)
 				.map((i: any) => (
-					<div className="w-full">
+					<div key={i.id} className="w-full">
 						<MenuItem
 							key={i.id}
 							id={i.id}

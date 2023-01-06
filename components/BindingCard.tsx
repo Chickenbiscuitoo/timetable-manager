@@ -50,7 +50,10 @@ const BindingCard: NextPage<BindingCardProps> = ({ teacherId }) => {
 								{teacherTotalLessons}h
 							</td>
 							{teacherBindings.map((binding) => (
-								<td className="border border-white text-white p-3 text-center">
+								<td
+									key={binding.id}
+									className="border border-white text-white p-3 text-center"
+								>
 									<h3 className="text-md font-semibold">
 										{binding.cl.name}
 									</h3>
