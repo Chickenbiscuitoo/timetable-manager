@@ -5,7 +5,7 @@ import create from 'zustand'
 const API_URL =
 	process.env.NODE_ENV === 'development'
 		? 'http://localhost:3000/api'
-		: process.env.VERCEL_URL + '/api'
+		: 'https://timetable-manager.vercel.app/api'
 
 interface TimetableStore {
 	mode: string

@@ -8,7 +8,7 @@ const LoginButton = () => {
 	const WEB_URL =
 		process.env.NODE_ENV === 'development'
 			? 'http://localhost:3000/'
-			: process.env.VERCEL_URL
+			: 'https://timetable-manager.vercel.app/api'
 
 	if (session.status === 'authenticated') {
 		return (
