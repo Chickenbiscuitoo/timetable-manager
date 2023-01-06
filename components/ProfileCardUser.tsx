@@ -16,6 +16,7 @@ const ProfileCardUser: NextPage<ProfileCardUserProps> = ({
 			<div>
 				<img
 					src={image}
+					referrerPolicy="no-referrer"
 					className="rounded-full h-24 w-24 inline table m-auto"
 				/>
 				<div className="ml-4 inline text-center">
