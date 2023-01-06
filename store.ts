@@ -349,72 +349,88 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	teachers: [],
 	fetchTeachers: async () => {
-		const mode = get().mode
-		const response = await axios.get(
-			'http://localhost:3000/api/teachers',
-			{
-				params: {
-					mode,
-				},
-			}
-		)
+		try {
+			const mode = get().mode
+			const response = await axios.get(
+				'http://localhost:3000/api/teachers',
+				{
+					params: {
+						mode,
+					},
+				}
+			)
 
-		set({
-			teachers: response.data,
-		})
+			set({
+				teachers: response.data,
+			})
+		} catch (err) {
+			console.log(err)
+		}
 	},
 
 	subjects: [],
 	fetchSubjects: async () => {
-		const mode = get().mode
-		const response = await axios.get(
-			'http://localhost:3000/api/subjects',
-			{
-				params: {
-					mode,
-				},
-			}
-		)
+		try {
+			const mode = get().mode
+			const response = await axios.get(
+				'http://localhost:3000/api/subjects',
+				{
+					params: {
+						mode,
+					},
+				}
+			)
 
-		set({
-			subjects: response.data,
-		})
+			set({
+				subjects: response.data,
+			})
+		} catch (err) {
+			console.log(err)
+		}
 	},
 
 	classes: [],
 	fetchClasses: async () => {
-		const mode = get().mode
-		const response = await axios.get(
-			'http://localhost:3000/api/classes',
-			{
-				params: {
-					mode,
-				},
-			}
-		)
+		try {
+			const mode = get().mode
+			const response = await axios.get(
+				'http://localhost:3000/api/classes',
+				{
+					params: {
+						mode,
+					},
+				}
+			)
 
-		set({
-			classes: response.data,
-		})
+			set({
+				classes: response.data,
+			})
+		} catch (err) {
+			console.log(err)
+		}
 	},
 
 	bindings: [],
 	fetchBindings: async () => {
-		const mode = get().mode
-		const schoolYear = get().schoolYear
-		const response = await axios.get(
-			'http://localhost:3000/api/bindings',
-			{
-				params: {
-					mode,
-					schoolYear,
-				},
-			}
-		)
+		try {
+			const mode = get().mode
+			const schoolYear = get().schoolYear
+			const response = await axios.get(
+				'http://localhost:3000/api/bindings',
+				{
+					params: {
+						mode,
+						schoolYear,
+					},
+				}
+			)
 
-		set({
-			bindings: response.data,
-		})
+			set({
+				bindings: response.data,
+			})
+		} catch (err) {
+			console.log(err)
+		}
 	},
 
 	addBinding: async (teacherId, subjectId, classId) => {
@@ -843,19 +859,23 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	rawTableData: [],
 
 	fetchLessons: async () => {
-		const mode = get().mode
-		const schoolYear = get().schoolYear
-		const response = await axios.get(
-			'http://localhost:3000/api/lessons',
-			{
-				params: {
-					mode,
-					schoolYear,
-				},
-			}
-		)
+		try {
+			const mode = get().mode
+			const schoolYear = get().schoolYear
+			const response = await axios.get(
+				'http://localhost:3000/api/lessons',
+				{
+					params: {
+						mode,
+						schoolYear,
+					},
+				}
+			)
 
-		set(() => ({ rawTableData: response.data }))
+			set(() => ({ rawTableData: response.data }))
+		} catch (err) {
+			console.log(err)
+		}
 	},
 
 	addLesson: async (classId, subjectId, day, period) => {
