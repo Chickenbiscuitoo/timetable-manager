@@ -2,6 +2,11 @@ import axios, { AxiosError } from 'axios'
 
 import create from 'zustand'
 
+const API_URL =
+	process.env.NODE_ENV === 'development'
+		? 'http://localhost:3000/api'
+		: process.env.VERCEL_URL + '/api'
+
 interface TimetableStore {
 	mode: string
 	setMode: (mode: string) => void
@@ -251,12 +256,9 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	organization: null,
 	fetchOrganization: async () => {
 		try {
-			const response = await axios.get(
-				'http://localhost:3000/api/organizations',
-				{
-					withCredentials: true,
-				}
-			)
+			const response = await axios.get(API_URL + '/organizations', {
+				withCredentials: true,
+			})
 
 			if (response.data.message === 'No organization') {
 				set({
@@ -283,12 +285,9 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	createOrganization: async (name) => {
 		try {
-			const response = await axios.post(
-				'http://localhost:3000/api/organizations',
-				{
-					name,
-				}
-			)
+			const response = await axios.post(API_URL + '/organizations', {
+				name,
+			})
 			get().fetchOrganization()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
@@ -313,22 +312,17 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	leaveOrganization: async () => {
-		const response = await axios.patch(
-			'http://localhost:3000/api/organizations'
-		)
+		const response = await axios.patch(API_URL + '/organizations')
 
 		get().fetchOrganization()
 	},
 
 	inviteMemberToOrganization: async (recipientEmail, orgId) => {
 		try {
-			const response = await axios.post(
-				'http://localhost:3000/api/invites/new',
-				{
-					recipientEmail,
-					orgId,
-				}
-			)
+			const response = await axios.post(API_URL + '/invites/new', {
+				recipientEmail,
+				orgId,
+			})
 			get().fetchOrganization()
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
@@ -354,15 +348,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	fetchTeachers: async () => {
 		try {
 			const mode = get().mode
-			const response = await axios.get(
-				'http://localhost:3000/api/teachers',
-				{
-					withCredentials: true,
-					params: {
-						mode,
-					},
-				}
-			)
+			const response = await axios.get(API_URL + '/teachers', {
+				withCredentials: true,
+				params: {
+					mode,
+				},
+			})
 
 			set({
 				teachers: response.data,
@@ -376,15 +367,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	fetchSubjects: async () => {
 		try {
 			const mode = get().mode
-			const response = await axios.get(
-				'http://localhost:3000/api/subjects',
-				{
-					withCredentials: true,
-					params: {
-						mode,
-					},
-				}
-			)
+			const response = await axios.get(API_URL + '/subjects', {
+				withCredentials: true,
+				params: {
+					mode,
+				},
+			})
 
 			set({
 				subjects: response.data,
@@ -398,15 +386,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	fetchClasses: async () => {
 		try {
 			const mode = get().mode
-			const response = await axios.get(
-				'http://localhost:3000/api/classes',
-				{
-					withCredentials: true,
-					params: {
-						mode,
-					},
-				}
-			)
+			const response = await axios.get(API_URL + '/classes', {
+				withCredentials: true,
+				params: {
+					mode,
+				},
+			})
 
 			set({
 				classes: response.data,
@@ -421,16 +406,13 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		try {
 			const mode = get().mode
 			const schoolYear = get().schoolYear
-			const response = await axios.get(
-				'http://localhost:3000/api/bindings',
-				{
-					withCredentials: true,
-					params: {
-						mode,
-						schoolYear,
-					},
-				}
-			)
+			const response = await axios.get(API_URL + '/bindings', {
+				withCredentials: true,
+				params: {
+					mode,
+					schoolYear,
+				},
+			})
 
 			set({
 				bindings: response.data,
@@ -443,36 +425,30 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	addBinding: async (teacherId, subjectId, classId) => {
 		const mode = get().mode
 		const schoolYear = get().schoolYear
-		const response = await axios.put(
-			'http://localhost:3000/api/bindings',
-			{
-				teacherId,
-				subjectId,
-				classId,
-				mode,
-				schoolYear,
-			}
-		)
+		const response = await axios.put(API_URL + '/bindings', {
+			teacherId,
+			subjectId,
+			classId,
+			mode,
+			schoolYear,
+		})
 
 		get().fetchBindings()
 	},
 
 	deleteBinding: async (id) => {
-		const response = await axios.delete(
-			'http://localhost:3000/api/bindings',
-			{
-				data: {
-					id,
-				},
-			}
-		)
+		const response = await axios.delete(API_URL + '/bindings', {
+			data: {
+				id,
+			},
+		})
 
 		get().fetchBindings()
 	},
 
 	deleteTeacherFromBinding: async (bindingId, teacherId) => {
 		const response = await axios.delete(
-			'http://localhost:3000/api/bindings/teachers',
+			API_URL + '/bindings/teachers',
 			{
 				data: {
 					bindingId,
@@ -486,7 +462,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	addTeacherToBinding: async (bindingId, teacherId) => {
 		const response = await axios.patch(
-			'http://localhost:3000/api/bindings/teachers',
+			API_URL + '/bindings/teachers',
 			{
 				bindingId,
 				teacherId,
@@ -503,7 +479,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		}
 
 		const response = await axios.patch(
-			'http://localhost:3000/api/bindings/lessonsCount',
+			API_URL + '/bindings/lessonsCount',
 			{
 				bindingId,
 				teacherId,
@@ -533,15 +509,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	addTeacher: async (name, shortname, email) => {
 		try {
 			const mode = get().mode
-			const response = await axios.put(
-				'http://localhost:3000/api/teachers',
-				{
-					name,
-					shortname,
-					email,
-					mode,
-				}
-			)
+			const response = await axios.put(API_URL + '/teachers', {
+				name,
+				shortname,
+				email,
+				mode,
+			})
 
 			get().fetchTeachers()
 		} catch (err) {
@@ -569,14 +542,11 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	removeTeacher: async (id) => {
 		try {
-			const response = await axios.delete(
-				'http://localhost:3000/api/teachers',
-				{
-					data: {
-						id,
-					},
-				}
-			)
+			const response = await axios.delete(API_URL + '/teachers', {
+				data: {
+					id,
+				},
+			})
 
 			get().fetchTeachers()
 			get().fetchBindings()
@@ -605,15 +575,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	updateTeacher: async (id, name, shortname, email) => {
 		try {
-			const response = await axios.patch(
-				'http://localhost:3000/api/teachers',
-				{
-					id,
-					name,
-					shortname,
-					email,
-				}
-			)
+			const response = await axios.patch(API_URL + '/teachers', {
+				id,
+				name,
+				shortname,
+				email,
+			})
 
 			get().fetchTeachers()
 			get().fetchBindings()
@@ -650,15 +617,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	addClass: async (name, grade, teacherId) => {
 		try {
 			const mode = get().mode
-			const response = await axios.put(
-				'http://localhost:3000/api/classes',
-				{
-					name,
-					grade,
-					teacherId,
-					mode,
-				}
-			)
+			const response = await axios.put(API_URL + '/classes', {
+				name,
+				grade,
+				teacherId,
+				mode,
+			})
 
 			get().fetchClasses()
 		} catch (err) {
@@ -685,14 +649,11 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	removeClass: async (id) => {
 		try {
-			const response = await axios.delete(
-				'http://localhost:3000/api/classes',
-				{
-					data: {
-						id,
-					},
-				}
-			)
+			const response = await axios.delete(API_URL + '/classes', {
+				data: {
+					id,
+				},
+			})
 
 			get().fetchClasses()
 		} catch (err) {
@@ -720,15 +681,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	updateClass: async (id, name, grade, teacherId) => {
 		try {
-			const response = await axios.patch(
-				'http://localhost:3000/api/classes',
-				{
-					id,
-					name,
-					grade,
-					teacherId,
-				}
-			)
+			const response = await axios.patch(API_URL + '/classes', {
+				id,
+				name,
+				grade,
+				teacherId,
+			})
 
 			get().fetchClasses()
 			get().fetchBindings()
@@ -758,15 +716,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	addSubject: async (name, shortname, commiteeId) => {
 		try {
 			const mode = get().mode
-			const response = await axios.put(
-				'http://localhost:3000/api/subjects',
-				{
-					name,
-					shortname,
-					commiteeId,
-					mode,
-				}
-			)
+			const response = await axios.put(API_URL + '/subjects', {
+				name,
+				shortname,
+				commiteeId,
+				mode,
+			})
 
 			get().fetchSubjects()
 		} catch (err) {
@@ -793,15 +748,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	updateSubject: async (id, name, shortname, commiteeId) => {
 		try {
-			const response = await axios.patch(
-				'http://localhost:3000/api/subjects',
-				{
-					id,
-					name,
-					shortname,
-					commiteeId,
-				}
-			)
+			const response = await axios.patch(API_URL + '/subjects', {
+				id,
+				name,
+				shortname,
+				commiteeId,
+			})
 
 			get().fetchSubjects()
 			get().fetchBindings()
@@ -830,14 +782,11 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	removeSubject: async (id) => {
 		try {
-			const response = await axios.delete(
-				'http://localhost:3000/api/subjects',
-				{
-					data: {
-						id,
-					},
-				}
-			)
+			const response = await axios.delete(API_URL + '/subjects', {
+				data: {
+					id,
+				},
+			})
 
 			get().fetchSubjects()
 		} catch (err) {
@@ -869,16 +818,13 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		try {
 			const mode = get().mode
 			const schoolYear = get().schoolYear
-			const response = await axios.get(
-				'http://localhost:3000/api/lessons',
-				{
-					withCredentials: true,
-					params: {
-						mode,
-						schoolYear,
-					},
-				}
-			)
+			const response = await axios.get(API_URL + '/lessons', {
+				withCredentials: true,
+				params: {
+					mode,
+					schoolYear,
+				},
+			})
 
 			set(() => ({ rawTableData: response.data }))
 		} catch (err) {
@@ -889,64 +835,49 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	addLesson: async (classId, subjectId, day, period) => {
 		const mode = get().mode
 		const schoolYear = get().schoolYear
-		const response = await axios.put(
-			'http://localhost:3000/api/lessons',
-			{
-				classId,
-				subjectId,
-				day,
-				period,
-				mode,
-				schoolYear,
-			}
-		)
+		const response = await axios.put(API_URL + '/lessons', {
+			classId,
+			subjectId,
+			day,
+			period,
+			mode,
+			schoolYear,
+		})
 
 		get().fetchLessons()
 	},
 
 	removeLesson: async (id) => {
-		const response = await axios.delete(
-			'http://localhost:3000/api/lessons',
-			{
-				data: {
-					id,
-				},
-			}
-		)
+		const response = await axios.delete(API_URL + '/lessons', {
+			data: {
+				id,
+			},
+		})
 
 		get().fetchLessons()
 	},
 
 	updateLesson: async (id, teacherId, subjectId) => {
 		if (subjectId && teacherId) {
-			const response = await axios.patch(
-				'http://localhost:3000/api/lessons',
-				{
-					id,
-					subjectId,
-					teacherId,
-				}
-			)
+			const response = await axios.patch(API_URL + '/lessons', {
+				id,
+				subjectId,
+				teacherId,
+			})
 
 			get().fetchLessons()
 		} else if (subjectId && !teacherId) {
-			const response = await axios.patch(
-				'http://localhost:3000/api/lessons',
-				{
-					id,
-					subjectId,
-				}
-			)
+			const response = await axios.patch(API_URL + '/lessons', {
+				id,
+				subjectId,
+			})
 
 			get().fetchLessons()
 		} else if (!subjectId && teacherId) {
-			const response = await axios.patch(
-				'http://localhost:3000/api/lessons',
-				{
-					id,
-					teacherId,
-				}
-			)
+			const response = await axios.patch(API_URL + '/lessons', {
+				id,
+				teacherId,
+			})
 
 			get().fetchLessons()
 		} else {
@@ -960,13 +891,10 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			const mode = get().mode
 			const schoolYear = get().schoolYear
 
-			const response = await axios.post(
-				'http://localhost:3000/api/bindings/send',
-				{
-					mode,
-					schoolYear,
-				}
-			)
+			const response = await axios.post(API_URL + '/bindings/send', {
+				mode,
+				schoolYear,
+			})
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
 				console.log(err.response?.data.message)

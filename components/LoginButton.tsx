@@ -5,12 +5,17 @@ import { FaSignOutAlt, FaSignInAlt } from 'react-icons/fa'
 const LoginButton = () => {
 	const session = useSession()
 
+	const WEB_URL =
+		process.env.NODE_ENV === 'development'
+			? 'http://localhost:3000/'
+			: process.env.VERCEL_URL
+
 	if (session.status === 'authenticated') {
 		return (
 			<button
 				onClick={() =>
 					signOut({
-						callbackUrl: 'http://localhost:3000/landing',
+						callbackUrl: WEB_URL + '/landing',
 					})
 				}
 				className="btn gap-2"
@@ -24,7 +29,7 @@ const LoginButton = () => {
 		<button
 			onClick={() =>
 				signIn('google', {
-					callbackUrl: 'http://localhost:3000',
+					callbackUrl: WEB_URL,
 				})
 			}
 			className="btn gap-2"
