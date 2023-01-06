@@ -6,7 +6,6 @@ import useTimetableStore from '../store'
 import { AiFillGithub } from 'react-icons/ai'
 
 import BindingsTable from '../components/BindingsTable'
-import CopyButton from '../components/CopyButton'
 import Sidebar from '../components/Sidebar'
 import BindingsTabsMenu from '../components/BindingsTabsMenu'
 import BindingsSideWorkspace from '../components/BindingsSideWorkspace'
