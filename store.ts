@@ -37,7 +37,7 @@ interface TimetableStore {
 				email: string
 		  }[]
 		| []
-	fetchTeachers: () => void
+	fetchTeachers: (showLoading?: boolean) => void
 
 	subjects:
 		| {
@@ -47,7 +47,7 @@ interface TimetableStore {
 				commiteeId: number
 		  }[]
 		| []
-	fetchSubjects: () => void
+	fetchSubjects: (showLoading?: boolean) => void
 
 	classes:
 		| {
@@ -62,7 +62,7 @@ interface TimetableStore {
 				}
 		  }[]
 		| []
-	fetchClasses: () => void
+	fetchClasses: (showLoading?: boolean) => void
 
 	bindings:
 		| {
@@ -93,7 +93,7 @@ interface TimetableStore {
 				}
 		  }[]
 		| []
-	fetchBindings: () => void
+	fetchBindings: (showLoading?: boolean) => void
 
 	addBinding: (
 		teacherId: number,
@@ -169,7 +169,7 @@ interface TimetableStore {
 		  }[]
 		| []
 
-	fetchLessons: () => void
+	fetchLessons: (showLoading?: boolean) => void
 
 	addLesson: (
 		classId: number,
@@ -351,11 +351,9 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	teachers: [],
-	fetchTeachers: async () => {
+	fetchTeachers: async (showLoading = false) => {
 		try {
-			set({
-				teachersLoading: true,
-			})
+			if (showLoading) set({ teachersLoading: true })
 
 			const mode = get().mode
 			const response = await axios.get(API_URL + '/teachers', {
@@ -378,11 +376,9 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	subjects: [],
-	fetchSubjects: async () => {
+	fetchSubjects: async (showLoading = false) => {
 		try {
-			set({
-				subjectsLoading: true,
-			})
+			if (showLoading) set({ subjectsLoading: true })
 
 			const mode = get().mode
 			const response = await axios.get(API_URL + '/subjects', {
@@ -405,11 +401,9 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	classes: [],
-	fetchClasses: async () => {
+	fetchClasses: async (showLoading = false) => {
 		try {
-			set({
-				classesLoading: true,
-			})
+			if (showLoading) set({ classesLoading: true })
 
 			const mode = get().mode
 			const response = await axios.get(API_URL + '/classes', {
@@ -432,11 +426,9 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	},
 
 	bindings: [],
-	fetchBindings: async () => {
+	fetchBindings: async (showLoading = false) => {
 		try {
-			set({
-				bindingsLoading: true,
-			})
+			if (showLoading) set({ bindingsLoading: true })
 
 			const mode = get().mode
 			const schoolYear = get().schoolYear
@@ -852,11 +844,9 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	rawTableData: [],
 
-	fetchLessons: async () => {
+	fetchLessons: async (showLoading = false) => {
 		try {
-			set({
-				lessonsLoading: true,
-			})
+			if (showLoading) set({ lessonsLoading: true })
 
 			const mode = get().mode
 			const schoolYear = get().schoolYear
@@ -986,10 +976,10 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 }))
 
 useTimetableStore.getState().fetchOrganization()
-useTimetableStore.getState().fetchTeachers()
-useTimetableStore.getState().fetchSubjects()
-useTimetableStore.getState().fetchClasses()
-useTimetableStore.getState().fetchBindings()
-useTimetableStore.getState().fetchLessons()
+useTimetableStore.getState().fetchTeachers(true)
+useTimetableStore.getState().fetchSubjects(true)
+useTimetableStore.getState().fetchClasses(true)
+useTimetableStore.getState().fetchBindings(true)
+useTimetableStore.getState().fetchLessons(true)
 
 export default useTimetableStore
