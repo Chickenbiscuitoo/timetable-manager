@@ -23,7 +23,7 @@ const Sidebar: NextPage = () => {
 	const { data: session, status } = useSession({
 		required: true,
 		onUnauthenticated() {
-			router.push('/landing')
+			router.push('/')
 		},
 	})
 
@@ -51,7 +51,7 @@ const Sidebar: NextPage = () => {
 				<ul className="space-y-2">
 					<li>
 						<a
-							onClick={() => router.push('/')}
+							onClick={() => router.push('/bindings')}
 							className="cursor-pointer flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
 						>
 							<AiFillFile className="w-fit h-full bg-neutral transition duration-75" />
@@ -60,9 +60,7 @@ const Sidebar: NextPage = () => {
 					</li>
 					<li>
 						<a
-							onClick={() =>
-								router.push('/timetableManager')
-							}
+							onClick={() => router.push('/lessons')}
 							className="cursor-pointer flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
 						>
 							<AiFillCalendar className="w-fit h-full bg-neutral transition duration-75" />

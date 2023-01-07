@@ -5,11 +5,10 @@ import useTimetableStore from '../store'
 
 import { AiFillGithub } from 'react-icons/ai'
 
-import Timetable from '../components/Timetable'
-import CopyButton from '../components/CopyButton'
+import BindingsTable from '../components/BindingsTable'
 import Sidebar from '../components/Sidebar'
-import TabsMenu from '../components/TabsMenu'
-import SideWorkspace from '../components/SideWorkspace'
+import BindingsTabsMenu from '../components/BindingsTabsMenu'
+import BindingsSideWorkspace from '../components/BindingsSideWorkspace'
 import ModeButton from '../components/ModeButton'
 import SchoolYearButton from '../components/SchoolYearButton'
 import ErrorMessageCard from '../components/ErrorMessageCard'
@@ -17,8 +16,18 @@ import ErrorMessageCard from '../components/ErrorMessageCard'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
 
-const TimetableManager: NextPage = () => {
-	const { errorMessage } = useTimetableStore()
+const Bindings: NextPage = () => {
+	const { errorMessage, subjects, classes } = useTimetableStore()
+
+	const warning = () => {
+		if (subjects.length === 0 && classes.length === 0) {
+			return 'You have no subjects and classes, please add some'
+		} else if (subjects.length === 0) {
+			return 'You have no subjects, please add some'
+		} else if (classes.length === 0) {
+			return 'You have no classes, please add some'
+		}
+	}
 
 	return (
 		<div>
@@ -30,20 +39,31 @@ const TimetableManager: NextPage = () => {
 			<DndProvider backend={HTML5Backend}>
 				<main className="min-h-screen flex flex-row relative">
 					<Sidebar />
-					<div>
+					<div className="w-full p-5">
 						<div className="flex flex-row items-end mx-5">
-							<TabsMenu />
-							<div className="mr-3 ml-1">
-								<CopyButton />
-							</div>
+							<BindingsTabsMenu />
+
 							<SchoolYearButton />
-							<div className="mt-3">
-								<ModeButton />
-							</div>
+
+							<ModeButton />
 						</div>
-						<Timetable />
+						{subjects.length > 0 && classes.length > 0 ? (
+							<BindingsTable />
+						) : (
+							<div className="flex flex-col items-center justify-center h-screen">
+								<h1 className="text-2xl font-semibold">
+									Subjects: {subjects.length}
+								</h1>
+								<h1 className="text-2xl font-semibold">
+									Classes: {classes.length}
+								</h1>
+								<p className="text-lg text-primary">
+									{warning()}
+								</p>
+							</div>
+						)}
 					</div>
-					<SideWorkspace />
+					<BindingsSideWorkspace />
 				</main>
 			</DndProvider>
 
@@ -67,4 +87,4 @@ const TimetableManager: NextPage = () => {
 	)
 }
 
-export default TimetableManager
+export default Bindings

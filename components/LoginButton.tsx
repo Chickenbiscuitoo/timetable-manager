@@ -15,7 +15,7 @@ const LoginButton = () => {
 			<button
 				onClick={() =>
 					signOut({
-						callbackUrl: WEB_URL + '/landing',
+						callbackUrl: WEB_URL,
 					})
 				}
 				className="btn gap-2"
