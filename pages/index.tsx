@@ -21,8 +21,8 @@ const Home: NextPage = () => {
 						className="opacity-80 w-full h-screen object-cover"
 					>
 						<source
-							src="/videos/showcase.mp4"
-							type="video/mp4"
+							src="/videos/showcase.webm"
+							type="video/webm"
 						/>
 					</video>
 				</div>
