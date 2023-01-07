@@ -1,21 +1,11 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
-
 import LoginButtonGlowing from '../components/LoginButtonGlowing'
 
 import { AiFillGithub } from 'react-icons/ai'
 
 const Home: NextPage = () => {
-	const router = useRouter()
-	const { data: session, status } = useSession()
-
-	if (session && status === 'authenticated') {
-		router.push('/bindings')
-	}
-
 	return (
 		<div className="bg-black">
 			<Head>
