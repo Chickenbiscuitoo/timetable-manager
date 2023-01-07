@@ -29,7 +29,7 @@ const LoginButton = () => {
 		<button
 			onClick={() =>
 				signIn('google', {
-					callbackUrl: WEB_URL,
+					callbackUrl: WEB_URL + '/bindings',
 				})
 			}
 			className="btn gap-2"
