@@ -5,7 +5,8 @@ import useTimetableStore from '../store'
 
 import { AiFillGithub } from 'react-icons/ai'
 
-import BindingsTable from '../components/BindingsTable'
+import BindingsMainContent from '../components/BindingsMainContent'
+
 import Sidebar from '../components/Sidebar'
 import BindingsTabsMenu from '../components/BindingsTabsMenu'
 import BindingsSideWorkspace from '../components/BindingsSideWorkspace'
@@ -17,17 +18,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
 
 const Bindings: NextPage = () => {
-	const { errorMessage, subjects, classes } = useTimetableStore()
-
-	const warning = () => {
-		if (subjects.length === 0 && classes.length === 0) {
-			return 'You have no subjects and classes, please add some'
-		} else if (subjects.length === 0) {
-			return 'You have no subjects, please add some'
-		} else if (classes.length === 0) {
-			return 'You have no classes, please add some'
-		}
-	}
+	const { errorMessage } = useTimetableStore()
 
 	return (
 		<div>
@@ -47,21 +38,7 @@ const Bindings: NextPage = () => {
 
 							<ModeButton />
 						</div>
-						{subjects.length > 0 && classes.length > 0 ? (
-							<BindingsTable />
-						) : (
-							<div className="flex flex-col items-center justify-center h-screen">
-								<h1 className="text-2xl font-semibold">
-									Subjects: {subjects.length}
-								</h1>
-								<h1 className="text-2xl font-semibold">
-									Classes: {classes.length}
-								</h1>
-								<p className="text-lg text-primary">
-									{warning()}
-								</p>
-							</div>
-						)}
+						<BindingsMainContent />
 					</div>
 					<BindingsSideWorkspace />
 				</main>

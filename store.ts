@@ -206,6 +206,12 @@ interface TimetableStore {
 		status: 'confirmed' | 'denied' | undefined
 	) => void
 	resetAlertMessage: () => void
+
+	teachersLoading: boolean
+	subjectsLoading: boolean
+	classesLoading: boolean
+	bindingsLoading: boolean
+	lessonsLoading: boolean
 }
 
 // TODO: Copy bindings func
@@ -347,6 +353,10 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	teachers: [],
 	fetchTeachers: async () => {
 		try {
+			set({
+				teachersLoading: true,
+			})
+
 			const mode = get().mode
 			const response = await axios.get(API_URL + '/teachers', {
 				withCredentials: true,
@@ -357,6 +367,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 			set({
 				teachers: response.data,
+				teachersLoading: false,
 			})
 		} catch (err) {
 			console.log(err)
@@ -366,6 +377,10 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	subjects: [],
 	fetchSubjects: async () => {
 		try {
+			set({
+				subjectsLoading: true,
+			})
+
 			const mode = get().mode
 			const response = await axios.get(API_URL + '/subjects', {
 				withCredentials: true,
@@ -376,6 +391,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 			set({
 				subjects: response.data,
+				subjectsLoading: false,
 			})
 		} catch (err) {
 			console.log(err)
@@ -385,6 +401,10 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	classes: [],
 	fetchClasses: async () => {
 		try {
+			set({
+				classesLoading: true,
+			})
+
 			const mode = get().mode
 			const response = await axios.get(API_URL + '/classes', {
 				withCredentials: true,
@@ -395,6 +415,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 			set({
 				classes: response.data,
+				classesLoading: false,
 			})
 		} catch (err) {
 			console.log(err)
@@ -404,6 +425,10 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	bindings: [],
 	fetchBindings: async () => {
 		try {
+			set({
+				bindingsLoading: true,
+			})
+
 			const mode = get().mode
 			const schoolYear = get().schoolYear
 			const response = await axios.get(API_URL + '/bindings', {
@@ -416,6 +441,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 			set({
 				bindings: response.data,
+				bindingsLoading: false,
 			})
 		} catch (err) {
 			console.log(err)
@@ -816,6 +842,10 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 
 	fetchLessons: async () => {
 		try {
+			set({
+				lessonsLoading: true,
+			})
+
 			const mode = get().mode
 			const schoolYear = get().schoolYear
 			const response = await axios.get(API_URL + '/lessons', {
@@ -826,7 +856,10 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				},
 			})
 
-			set(() => ({ rawTableData: response.data }))
+			set({
+				rawTableData: response.data,
+				lessonsLoading: false,
+			})
 		} catch (err) {
 			console.log(err)
 		}
@@ -906,6 +939,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			}
 		}
 	},
+
+	teachersLoading: false,
+	subjectsLoading: false,
+	classesLoading: false,
+	bindingsLoading: false,
+	lessonsLoading: false,
 
 	selectedClass: 1,
 	setSelectedClass: (classId) => set(() => ({ selectedClass: classId })),
