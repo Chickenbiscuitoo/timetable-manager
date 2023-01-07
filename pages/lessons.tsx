@@ -28,7 +28,7 @@ const Lessons: NextPage = () => {
 			</Head>
 
 			<DndProvider backend={HTML5Backend}>
-				<main className="min-h-screen flex flex-row relative">
+				<main className="min-h-screen flex flex-row relative select-none">
 					<Sidebar />
 					<div>
 						<div className="flex flex-row items-end mx-5">
