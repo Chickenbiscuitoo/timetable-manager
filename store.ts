@@ -370,6 +370,9 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				teachersLoading: false,
 			})
 		} catch (err) {
+			set({
+				teachersLoading: false,
+			})
 			console.log(err)
 		}
 	},
@@ -394,6 +397,9 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				subjectsLoading: false,
 			})
 		} catch (err) {
+			set({
+				subjectsLoading: false,
+			})
 			console.log(err)
 		}
 	},
@@ -418,6 +424,9 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				classesLoading: false,
 			})
 		} catch (err) {
+			set({
+				classesLoading: false,
+			})
 			console.log(err)
 		}
 	},
@@ -444,6 +453,9 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				bindingsLoading: false,
 			})
 		} catch (err) {
+			set({
+				bindingsLoading: false,
+			})
 			console.log(err)
 		}
 	},
@@ -861,6 +873,9 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 				lessonsLoading: false,
 			})
 		} catch (err) {
+			set({
+				lessonsLoading: false,
+			})
 			console.log(err)
 		}
 	},
