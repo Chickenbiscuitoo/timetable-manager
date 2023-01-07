@@ -21,7 +21,7 @@ const Sidebar: NextPage = () => {
 						alt="User avatar"
 					/>
 					<span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-						Username
+						Danny
 					</span>
 				</a>
 				<ul className="space-y-2">

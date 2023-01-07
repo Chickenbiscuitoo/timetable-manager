@@ -3,7 +3,6 @@ import useTimetableStore from '../store'
 import { useEffect, useState } from 'react'
 
 import BindingsCell from './BindingsCell'
-import BindingsCopyButton from './BindingsCopyButton'
 
 const BindingsTable: NextComponentType = () => {
 	const { bindings, selectedGrade, classes, subjects } =
@@ -106,9 +105,6 @@ const BindingsTable: NextComponentType = () => {
 									key={cl.id}
 									className="border border-slate-600 text-center"
 								>
-									<BindingsCopyButton
-										selectedClass={cl.id}
-									/>
 									<h1 className="mt-1 font-bold text-base">
 										{cl.name}
 									</h1>
