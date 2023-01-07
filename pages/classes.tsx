@@ -11,9 +11,10 @@ import ClassesBarChart from '../components/ClassesBarChart'
 import ClassesForm from '../components/ClassesForm'
 import ClassesManager from '../components/ClassesManager'
 import ErrorMessageCard from '../components/ErrorMessageCard'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 const Classes: NextPage = () => {
-	const { classes, errorMessage } = useTimetableStore()
+	const { classes, classesLoading, errorMessage } = useTimetableStore()
 
 	return (
 		<div>
@@ -24,7 +25,9 @@ const Classes: NextPage = () => {
 
 			<main className="min-h-screen flex flex-row relative">
 				<Sidebar />
-				{classes.length > 0 ? (
+				{classesLoading ? (
+					<LoadingSpinner />
+				) : classes.length > 0 ? (
 					<div className="flex flex-col p-3 place-content-center place-items-center w-full h-full">
 						<div className="flex flex-row max-h-fit h-fit">
 							<div className="grid bg-primary bg-opacity-30 rounded-xl p-4 m-2 h-fit">

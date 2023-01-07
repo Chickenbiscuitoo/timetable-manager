@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 
 const LoadingSpinner: NextPage = () => {
 	return (
-		<div className="grid w-full h-full justify-center align-middle items-center content-center text-center">
+		<div className="grid w-full h-full justify-center align-middle items-center content-center text-center place-items-center place-content-center self-center">
 			<div role="status">
 				<svg
 					aria-hidden="true"

@@ -13,9 +13,11 @@ import TeachersManager from '../components/TeachersManager'
 import ErrorMessageCard from '../components/ErrorMessageCard'
 import SendBindingsButton from '../components/SendBindingsButton'
 import AlertMessageCard from '../components/AlertMessageCard'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 const Teachers: NextPage = () => {
-	const { teachers, errorMessage, alertMessage } = useTimetableStore()
+	const { teachers, teachersLoading, errorMessage, alertMessage } =
+		useTimetableStore()
 
 	return (
 		<div>
@@ -26,7 +28,9 @@ const Teachers: NextPage = () => {
 
 			<main className="min-h-screen flex flex-row relative">
 				<Sidebar />
-				{teachers.length > 0 ? (
+				{teachersLoading ? (
+					<LoadingSpinner />
+				) : teachers.length > 0 ? (
 					<div className="flex flex-col p-3 place-content-center place-items-center w-full h-full">
 						<div className="flex flex-row max-h-fit h-fit">
 							<div className="grid bg-primary bg-opacity-30 rounded-xl p-4 m-2 h-fit">

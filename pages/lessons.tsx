@@ -13,12 +13,13 @@ import SideWorkspace from '../components/SideWorkspace'
 import ModeButton from '../components/ModeButton'
 import SchoolYearButton from '../components/SchoolYearButton'
 import ErrorMessageCard from '../components/ErrorMessageCard'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
 
 const Lessons: NextPage = () => {
-	const { errorMessage } = useTimetableStore()
+	const { lessonsLoading, errorMessage } = useTimetableStore()
 
 	return (
 		<div>
@@ -41,7 +42,11 @@ const Lessons: NextPage = () => {
 								<ModeButton />
 							</div>
 						</div>
-						<Timetable />
+						{lessonsLoading ? (
+							<LoadingSpinner />
+						) : (
+							<Timetable />
+						)}
 					</div>
 					<SideWorkspace />
 				</main>
