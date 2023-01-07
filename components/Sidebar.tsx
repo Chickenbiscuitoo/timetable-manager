@@ -33,14 +33,15 @@ const Sidebar: NextPage = () => {
 					onClick={() => setPopup(!popup)}
 					className="cursor-pointer flex items-center pl-2.5 mb-5"
 				>
-					{session?.user?.image && (
-						<img
-							src={session?.user?.image}
-							width={28}
-							height={28}
-							className="mr-3 rounded-full"
-						/>
-					)}
+					<img
+						src={
+							session?.user?.image ||
+							'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Danny_DeVito_%284842584969%29.jpg/320px-Danny_DeVito_%284842584969%29.jpg'
+						}
+						width={28}
+						height={28}
+						className="mr-3 rounded-full"
+					/>
 
 					<span className="self-center text-xl font-semibold whitespace-nowrap text-white overflow-hidden">
 						{session?.user?.name || 'User'}
