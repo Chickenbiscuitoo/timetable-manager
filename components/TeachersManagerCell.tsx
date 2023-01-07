@@ -3,7 +3,7 @@ import useTimetableStore from '../store'
 
 import { flatten } from '../utils/arraysFuncs'
 
-import { BsFillPenFill } from 'react-icons/bs'
+import { BsFillPenFill, BsFillPersonFill } from 'react-icons/bs'
 import { FaTrash } from 'react-icons/fa'
 import { useState } from 'react'
 
@@ -167,10 +167,7 @@ const TeachersManagerCell: NextPage<TeacherProps> = ({
 					<div className="flex items-center space-x-3">
 						<div className="avatar">
 							<div className="mask mask-squircle w-12 h-12">
-								<img
-									src="https://upload.wikimedia.org/wikipedia/commons/2/21/Danny_DeVito_by_Gage_Skidmore.jpg"
-									alt="Avatar Tailwind CSS Component"
-								/>
+								<BsFillPersonFill className="w-12 h-12" />
 							</div>
 						</div>
 						<div>

@@ -1,10 +1,9 @@
 import { NextPage } from 'next'
 
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 
 import LoginButton from './LoginButton'
 import ProfileCard from './ProfileCard'
@@ -27,10 +26,6 @@ const Sidebar: NextPage = () => {
 		},
 	})
 
-	const image =
-		session?.user?.image ||
-		'https://upload.wikimedia.org/wikipedia/commons/2/21/Danny_DeVito_by_Gage_Skidmore.jpg'
-
 	return (
 		<div className="min-h-screen flex select-none">
 			<div className="py-4 px-3 bg-neutral w-52 relative">
@@ -38,11 +33,15 @@ const Sidebar: NextPage = () => {
 					onClick={() => setPopup(!popup)}
 					className="cursor-pointer flex items-center pl-2.5 mb-5"
 				>
-					<img
-						src={image}
-						className="mr-3 h-6 sm:h-7 rounded-full"
-						alt="https://upload.wikimedia.org/wikipedia/commons/2/21/Danny_DeVito_by_Gage_Skidmore.jpg"
-					/>
+					{session?.user?.image && (
+						<img
+							src={session?.user?.image}
+							width={28}
+							height={28}
+							className="mr-3 rounded-full"
+						/>
+					)}
+
 					<span className="self-center text-xl font-semibold whitespace-nowrap text-white overflow-hidden">
 						{session?.user?.name || 'User'}
 					</span>
