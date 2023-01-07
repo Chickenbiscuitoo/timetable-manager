@@ -68,7 +68,7 @@ const Teachers: NextPage = () => {
 					rel="noopener noreferrer"
 					className="text-neutral"
 				>
-					Created by Chickenbiscuitoo
+					Chickenbiscuitoo
 					<span className="ml-1 inline">
 						<AiFillGithub className="inline h-full" />
 					</span>

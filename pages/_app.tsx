@@ -14,7 +14,7 @@ function App({
 }: AppProps<{ session: Session }>) {
 	return (
 		<>
-			<NextNProgress color="linear-gradient(90deg, #b656cb, #10a1a0)" />
+			<NextNProgress color="linear-gradient(90deg, #9333ea, #6419e6, #6366F1)" />
 			<SessionProvider session={session}>
 				<Component {...pageProps} />
 			</SessionProvider>
