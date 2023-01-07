@@ -1,13 +1,10 @@
 import type { NextPage } from 'next'
-import { useState } from 'react'
 
 import useTimetableStore from '../store'
 
 import { flatten } from '../utils/arraysFuncs'
 
 const BindingsChecking: NextPage = () => {
-	const [clicked, setClicked] = useState(false)
-
 	const { bindings, teachers, classes, selectedGrade } =
 		useTimetableStore()
 
@@ -45,8 +42,8 @@ const BindingsChecking: NextPage = () => {
 	}
 
 	const warningsTeachersTotalLessons = () => {
-		const teacherMinLessons = 4
-		const teacherMaxLessons = 22
+		const teacherMinLessons = 22
+		const teacherMaxLessons = 42
 
 		const teachersLessons = teachersTotalLessons()
 
