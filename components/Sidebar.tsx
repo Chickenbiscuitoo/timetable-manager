@@ -32,7 +32,7 @@ const Sidebar: NextPage = () => {
 		'https://upload.wikimedia.org/wikipedia/commons/2/21/Danny_DeVito_by_Gage_Skidmore.jpg'
 
 	return (
-		<div className="min-h-screen flex">
+		<div className="min-h-screen flex select-none">
 			<div className="py-4 px-3 bg-neutral w-52 relative">
 				<a
 					onClick={() => setPopup(!popup)}
