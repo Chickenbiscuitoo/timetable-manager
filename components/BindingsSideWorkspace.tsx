@@ -10,7 +10,7 @@ const BindingsSideWorkspace: NextPage = () => {
 	const { teachers, teachersLoading } = useTimetableStore()
 
 	return (
-		<div className="min-h-screen flex flex-col bg-neutral p-2">
+		<div className="min-h-screen flex flex-col bg-neutral p-2 min-w-64">
 			<div className="h-50vh flex flex-row">
 				{teachersLoading ? (
 					<LoadingSpinner />
