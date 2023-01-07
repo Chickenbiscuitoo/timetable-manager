@@ -6,14 +6,19 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import type { Session } from 'next-auth'
 
+import NextNProgress from 'nextjs-progressbar'
+
 function App({
 	Component,
 	pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session }>) {
 	return (
-		<SessionProvider session={session}>
-			<Component {...pageProps} />
-		</SessionProvider>
+		<>
+			<NextNProgress color="linear-gradient(90deg, #b656cb, #10a1a0)" />
+			<SessionProvider session={session}>
+				<Component {...pageProps} />
+			</SessionProvider>
+		</>
 	)
 }
 
