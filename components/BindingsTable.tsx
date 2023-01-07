@@ -93,6 +93,8 @@ const BindingsTable: NextComponentType = () => {
 		return totalLessons
 	}
 
+	// TODO: Add bindingsCopyButton
+
 	return (
 		<div className="w-full p-5">
 			<table className="table table-zebra w-full h-full devide-black table-fixed rounded-full border-separate">
@@ -106,9 +108,6 @@ const BindingsTable: NextComponentType = () => {
 									key={cl.id}
 									className="border border-slate-600 text-center"
 								>
-									<BindingsCopyButton
-										selectedClass={cl.id}
-									/>
 									<h1 className="mt-1 font-bold text-base">
 										{cl.name}
 									</h1>
