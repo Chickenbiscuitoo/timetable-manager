@@ -6,10 +6,10 @@ import BindingsMenuItem from '../components/BindingsMenuItem'
 import BindingCard from './BindingCard'
 
 interface Props {
-	data: any
+	teachers: any
 }
 
-const BindingsScrollMenu: NextPage<Props> = ({ data }) => {
+const BindingsScrollMenu: NextPage<Props> = ({ teachers }) => {
 	const [filter, setFilter] = useState('')
 
 	const [hovered, setHovered] = useState(-1)
@@ -50,7 +50,7 @@ const BindingsScrollMenu: NextPage<Props> = ({ data }) => {
 				</span>
 			</div>
 
-			{data
+			{teachers
 				.filter((item: any) =>
 					item.name.toLowerCase().includes(filter.toLowerCase())
 				)
