@@ -7,12 +7,12 @@ import { useRouter } from 'next/router'
 
 import LoginButton from './LoginButton'
 import ProfileCard from './ProfileCard'
+import LoadingSpinner from './LoadingSpinner'
 
 import { BsPersonFill } from 'react-icons/bs'
 import { MdClass } from 'react-icons/md'
 import { HiUserGroup } from 'react-icons/hi'
-import { AiFillCalendar } from 'react-icons/ai'
-import { AiFillFile } from 'react-icons/ai'
+import { AiFillCalendar, AiFillFile } from 'react-icons/ai'
 
 const Sidebar: NextPage = () => {
 	const [popup, setPopup] = useState(false)
@@ -33,19 +33,25 @@ const Sidebar: NextPage = () => {
 					onClick={() => setPopup(!popup)}
 					className="cursor-pointer flex items-center pl-2.5 mb-5"
 				>
-					<img
-						src={
-							session?.user?.image ||
-							'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Danny_DeVito_%284842584969%29.jpg/320px-Danny_DeVito_%284842584969%29.jpg'
-						}
-						width={28}
-						height={28}
-						className="mr-3 rounded-full"
-					/>
+					{status === 'loading' ? (
+						<LoadingSpinner />
+					) : (
+						<>
+							<img
+								src={
+									session?.user?.image ||
+									'/images/defaultUserImage.jpg'
+								}
+								width={28}
+								height={28}
+								className="mr-3 rounded-full"
+							/>
 
-					<span className="self-center text-xl font-semibold whitespace-nowrap text-white overflow-hidden">
-						{session?.user?.name || 'User'}
-					</span>
+							<span className="self-center text-xl font-semibold whitespace-nowrap text-white overflow-hidden">
+								{session?.user?.name || 'User'}
+							</span>
+						</>
+					)}
 				</a>
 				{popup && <ProfileCard />}
 				<ul className="space-y-2">
