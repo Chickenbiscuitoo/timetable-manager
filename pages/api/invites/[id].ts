@@ -68,8 +68,6 @@ export default async function handler(
 
 			return res.status(200).json({
 				message: 'Invite accepted',
-				org: orgResponse,
-				invite: inviteResponse,
 			})
 		} catch (error) {
 			let message = 'Unknown Error'

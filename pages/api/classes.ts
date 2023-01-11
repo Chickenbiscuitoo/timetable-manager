@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { getServerAuthSession } from '../../server/common/get-server-auth-session'
+// import { getServerAuthSession } from '../../server/common/get-server-auth-session'
 
 import { Class, Teacher } from '@prisma/client'
 import { prisma } from '../../server/client'
@@ -75,14 +75,14 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
 ) {
-	const session = await getServerAuthSession({ req, res })
+	// const session = await getServerAuthSession({ req, res })
 
-	if (!session) {
-		return res.status(403).send({
-			message:
-				'You must be signed in to view the protected content on this page.',
-		})
-	}
+	// if (!session) {
+	// 	return res.status(403).send({
+	// 		message:
+	// 			'You must be signed in to view the protected content on this page.',
+	// 	})
+	// }
 
 	const cookies = cookie.parse(req.headers.cookie || '')
 	const token =
