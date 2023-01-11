@@ -1,8 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { getServerAuthSession } from '../../../server/common/get-server-auth-session'
+// import { getServerAuthSession } from '../../../server/common/get-server-auth-session'
 
 import { prisma } from '../../../server/client'
 import { z } from 'zod'
+
+import cookie from 'cookie'
 
 const schemaPATCH = z.object({
 	bindingId: z.number().int().positive(),
@@ -21,10 +23,30 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
 ) {
-	const session = await getServerAuthSession({ req, res })
+	// const session = await getServerAuthSession({ req, res })
 
-	if (!session) {
-		res.send({
+	// if (!session) {
+	// 	res.send({
+	// 		message:
+	// 			'You must be signed in to view the protected content on this page.',
+	// 	})
+	// }
+
+	const cookies = cookie.parse(req.headers.cookie || '')
+	const token =
+		process.env.NODE_ENV == 'development'
+			? cookies['next-auth.session-token']
+			: cookies['__Secure-next-auth.session-token']
+
+	const userSession = await prisma.session.findUnique({
+		where: { sessionToken: token },
+		include: {
+			user: true,
+		},
+	})
+
+	if (!userSession) {
+		return res.status(403).send({
 			message:
 				'You must be signed in to view the protected content on this page.',
 		})
