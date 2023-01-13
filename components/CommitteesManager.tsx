@@ -1,10 +1,10 @@
 import { NextPage } from 'next'
 import useTimetableStore from '../store'
 
-import SubjectsManagerCell from './SubjectsManagerCell'
+import CommitteesManagerCell from './CommitteesManagerCell'
 
-const SubjectsManager: NextPage = () => {
-	const { subjects } = useTimetableStore()
+const CommitteesManager: NextPage = () => {
+	const { committees } = useTimetableStore()
 
 	return (
 		<div>
@@ -21,19 +21,16 @@ const SubjectsManager: NextPage = () => {
 								</label>
 							</th>
 							<th>Name</th>
-							<th>Commitee</th>
-							<th>Lessons</th>
+							<th>Subjects</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						{subjects.map((subject) => (
-							<SubjectsManagerCell
-								key={subject.id}
-								id={subject.id}
-								name={subject.name}
-								shortname={subject.shortname}
-								committee_id={subject.committeeId}
+						{committees.map((committee) => (
+							<CommitteesManagerCell
+								key={committee.id}
+								id={committee.id}
+								name={committee.name}
 							/>
 						))}
 					</tbody>
@@ -41,8 +38,7 @@ const SubjectsManager: NextPage = () => {
 						<tr>
 							<th></th>
 							<th>Name</th>
-							<th>Commitee</th>
-							<th>Lessons</th>
+							<th>Subjects</th>
 							<th></th>
 						</tr>
 					</tfoot>
@@ -52,4 +48,4 @@ const SubjectsManager: NextPage = () => {
 	)
 }
 
-export default SubjectsManager
+export default CommitteesManager

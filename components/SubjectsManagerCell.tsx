@@ -11,20 +11,20 @@ interface SubjectsProps {
 	id: number
 	name: string
 	shortname: string
-	commitee_id: number
+	committee_id: number
 }
 
 const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 	id,
 	name,
 	shortname,
-	commitee_id,
+	committee_id,
 }) => {
 	const [clickedUpdate, setClickedUpdate] = useState(false)
 	const [formData, setFormData] = useState({
 		name,
 		shortname,
-		commitee_id,
+		committee_id,
 	})
 	const [errorMessages, setErrorMessages] = useState({
 		nameError: '',
@@ -104,7 +104,7 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 	const handleSubmit = () => {
 		const name = formData.name.trim()
 		const shortname = formData.shortname.trim().toUpperCase()
-		const commitee_id = formData.commitee_id
+		const commitee_id = formData.committee_id
 
 		if (
 			name &&
@@ -117,7 +117,7 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 			setFormData({
 				name,
 				shortname,
-				commitee_id,
+				committee_id,
 			})
 			setClickedUpdate(false)
 		}
@@ -145,7 +145,7 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 						</div>
 					</div>
 				</td>
-				<td>{commitee_id}</td>
+				<td>{committee_id}</td>
 				<td>{subjectTotalLessons()}</td>
 				<th>
 					<button
@@ -202,7 +202,7 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 								tabIndex={0}
 								className="btn btn-outline btn-md text-xs w-full"
 							>
-								{formData.commitee_id}
+								{formData.committee_id}
 							</label>
 							<ul
 								tabIndex={0}
