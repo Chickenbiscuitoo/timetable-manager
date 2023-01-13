@@ -233,12 +233,12 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			mode,
 		})
 
+		get().fetchTeachers(true)
+		get().fetchSubjects(true)
+		get().fetchClasses(true)
+		get().fetchBindings(true)
+		get().fetchLessons(true)
 		get().fetchOrganization()
-		get().fetchTeachers()
-		get().fetchSubjects()
-		get().fetchClasses()
-		get().fetchBindings()
-		get().fetchLessons()
 	},
 
 	schoolYear: '2020/2021',
@@ -975,11 +975,11 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		set(() => ({ alertMessage: { message: '', status: undefined } })),
 }))
 
-useTimetableStore.getState().fetchOrganization()
 useTimetableStore.getState().fetchTeachers(true)
 useTimetableStore.getState().fetchSubjects(true)
 useTimetableStore.getState().fetchClasses(true)
 useTimetableStore.getState().fetchBindings(true)
 useTimetableStore.getState().fetchLessons(true)
+useTimetableStore.getState().fetchOrganization()
 
 export default useTimetableStore
