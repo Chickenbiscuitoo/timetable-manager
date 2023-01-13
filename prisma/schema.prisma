@@ -17,7 +17,6 @@ model Teacher {
   shortname             String                  @db.VarChar(8)
   email                 String                  @db.VarChar(255)
   classId               Class?
-  commitee              Committee?
   lessons               Lesson[]
   bindings              Binding[]
   BindingTeacherLessons BindingTeacherLessons[]
@@ -39,14 +38,14 @@ model Teacher {
 }
 
 model Subject {
-  id         Int      @id @default(autoincrement())
-  name       String   @db.VarChar(255)
-  shortname  String   @db.VarChar(8)
-  commiteeId Int
-  lessons    Lesson[]
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  shortname   String   @db.VarChar(8)
+  committeeId Int
+  lessons     Lesson[]
 
-  commitee Committee @relation(fields: [commiteeId], references: [id])
-  Binding  Binding[]
+  committee Committee @relation(fields: [committeeId], references: [id])
+  Binding   Binding[]
 
   ownerId String
   owner   User?  @relation(fields: [ownerId], references: [id])
@@ -59,20 +58,17 @@ model Subject {
   @@unique([organizationId, name])
   @@unique([organizationId, shortname])
   @@index([ownerId])
-  @@index([commiteeId])
+  @@index([committeeId])
   @@index([organizationId])
 }
 
 model Committee {
-  id         Int       @id @default(autoincrement())
-  name       String    @db.VarChar(255)
-  chairmanId Int       @unique
-  subjects   Subject[]
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(255)
+  subjects Subject[]
 
   ownerId String
   owner   User?  @relation(fields: [ownerId], references: [id])
-
-  chairman Teacher @relation(fields: [chairmanId], references: [id])
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId String

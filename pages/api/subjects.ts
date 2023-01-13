@@ -21,7 +21,7 @@ const schemaGET = z.object({
 const schemaPUT = z.object({
 	name: z.string().min(3).max(128),
 	shortname: z.string().min(2).max(8),
-	commiteeId: z.number().int().positive(),
+	committeeId: z.number().int().positive(),
 	mode: z.string().refine(
 		(value) => {
 			return value === 'personal' || value === 'organization'
@@ -40,7 +40,7 @@ const schemaPATCH = z.object({
 	id: z.number().int().positive(),
 	name: z.string().min(3).max(128),
 	shortname: z.string().min(2).max(8),
-	commiteeId: z.number().int().positive(),
+	committeeId: z.number().int().positive(),
 })
 
 type UpdatedSubject = Omit<Subject, 'organizationId' | 'ownerId'>
@@ -151,7 +151,7 @@ export default async function handler(
 					data: {
 						name: data.name,
 						shortname: data.shortname,
-						commiteeId: data.commiteeId,
+						committeeId: data.committeeId,
 						ownerId: userSession.userId,
 						organizationId: userSession.userId,
 					},
@@ -170,7 +170,7 @@ export default async function handler(
 					data: {
 						name: data.name,
 						shortname: data.shortname,
-						commiteeId: data.commiteeId,
+						committeeId: data.committeeId,
 						ownerId: userSession.userId,
 						organizationId: userSession.user.organizationId,
 					},
@@ -214,7 +214,7 @@ export default async function handler(
 				data: {
 					name: data.name,
 					shortname: data.shortname,
-					commiteeId: data.commiteeId,
+					committeeId: data.committeeId,
 				},
 			})
 

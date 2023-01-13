@@ -29,6 +29,15 @@ interface TimetableStore {
 		orgId: string
 	) => void
 
+	committees:
+		| {
+				id: number
+				name: string
+		  }[]
+		| []
+
+	fetchCommittees: (showLoading?: boolean) => void
+
 	teachers:
 		| {
 				id: number
@@ -44,7 +53,7 @@ interface TimetableStore {
 				id: number
 				name: string
 				shortname: string
-				commiteeId: number
+				committeeId: number
 		  }[]
 		| []
 	fetchSubjects: (showLoading?: boolean) => void
@@ -78,7 +87,7 @@ interface TimetableStore {
 					id: number
 					name: string
 					shortname: string
-					commiteeId: number
+					committeeId: number
 				}
 				cl: {
 					id: number
@@ -136,14 +145,14 @@ interface TimetableStore {
 	addSubject: (
 		name: string,
 		shortname: string,
-		commiteeId: number
+		committeeId: number
 	) => void
 	removeSubject: (id: number) => void
 	updateSubject: (
 		id: number,
 		name: string,
 		shortname: string,
-		commiteeId: number
+		committeeId: number
 	) => void
 
 	rawTableData:
@@ -156,7 +165,7 @@ interface TimetableStore {
 					id: number
 					name: string
 					shortname: string
-					commiteeId: number
+					committeeId: number
 				}[]
 				teachers:
 					| {
@@ -212,6 +221,7 @@ interface TimetableStore {
 	classesLoading: boolean
 	bindingsLoading: boolean
 	lessonsLoading: boolean
+	committeesLoading: boolean
 }
 
 // TODO: Copy bindings func
@@ -238,6 +248,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		get().fetchClasses(true)
 		get().fetchBindings(true)
 		get().fetchLessons(true)
+		get().fetchCommittees(true)
 		get().fetchOrganization()
 	},
 
@@ -347,6 +358,31 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			} else {
 				console.log(err)
 			}
+		}
+	},
+
+	committees: [],
+	fetchCommittees: async (showLoading = false) => {
+		try {
+			if (showLoading) set({ committeesLoading: true })
+
+			const mode = get().mode
+			const response = await axios.get(API_URL + '/committees', {
+				withCredentials: true,
+				params: {
+					mode,
+				},
+			})
+
+			set({
+				committees: response.data,
+				committeesLoading: false,
+			})
+		} catch (err) {
+			set({
+				committeesLoading: false,
+			})
+			console.log(err)
 		}
 	},
 
@@ -743,13 +779,13 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		}
 	},
 
-	addSubject: async (name, shortname, commiteeId) => {
+	addSubject: async (name, shortname, committeeId) => {
 		try {
 			const mode = get().mode
 			const response = await axios.put(API_URL + '/subjects', {
 				name,
 				shortname,
-				commiteeId,
+				committeeId,
 				mode,
 			})
 
@@ -776,13 +812,13 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 		}
 	},
 
-	updateSubject: async (id, name, shortname, commiteeId) => {
+	updateSubject: async (id, name, shortname, committeeId) => {
 		try {
 			const response = await axios.patch(API_URL + '/subjects', {
 				id,
 				name,
 				shortname,
-				commiteeId,
+				committeeId,
 			})
 
 			get().fetchSubjects()
@@ -950,6 +986,7 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 	classesLoading: false,
 	bindingsLoading: false,
 	lessonsLoading: false,
+	committeesLoading: false,
 
 	selectedClass: 1,
 	setSelectedClass: (classId) => set(() => ({ selectedClass: classId })),
@@ -980,6 +1017,7 @@ useTimetableStore.getState().fetchSubjects(true)
 useTimetableStore.getState().fetchClasses(true)
 useTimetableStore.getState().fetchBindings(true)
 useTimetableStore.getState().fetchLessons(true)
+useTimetableStore.getState().fetchCommittees(true)
 useTimetableStore.getState().fetchOrganization()
 
 export default useTimetableStore
