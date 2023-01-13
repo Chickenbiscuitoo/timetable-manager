@@ -13,6 +13,7 @@ import { BsPersonFill } from 'react-icons/bs'
 import { MdClass } from 'react-icons/md'
 import { HiUserGroup } from 'react-icons/hi'
 import { AiFillCalendar, AiFillFile } from 'react-icons/ai'
+import { RiBookletFill } from 'react-icons/ri'
 
 const Sidebar: NextPage = () => {
 	const [popup, setPopup] = useState(false)
@@ -98,6 +99,15 @@ const Sidebar: NextPage = () => {
 						>
 							<HiUserGroup className="w-fit h-full bg-neutral transition duration-75" />
 							<span className="ml-3">Classes</span>
+						</a>
+					</li>
+					<li>
+						<a
+							onClick={() => router.push('/committees')}
+							className="cursor-pointer flex items-center p-2 text-base font-normal rounded-lg border border-transparent transition duration-200 hover:border-primary"
+						>
+							<RiBookletFill className="w-fit h-full bg-neutral transition duration-75" />
+							<span className="ml-3">Committees</span>
 						</a>
 					</li>
 				</ul>
