@@ -38,6 +38,8 @@ interface TimetableStore {
 
 	fetchCommittees: (showLoading?: boolean) => void
 	addCommittee: (name: string) => void
+	updateCommittee: (id: number, name: string) => void
+	deleteCommittee: (id: number) => void
 
 	teachers:
 		| {
@@ -394,6 +396,33 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			const response = await axios.put(API_URL + '/committees', {
 				mode,
 				name,
+			})
+
+			get().fetchCommittees()
+		} catch (err) {
+			console.log(err)
+		}
+	},
+
+	updateCommittee: async (id, name) => {
+		try {
+			const response = await axios.patch(API_URL + '/committees', {
+				id,
+				name,
+			})
+
+			get().fetchCommittees()
+		} catch (err) {
+			console.log(err)
+		}
+	},
+
+	deleteCommittee: async (id) => {
+		try {
+			const response = await axios.delete(API_URL + '/committees', {
+				data: {
+					id,
+				},
 			})
 
 			get().fetchCommittees()
