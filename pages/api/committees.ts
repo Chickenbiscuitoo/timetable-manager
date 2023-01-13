@@ -20,7 +20,6 @@ const schemaGET = z.object({
 
 const schemaPUT = z.object({
 	name: z.string().min(3).max(128),
-	chairmanId: z.number().int().positive(),
 	mode: z.string().refine(
 		(value) => {
 			return value === 'personal' || value === 'organization'
@@ -114,7 +113,6 @@ export default async function handler(
 				const response = await prisma.committee.create({
 					data: {
 						name: data.name,
-						chairmanId: data.chairmanId,
 						ownerId: userSession.userId,
 						organizationId: userSession.userId,
 					},
@@ -132,7 +130,6 @@ export default async function handler(
 				const response = await prisma.committee.create({
 					data: {
 						name: data.name,
-						chairmanId: data.chairmanId,
 						ownerId: userSession.userId,
 						organizationId: userSession.user.organizationId,
 					},

@@ -37,6 +37,7 @@ interface TimetableStore {
 		| []
 
 	fetchCommittees: (showLoading?: boolean) => void
+	addCommittee: (name: string) => void
 
 	teachers:
 		| {
@@ -382,6 +383,21 @@ const useTimetableStore = create<TimetableStore>((set, get) => ({
 			set({
 				committeesLoading: false,
 			})
+			console.log(err)
+		}
+	},
+
+	addCommittee: async (name) => {
+		try {
+			const mode = get().mode
+
+			const response = await axios.put(API_URL + '/committees', {
+				mode,
+				name,
+			})
+
+			get().fetchCommittees()
+		} catch (err) {
 			console.log(err)
 		}
 	},
