@@ -71,7 +71,8 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 		}
 	}
 
-	const { bindings, updateSubject, removeSubject } = useTimetableStore()
+	const { bindings, committees, updateSubject, removeSubject } =
+		useTimetableStore()
 
 	const subjectTotalLessons = () => {
 		const subjectLessons = bindings
@@ -123,6 +124,14 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 		}
 	}
 
+	const ogSubjectCommittee = committees.find(
+		(committee) => committee.id === committee_id
+	)
+
+	const subjectCommittee = committees.find(
+		(committee) => committee.id === formData.committee_id
+	)
+
 	return (
 		<>
 			<tr>
@@ -145,7 +154,7 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 						</div>
 					</div>
 				</td>
-				<td>{committee_id}</td>
+				<td>{ogSubjectCommittee?.name || committee_id}</td>
 				<td>{subjectTotalLessons()}</td>
 				<th>
 					<button
@@ -202,40 +211,30 @@ const SubjectsManagerCell: NextPage<SubjectsProps> = ({
 								tabIndex={0}
 								className="btn btn-outline btn-md text-xs w-full"
 							>
-								{formData.committee_id}
+								{subjectCommittee?.name ||
+									formData.committee_id}
 							</label>
 							<ul
 								tabIndex={0}
 								className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
 							>
-								<li>
-									<a
-										onClick={() =>
-											setFormData(
-												(prevFormData) => ({
-													...prevFormData,
-													commitee_id: 1,
-												})
-											)
-										}
-									>
-										1
-									</a>
-								</li>
-								<li>
-									<a
-										onClick={() =>
-											setFormData(
-												(prevFormData) => ({
-													...prevFormData,
-													commitee_id: 2,
-												})
-											)
-										}
-									>
-										2
-									</a>
-								</li>
+								{committees.map((committee) => (
+									<li key={committee.id}>
+										<a
+											onClick={() =>
+												setFormData(
+													(prevFormData) => ({
+														...prevFormData,
+														committee_id:
+															committee.id,
+													})
+												)
+											}
+										>
+											{committee.name}
+										</a>
+									</li>
+								))}
 							</ul>
 						</div>
 					</td>
