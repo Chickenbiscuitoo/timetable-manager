@@ -26,7 +26,7 @@ const BindingsMainContent: NextPage = () => {
 
 	if (bindingsLoading || classesLoading || subjectsLoading) {
 		return <LoadingSpinner />
-	} else if (subjects.length === 0 && classes.length === 0) {
+	} else if (subjects.length === 0 || classes.length === 0) {
 		return (
 			<div className="flex flex-col items-center justify-center h-screen">
 				<h1 className="text-2xl font-semibold">
