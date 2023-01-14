@@ -3,12 +3,12 @@ import { useState } from 'react'
 import useTimetableStore from '../store'
 
 const SubjectsForm: NextPage = () => {
-	const { addSubject } = useTimetableStore()
+	const { addSubject, committees } = useTimetableStore()
 
 	const [formData, setFormData] = useState({
 		name: '',
 		shortname: '',
-		commitee_id: -1,
+		committeeId: -1,
 	})
 	const [errorMessages, setErrorMessages] = useState({
 		nameError: '',
@@ -71,22 +71,26 @@ const SubjectsForm: NextPage = () => {
 	const handleSubmit = () => {
 		const name = formData.name.trim()
 		const shortname = formData.shortname.trim().toUpperCase()
-		const commitee_id = formData.commitee_id
+		const committeeId = formData.committeeId
 
 		if (
 			name &&
-			commitee_id !== -1 &&
+			committeeId !== -1 &&
 			!errorMessages.nameError &&
 			!errorMessages.shortnameError
 		) {
-			addSubject(name, shortname, commitee_id)
+			addSubject(name, shortname, committeeId)
 			setFormData({
 				name: '',
 				shortname: '',
-				commitee_id: -1,
+				committeeId: -1,
 			})
 		}
 	}
+
+	const selectedCommittee = committees.find(
+		(comm) => comm.id === formData.committeeId
+	)
 
 	return (
 		<div className="flex flex-col gap-2">
@@ -134,38 +138,31 @@ const SubjectsForm: NextPage = () => {
 							tabIndex={0}
 							className="btn btn-ghost bg-base-100 border-gray-200 border-opacity-20 dropdown-toggle w-full font-normal text-md text-left justify-start normal-case"
 						>
-							{formData.commitee_id !== -1
-								? formData.commitee_id
-								: 'Select Commitee'}
+							{formData.committeeId !== -1
+								? selectedCommittee?.name
+								: 'Select Committee'}
 						</label>
 						<ul
 							tabIndex={0}
 							className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
 						>
-							<li>
-								<a
-									onClick={() =>
-										setFormData((prevFormData) => ({
-											...prevFormData,
-											commitee_id: 1,
-										}))
-									}
-								>
-									1
-								</a>
-							</li>
-							<li>
-								<a
-									onClick={() =>
-										setFormData((prevFormData) => ({
-											...prevFormData,
-											commitee_id: 2,
-										}))
-									}
-								>
-									2
-								</a>
-							</li>
+							{committees.map((committee) => (
+								<li key={committee.id}>
+									<a
+										onClick={() =>
+											setFormData(
+												(prevFormData) => ({
+													...prevFormData,
+													committeeId:
+														committee.id,
+												})
+											)
+										}
+									>
+										{committee.name}
+									</a>
+								</li>
+							))}
 						</ul>
 					</div>
 				</label>
@@ -175,7 +172,7 @@ const SubjectsForm: NextPage = () => {
 				disabled={
 					errorMessages.nameError ||
 					errorMessages.shortnameError ||
-					formData.commitee_id === -1
+					formData.committeeId === -1
 						? true
 						: false
 				}
