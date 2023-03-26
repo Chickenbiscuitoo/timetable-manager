@@ -3,7 +3,7 @@ import { useState } from 'react'
 import useTimetableStore from '../store'
 
 const ClassesForm: NextPage = () => {
-	const { teachers, addClass } = useTimetableStore()
+	const { classes, teachers, addClass } = useTimetableStore()
 
 	const [formData, setFormData] = useState({
 		name: '',
@@ -102,6 +102,14 @@ const ClassesForm: NextPage = () => {
 		(tch) => tch.id == formData.teacherId
 	)
 
+	const isTeacherAssigned = (teacherId: number): boolean => {
+		if (classes.find((cls) => cls.teacher.id == teacherId)) {
+			return true
+		} else {
+			return false
+		}
+	}
+
 	return (
 		<div className="flex flex-col gap-2">
 			<div className="form-control">
@@ -156,22 +164,36 @@ const ClassesForm: NextPage = () => {
 							tabIndex={0}
 							className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
 						>
-							{teachers.map((tch) => (
-								<li key={tch.id}>
-									<a
-										onClick={() =>
-											setFormData(
-												(prevFormData) => ({
-													...prevFormData,
-													teacherId: tch.id,
-												})
-											)
-										}
-									>
-										{tch.name}
-									</a>
+							{teachers.find(
+								(tch) => !isTeacherAssigned(tch.id)
+							) ? (
+								teachers.map(
+									(tch) =>
+										!isTeacherAssigned(tch.id) && (
+											<li key={tch.id}>
+												<a
+													onClick={() =>
+														setFormData(
+															(
+																prevFormData
+															) => ({
+																...prevFormData,
+																teacherId:
+																	tch.id,
+															})
+														)
+													}
+												>
+													{tch.name}
+												</a>
+											</li>
+										)
+								)
+							) : (
+								<li>
+									<a>No Teacher Available</a>
 								</li>
-							))}
+							)}
 						</ul>
 					</div>
 				</label>
