@@ -122,7 +122,7 @@ const BindingsTable: NextComponentType = () => {
 							<tr key={i}>
 								<td className="border border-slate-600 text-center">
 									<h3 className="truncate hover:text-clip hover:overflow-visible">
-										{subjects[i]?.name}
+										{subjects[i]?.shortname}
 									</h3>
 								</td>
 								{row
