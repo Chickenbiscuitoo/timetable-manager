@@ -3,8 +3,6 @@ import useTimetableStore from '../store'
 
 import { useState } from 'react'
 
-import { classesSort } from '../utils/arraysFuncs'
-
 import ClassesManagerCell from './ClassesManagerCell'
 import SortButton from './SortButton'
 
@@ -35,30 +33,21 @@ const ClassesManager: NextPage = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{sortAsc
-							? classes
-									.sort(classesSort)
-									.map((cl) => (
-										<ClassesManagerCell
-											key={cl.id}
-											id={cl.id}
-											name={cl.name}
-											teacher={cl.teacher}
-											grade={cl.grade}
-										/>
-									))
-							: classes
-									.sort(classesSort)
-									.reverse()
-									.map((cl) => (
-										<ClassesManagerCell
-											key={cl.id}
-											id={cl.id}
-											name={cl.name}
-											teacher={cl.teacher}
-											grade={cl.grade}
-										/>
-									))}
+						{classes
+							.sort(
+								(a, b) =>
+									(sortAsc ? 1 : -1) *
+									(a.name > b.name ? 1 : -1)
+							)
+							.map((cl) => (
+								<ClassesManagerCell
+									key={cl.id}
+									id={cl.id}
+									name={cl.name}
+									teacher={cl.teacher}
+									grade={cl.grade}
+								/>
+							))}
 					</tbody>
 					<tfoot>
 						<tr>

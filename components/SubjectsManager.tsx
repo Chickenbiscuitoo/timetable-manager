@@ -1,10 +1,18 @@
 import { NextPage } from 'next'
 import useTimetableStore from '../store'
 
+import { useState } from 'react'
+
 import SubjectsManagerCell from './SubjectsManagerCell'
+import SortButton from './SortButton'
 
 const SubjectsManager: NextPage = () => {
 	const { subjects } = useTimetableStore()
+	const [sortAsc, setSortAsc] = useState(true)
+
+	const handleSort = () => {
+		setSortAsc(!sortAsc)
+	}
 
 	return (
 		<div>
@@ -13,12 +21,10 @@ const SubjectsManager: NextPage = () => {
 					<thead>
 						<tr>
 							<th>
-								<label>
-									<input
-										type="checkbox"
-										className="checkbox"
-									/>
-								</label>
+								<SortButton
+									asc={sortAsc}
+									handleClick={handleSort}
+								/>
 							</th>
 							<th>Name</th>
 							<th>Commitee</th>
@@ -27,15 +33,21 @@ const SubjectsManager: NextPage = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{subjects.map((subject) => (
-							<SubjectsManagerCell
-								key={subject.id}
-								id={subject.id}
-								name={subject.name}
-								shortname={subject.shortname}
-								committee_id={subject.committeeId}
-							/>
-						))}
+						{subjects
+							.sort(
+								(a, b) =>
+									(sortAsc ? 1 : -1) *
+									(a.name > b.name ? 1 : -1)
+							)
+							.map((subject) => (
+								<SubjectsManagerCell
+									key={subject.id}
+									id={subject.id}
+									name={subject.name}
+									shortname={subject.shortname}
+									committee_id={subject.committeeId}
+								/>
+							))}
 					</tbody>
 					<tfoot>
 						<tr>
