@@ -18,7 +18,7 @@ const TeachersManager: NextPage = () => {
 		<div>
 			<div className="overflow-x-auto w-full max-h-screen">
 				<table className="table w-full">
-					<thead>
+					<thead className="select-none">
 						<tr>
 							<th>
 								<SortButton
