@@ -100,10 +100,6 @@ const SubjectsForm: NextPage = () => {
 		}
 	}
 
-	const selectedCommittee = committees.find(
-		(comm) => comm.id === formData.committeeId
-	)
-
 	return (
 		<div className="flex flex-col gap-2" ref={subjectsForm}>
 			<div className="form-control">
@@ -144,39 +140,24 @@ const SubjectsForm: NextPage = () => {
 			</div>
 			<div className="form-control">
 				<label className="input-group input-group-vertical">
-					<span>Class Teacher</span>
-					<div className="dropdown">
-						<label
-							tabIndex={0}
-							className="btn btn-ghost bg-base-100 border-gray-200 border-opacity-20 dropdown-toggle w-full font-normal text-md text-left justify-start normal-case"
-						>
-							{formData.committeeId !== -1
-								? selectedCommittee?.name
-								: 'Select Committee'}
-						</label>
-						<ul
-							tabIndex={0}
-							className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
-						>
-							{committees.map((committee) => (
-								<li key={committee.id}>
-									<a
-										onClick={() =>
-											setFormData(
-												(prevFormData) => ({
-													...prevFormData,
-													committeeId:
-														committee.id,
-												})
-											)
-										}
-									>
-										{committee.name}
-									</a>
-								</li>
-							))}
-						</ul>
-					</div>
+					<span>Committee</span>
+					<select
+						className="select select-bordered w-full"
+						defaultValue={formData.committeeId}
+						onChange={(e: any) => {
+							setFormData((prevFormData) => ({
+								...prevFormData,
+								committeeId: Number(e.target.value),
+							}))
+						}}
+					>
+						<option value={-1}>Select Committee</option>
+						{committees.map((comm) => (
+							<option key={comm.id} value={comm.id}>
+								{comm.name}
+							</option>
+						))}
+					</select>
 				</label>
 			</div>
 			<button
