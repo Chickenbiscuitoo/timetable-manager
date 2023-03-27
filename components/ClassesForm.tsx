@@ -110,10 +110,6 @@ const ClassesForm: NextPage = () => {
 		}
 	}
 
-	const selectedClassTeacher = teachers.find(
-		(tch) => tch.id == formData.teacherId
-	)
-
 	const isTeacherAssigned = (teacherId: number): boolean => {
 		if (classes.find((cls) => cls.teacher.id == teacherId)) {
 			return true
