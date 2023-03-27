@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 
 const useKeyPress = (
-	keys: string[],
+	key: string,
 	callback: (event: KeyboardEvent) => void,
 	node: HTMLElement | null = null
 ) => {
@@ -15,11 +15,11 @@ const useKeyPress = (
 	const handleKeyPress = useCallback(
 		(event: KeyboardEvent) => {
 			// check if one of the key is part of the ones we want
-			if (keys.some((key) => event.key === key)) {
+			if (event.ctrlKey && key === event.key) {
 				callbackRef.current(event)
 			}
 		},
-		[keys]
+		[key]
 	)
 
 	useEffect(() => {
@@ -41,3 +41,5 @@ const useKeyPress = (
 			)
 	}, [handleKeyPress, node])
 }
+
+export default useKeyPress
