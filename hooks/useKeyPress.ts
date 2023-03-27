@@ -2,6 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 
 const useKeyPress = (
 	key: string,
+	ctrlKeyEnabled: boolean = true,
 	callback: (event: KeyboardEvent) => void,
 	node: HTMLElement | null = null
 ) => {
@@ -12,8 +13,14 @@ const useKeyPress = (
 
 	const handleKeyPress = useCallback(
 		(event: KeyboardEvent) => {
-			if (event.ctrlKey && key === event.key) {
-				callbackRef.current(event)
+			if (ctrlKeyEnabled) {
+				if (event.ctrlKey && key === event.key) {
+					callbackRef.current(event)
+				}
+			} else {
+				if (key === event.key) {
+					callbackRef.current(event)
+				}
 			}
 		},
 		[key]
