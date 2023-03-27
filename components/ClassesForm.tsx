@@ -163,51 +163,26 @@ const ClassesForm: NextPage = () => {
 			<div className="form-control">
 				<label className="input-group input-group-vertical">
 					<span>Class Teacher</span>
-					<div className="dropdown">
-						<label
-							tabIndex={0}
-							className="btn btn-ghost bg-base-100 border-gray-200 border-opacity-20 dropdown-toggle w-full font-normal text-md text-left justify-start normal-case"
-						>
-							{selectedClassTeacher
-								? selectedClassTeacher.name
-								: 'Select Class Teacher'}
-						</label>
-						<ul
-							tabIndex={0}
-							className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
-						>
-							{teachers.find(
-								(tch) => !isTeacherAssigned(tch.id)
-							) ? (
-								teachers.map(
-									(tch) =>
-										!isTeacherAssigned(tch.id) && (
-											<li key={tch.id}>
-												<a
-													onClick={() =>
-														setFormData(
-															(
-																prevFormData
-															) => ({
-																...prevFormData,
-																teacherId:
-																	tch.id,
-															})
-														)
-													}
-												>
-													{tch.name}
-												</a>
-											</li>
-										)
+					<select
+						className="select select-bordered w-full"
+						defaultValue={formData.teacherId}
+						onChange={(e: any) => {
+							setFormData((prevFormData) => ({
+								...prevFormData,
+								teacherId: Number(e.target.value),
+							}))
+						}}
+					>
+						<option value={-1}>Select Teacher</option>
+						{teachers.map(
+							(tch) =>
+								!isTeacherAssigned(tch.id) && (
+									<option key={tch.id} value={tch.id}>
+										{tch.name}
+									</option>
 								)
-							) : (
-								<li>
-									<a>No Teacher Available</a>
-								</li>
-							)}
-						</ul>
-					</div>
+						)}
+					</select>
 				</label>
 				{errrorMessages.teacherError && (
 					<p className="text-sm text-error">
