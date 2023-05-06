@@ -1,9 +1,21 @@
 import { NextPage } from 'next'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import useTimetableStore from '../store'
+
+import useKeyPress from '../hooks/useKeyPress'
 
 const TeacherForm: NextPage = () => {
 	const { addTeacher } = useTimetableStore()
+
+	const teacherForm = useRef<HTMLDivElement>(null)
+	useKeyPress(
+		'Enter',
+		false,
+		() => {
+			handleSubmit()
+		},
+		teacherForm.current
+	)
 
 	const [formData, setFormData] = useState({
 		name: '',
@@ -112,7 +124,7 @@ const TeacherForm: NextPage = () => {
 	}
 
 	return (
-		<div className="flex flex-col gap-2">
+		<div className="flex flex-col gap-2" ref={teacherForm}>
 			<div className="form-control">
 				<label className="input-group input-group-vertical">
 					<span>Name</span>
