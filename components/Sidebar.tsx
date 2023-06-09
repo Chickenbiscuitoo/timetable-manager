@@ -1,13 +1,10 @@
 import { NextPage } from 'next'
 
-import { useSession } from 'next-auth/react'
-
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 
 import LoginButton from './LoginButton'
 import ProfileCard from './ProfileCard'
-import LoadingSpinner from './LoadingSpinner'
 
 import { BsPersonFill } from 'react-icons/bs'
 import { MdClass } from 'react-icons/md'
@@ -20,13 +17,6 @@ const Sidebar: NextPage = () => {
 
 	const router = useRouter()
 
-	const { data: session, status } = useSession({
-		required: true,
-		onUnauthenticated() {
-			router.push('/')
-		},
-	})
-
 	return (
 		<div className="min-h-screen flex select-none">
 			<div className="py-4 px-3 bg-neutral w-52 relative">
@@ -34,25 +24,12 @@ const Sidebar: NextPage = () => {
 					onClick={() => setPopup(!popup)}
 					className="cursor-pointer flex items-center pl-2.5 mb-5"
 				>
-					{status === 'loading' ? (
-						<LoadingSpinner />
-					) : (
-						<>
-							<img
-								src={
-									session?.user?.image ||
-									'/images/defaultUserImage.jpg'
-								}
-								width={28}
-								height={28}
-								className="mr-3 rounded-full"
-							/>
-
-							<span className="self-center text-xl font-semibold whitespace-nowrap text-white overflow-hidden">
-								{session?.user?.name || 'User'}
-							</span>
-						</>
-					)}
+					<h1 className="text-3xl text-white font-bold">
+						Time
+						<span className="bg-gradient-to-r bg-clip-text  text-transparent from-white via-indigo-500 to-[#6419e6] animate-text">
+							ly
+						</span>
+					</h1>
 				</a>
 				{popup && <ProfileCard />}
 				<ul className="space-y-2">
