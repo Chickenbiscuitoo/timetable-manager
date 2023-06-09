@@ -11,6 +11,7 @@ import { MdClass } from 'react-icons/md'
 import { HiUserGroup } from 'react-icons/hi'
 import { AiFillCalendar, AiFillFile } from 'react-icons/ai'
 import { RiBookletFill } from 'react-icons/ri'
+import { IoPeopleSharp } from 'react-icons/io5'
 
 const Sidebar: NextPage = () => {
 	const [popup, setPopup] = useState(false)
@@ -20,17 +21,22 @@ const Sidebar: NextPage = () => {
 	return (
 		<div className="min-h-screen flex select-none">
 			<div className="py-4 px-3 bg-neutral w-52 relative">
-				<a
-					onClick={() => setPopup(!popup)}
-					className="cursor-pointer flex items-center pl-2.5 mb-5"
-				>
+				<div className="flex items-center pl-2.5 mb-5">
 					<h1 className="text-3xl text-white font-bold">
 						Time
 						<span className="bg-gradient-to-r bg-clip-text  text-transparent from-white via-indigo-500 to-[#6419e6] animate-text">
 							ly
 						</span>
 					</h1>
-				</a>
+					<div
+						onClick={() => setPopup(!popup)}
+						className="flex w-full justify-end align-middle"
+					>
+						<label className="btn btn-circle bg-[#111318] hover:bg-[rgba(100,26,230,.5)] text-xl">
+							<IoPeopleSharp />
+						</label>
+					</div>
+				</div>
 				{popup && <ProfileCard />}
 				<ul className="space-y-2">
 					<li>

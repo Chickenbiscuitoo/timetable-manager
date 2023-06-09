@@ -22,7 +22,7 @@ const ProfileCard: NextPage = () => {
 		'https://upload.wikimedia.org/wikipedia/commons/2/21/Danny_DeVito_by_Gage_Skidmore.jpg'
 
 	return (
-		<div className="absolute z-20 bg-primary p-4 rounded-xl shadow-xl duration-300 ease-in-out transition-opacity">
+		<div className="absolute z-20 bg-[rgb(71,37,145,.8)] p-4 rounded-xl shadow-xl duration-300 ease-in-out transition-opacity min-w-[370px] min-h-[565px]">
 			<ProfileCardUser name={name} email={email} image={image} />
 			<ProfileCardOrg />
 		</div>

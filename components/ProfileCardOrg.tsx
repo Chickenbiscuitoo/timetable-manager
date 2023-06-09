@@ -3,6 +3,8 @@ import { useState } from 'react'
 
 import useTimetableStore from '../store'
 
+import { FaRegBuilding } from 'react-icons/fa'
+
 const ProfileCardOrg: NextPage = () => {
 	const {
 		organization,
@@ -62,12 +64,11 @@ const ProfileCardOrg: NextPage = () => {
 
 	if (!organization) {
 		return (
-			<div className="bg-base-100 rounded-xl p-6 mt-2 duration-300 ease-in-out transition-opacity">
+			<div className="bg-base-100 shadow-lg rounded-xl p-6 mt-2 duration-300 ease-in-out transition-opacity">
 				<div>
-					<img
-						src="https://static.vecteezy.com/system/resources/thumbnails/001/500/616/small/building-icon-free-vector.jpg"
-						className="rounded-full h-24 w-24 inline table m-auto"
-					/>
+					<div className="rounded-full h-24 w-24 inline table m-auto">
+						<FaRegBuilding className="h-full w-full m-auto" />
+					</div>
 					<div className="ml-4 inline text-center">
 						<h1 className="text-3xl text-white text whitespace-nowrap ">
 							No organization
@@ -104,12 +105,11 @@ const ProfileCardOrg: NextPage = () => {
 	}
 
 	return (
-		<div className="bg-base-100 rounded-xl p-6 mt-2 duration-300 ease-in-out transition-opacity">
+		<div className="min-h-[330px] bg-base-100 shadow-lg rounded-xl p-6 mt-2 duration-300 ease-in-out transition-opacity  place-content-center place-items-center">
 			<div>
-				<img
-					src="https://static.vecteezy.com/system/resources/thumbnails/001/500/616/small/building-icon-free-vector.jpg"
-					className="rounded-full h-24 w-24 inline table m-auto"
-				/>
+				<div className="rounded-full h-24 w-24 inline table m-auto">
+					<FaRegBuilding className="h-full w-full m-auto" />
+				</div>
 				<div className="ml-4 inline text-center">
 					<h1 className="text-3xl text-white text whitespace-nowrap ">
 						{organization.name}
